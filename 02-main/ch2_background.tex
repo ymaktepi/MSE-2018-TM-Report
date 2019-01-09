@@ -1,0 +1,100 @@
+\chapter{Background}
+\label{chap:background}
+
+\section{\gls{pow} and \gls{pos}}
+In Ethereum, \gls{pos} is aiming at replacing \gls{pow} as a distributed
+consensus algorithm. This section succintly describe both methods as well as the
+main differences between them, and then explains which problems arise when you
+replace \gls{pow} with \gls{pos}.
+
+\subsection{What is \gls{pow}?}
+\gls{pow} is the current consensus protocol used to decide on a blockchain in
+Ethereum. In order To create a new valid block, a node has to solve a
+cryptographic puzzle and include its solution in the newly created block. The
+difficulty of the puzzle is parametrized in order to have -on average- a block
+created at a set interval. A reward is given to the creator of each block.  The
+consensus rule states that the chain with the greatest total difficulty is to be
+considered the main one. Miners are therefore incentivised to build on the main
+chain if they want to get rewards for their work. The fact that the difficulty
+changes to keep a certain interval between blocks means that said work is a
+proxy for timing; a miner cannot create an arbitrary large number of blocks in a
+short time because it's inherent to the protocol.
+
+
+\subsection{What is \gls{pos}?}
+\gls{pos}, on the other hand, selects a new block creator according to its
+weight (or stake). This weight can be the node's age, wealth, etc. In this
+report, we will mainly discuss a specific \gls{pos} protocol, \gls{cbc}-Casper.
+
+\subsection{\gls{cbc}-Casper}
+\gls{cbc}-Casper \todo{cite somewhere} is an abstract consensus protocol family
+which is \gls{pos}-ready. Nodes, called validators in this context, send
+messages to each other, acknowledging they saw other messages by including them
+in a \textit{justification}, that is attached to each message. Based on its
+justification as well as a weighted list of validators, each message defines an
+\textit{estimate}, which is the consensus value proposed by the sender of the
+message. In the case of a blockchain, messages each point to one older message
+as their estimate and form a \textit{block-\gls{dag}}. Running a slightly
+modified version of the \gls{ghost} algorithm on the \gls{dag} returns a
+blockchain.
+
+
+\todo{change structure; make comparison not between POS and POW but between POW
+and CBC}
+
+\subsection{POS vs POW}
+\todo{talk about differences between pos and pow }
+
+\begin{table}[H]
+    \centering
+    {
+        \begin{tabular}{|l|p{47mm}|p{47mm}|}
+            \hline
+            & \gls{pow} & \gls{pos} \\
+            \hline
+            Block production & Miners can publish blocks if the can prove they
+            worked for it & Nodes can publish blocks at any time \\
+            \hline
+            Timing assumption & Work is a proxy for timing & None \\
+            \hline
+            Spam & Work removes the possibility to spam & Negligible
+            computationnal costs to produce blocks imply potential spam \\
+            \hline
+            Economic majority & Work is a proxy for economic majority & Economic
+            majority \\
+            \hline
+            Building strategy & Nodes are incentivised to build on the longest
+            chain because they have to work for to build blocks & No clear
+            incentive to build on the longest chain \\
+            \hline
+        \end{tabular}
+        \captionsetup{justification=centering}
+        \caption{Summary of key differences between \gls{pow} and \gls{pos}}
+        \label{fig:keyDiffPowPos}
+    }
+\end{table}
+\subsection{key differences}
+
+\subsection{new problems}
+
+\todo{talk about key differences and what this project is about}
+
+\section{CBC casper}
+\todo{describe the protocol in my own words}
+
+\todo{describe liveness, safety}
+\section{\texttt{core\_cbc}}
+\texttt{core\_cbc} a Rust implementation of the \gls{cbc}-Casper, made by
+TrueLevel. It implements the consensus algorithms proposed in the paper and
+offers an abstract structure that can be used to create consensus on any value.
+
+\section{the other casper?}
+\section{Parity Ethereum}
+Parity is a Rust Ethereum client. It includes a \textit{Pluggable Consensus}
+module that allows one to easily add new consensus protocols by implementing an
+interface.  At first, the goal of this project was to implement a small bridge
+between the Parity module and the core cbc implementation to test block creation
+strategies in a pseudo real-like manner. The implementation of the bridge was
+not as straight forward as planned so it has been decided to cut it out and test
+strategies without mimicking the network and client settings.
+
