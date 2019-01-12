@@ -38,7 +38,6 @@ as their estimate and form a \textit{block-\gls{dag}}. Running a slightly
 modified version of the \gls{ghost} algorithm on the \gls{dag} returns a
 blockchain.
 
-
 \todo{change structure; make comparison not between POS and POW but between POW
 and CBC}
 
@@ -97,4 +96,24 @@ between the Parity module and the core cbc implementation to test block creation
 strategies in a pseudo real-like manner. The implementation of the bridge was
 not as straight forward as planned so it has been decided to cut it out and test
 strategies without mimicking the network and client settings.
+
+\subsection{Background work}
+During the early stages of this project, a clear objective was set: to be able
+to run a Casper \textit{testnet} with Parity custom nodes. Some work has been
+done for the implementation of the \texttt{core-cbc} library into Parity, but
+that was left to people that had a better understanding of the underlying
+library. Furthermore, \todo{rephrase "a lot of"} a lot of effort had been
+injected in the creation of a Docker infrastructure in order to easily deploy,
+connect and monitor multiple custom Parity nodes on a single machine in order to
+experiment with different message building strategies. The choice of using
+Docker was made because there was a  possibility to work on the UniNE
+clusters, which happen to work well with containerized software. After seeing
+that the Parity implementation would take too much time to be completed, and
+therefore might be unusable for this thesis, it has been decided to evaluate
+strategies inside the \texttt{core-cbc} library instead of the more
+real-life-like setting that is a Parity testnet. The main disadvantage of doing
+the experimentations in the library is that the whole network latencies and
+topology are not taken into account. However, a non-negligible advantage of
+implementing strategies in the core library is that it will be easier to test
+them on consensus values that are not only blockchains.
 
