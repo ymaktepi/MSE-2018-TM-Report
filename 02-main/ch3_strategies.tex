@@ -3,7 +3,49 @@
 
 \section{Modelisation}
 \section{Strategies}
+The following strategies were proposed in order to visit the entierty of the
+trade-off triangle:
+\begin{itemize}
+        \item randomness;
+        \item round-robin;
+        \item double round-robin;
+        \item overhead.
+\end{itemize}
+These strategies should allow one to visit the whole triangle and to discuss
+their respective strength and weaknesses. The following sections describe the
+strategies as well as their expected locations in the triangle.
+
+\subsection{Round-robin}
+The first strategy that comes to mind is a simple round-robin. Nodes send
+messages one after the other, in a fixed order.
+
+\subsection{Randomness}
+The next strategy is the simplest to think of: complete randomness. Using fixed
+probability density functions, nodes chose when to create messages and to which
+other validator to send them.
+
+\subsection{Double Round-robin}
+In this setting, two nodes send messages at the same time, in a fixed order. If
+the two nodes that send messages at the same step are at opposite places in the
+set of validators \todo{explain better}, the latency to finality is supposedly
+half as much as the simple round-robin strategy. The overhead is however
+doubled.
+
+\subsection{Maximal Overhead}
+This strategy is the most expensive in terms of bandwidth; at each step, each
+validator sends a message to the others. This example strategy should give a
+baseline value for the maximum overhead that is reachable in the tradeoff
+triangle.
+
 \section{Experimentations}
+Over the duration of this thesis, the \texttt{core-cbc} library has included a
+test framework called \textit{proptest}. The testing framework that has been
+implemented includes ways to simulate the behavior of the Casper protocol over
+multiple nodes and thousands \todo{numbers} of blocks. At the time of the
+writing, the simulations do not include networking latencies.
+
+\todo{schema with what to measure}
+\todo{how the measurements take place in the code}
+
 \section{Visualization}
 \section{Analysis}
-\todo{insert conclusion}
