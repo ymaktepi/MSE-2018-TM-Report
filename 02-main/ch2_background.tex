@@ -89,6 +89,7 @@ offers an abstract structure that can be used to create consensus on any value.
 
 \section{the other casper?}
 \section{Parity Ethereum}
+\todo{remove redundancy in this chapter}
 Parity is a Rust Ethereum client. It includes a \textit{Pluggable Consensus}
 module that allows one to easily add new consensus protocols by implementing an
 interface.  At first, the goal of this project was to implement a small bridge
@@ -106,14 +107,44 @@ library. Furthermore, \todo{rephrase "a lot of"} a lot of effort had been
 injected in the creation of a Docker infrastructure in order to easily deploy,
 connect and monitor multiple custom Parity nodes on a single machine in order to
 experiment with different message building strategies. The choice of using
-Docker was made because there was a  possibility to work on the UniNE
-clusters, which happen to work well with containerized software. After seeing
-that the Parity implementation would take too much time to be completed, and
-therefore might be unusable for this thesis, it has been decided to evaluate
-strategies inside the \texttt{core-cbc} library instead of the more
-real-life-like setting that is a Parity testnet. The main disadvantage of doing
-the experimentations in the library is that the whole network latencies and
-topology are not taken into account. However, a non-negligible advantage of
-implementing strategies in the core library is that it will be easier to test
-them on consensus values that are not only blockchains.
+Docker was made because there was a  possibility to work on the UniNE clusters,
+which happen to work well with containerized software. After seeing that the
+Parity implementation would take too much time to be completed, and therefore
+might be unusable for this thesis, it has been decided to evaluate strategies
+inside the \texttt{core-cbc} library instead of the more real-life-like setting
+that is a Parity testnet. The main disadvantage of doing the experimentations in
+the library is that the whole network latencies and topology are not taken into
+account. However, a non-negligible advantage of implementing strategies in the
+core library is that it will be easier to test them on consensus values that are
+not only blockchains.  \todo{add that the lib was not fully tested at this point
+and that further testing was needed before being able to test parity}
 
+\subsection{Local testnet}
+Scripts that create and manage two local nodes have been written. They launch 2
+Parity instances with the \gls{cbc}-Casper consensus engine, and connect them
+together. Each node has an user account to send transactions, as well as a
+sender account, that can act as a validator in a Casper sense. Currently, each
+node produces a block every 10 seconds. This is a basic strategy that enabled
+further testing of the Parity inclusion of the \texttt{core-cbc}.
+
+\subsection{Docker testnet}
+Testing at a larger scale than two local instances was needed. The possibility
+to access a cluster at the UniNE was discussed and the more straightforward way
+to run programs on the cluster is to have containers. It was therefore decided
+to create a more complex infrastructure using Docker containers.
+\texttt{docker-compose} scripts were created to achieve this goal. An arbitrary
+number of containers can be created at once and inter-connected in two different
+ways:
+\begin{itemize}
+    \item fully connected;
+    \item ring.
+\end{itemize}
+The created nodes have the same types of accounts as for the local testnet.
+\todo{include schemas of fully connected and ring layouts}
+In the fully connected setting, each node is connected to every other node. In
+the ring case, each node is connected to two other nodes in a circular manner.
+Those were the two first layouts that were implemented for simplicity. It was
+thought to add new layouts afterwards in order to match more precisely the real
+network topology of the Ethereum \textit{mainnet}. However, because the Parity
+implementation was deemed too time consuming to be used before the end of this
+project, no further efforts have been put in that direction.
