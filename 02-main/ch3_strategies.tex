@@ -2,6 +2,41 @@
 \label{chap:strategies}
 
 \section{Modelisation}
+\subsection{Metrics}
+A way to rationaly compare strategies is needed in order to discuss their
+relative strengths and weaknesses. Three main characteristics will be used for
+that:
+\begin{itemize}
+        \item latency;
+        \item number of nodes;
+        \item overhead.
+\end{itemize}
+
+\subsubsection{Latency}
+The latency is the number of messages needed to finalize a block. Ideally, you
+want to have a latency as low as possible to reach finality as soon as possible.
+The latency is a way to measure liveness in a blockchain system. If it is low,
+then the system is considered more "live", as less messages are needed in order
+to confirm a transaction, and therefore less time.
+\todo{schema for latency}
+
+\subsubsection{Number of nodes}
+The number of nodes is quite straightforward; it is the number of nodes that can
+be included in the validator set. This number should be as high as possible to
+guarantee decentralization and therefore safety.
+\todo{schema for number of nodes}
+
+\subsubsection{Overhead}
+The overhead is the number of messages that are sent over the network between
+one step of the consensus and the next. It should be as low as possible to keep
+the costs in bandwidth low.
+\todo{schema for overhead}
+
+
+\subsection{Tradeoff triangle/Trilemma}
+
+\subsection{Model}
+
 \section{Strategies}
 The following strategies were proposed in order to visit the entierty of the
 trade-off triangle:
@@ -48,4 +83,6 @@ writing, the simulations do not include networking latencies.
 \todo{how the measurements take place in the code}
 
 \section{Visualization}
+
+\todo{talk about sampling}
 \section{Analysis}
