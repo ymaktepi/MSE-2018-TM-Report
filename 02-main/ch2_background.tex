@@ -38,15 +38,52 @@ as their estimate and form a \textit{block-\gls{dag}}. Running a slightly
 modified version of the \gls{ghost} algorithm on the \gls{dag} returns a
 blockchain.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\columnwidth]{cbc-example}
+  \captionsetup{justification=centering}
+    \caption{\gls{cbc} blockchain example}
+	\label{fig:example}
+\end{figure}
+
+The Figure~\ref{fig:example} shows a small example of a \gls{cbc} execution
+over a blockchain. Four nodes are pictured. Colored circles are messages sent by
+validators, dotted arrows show their justifications. The selected blockchain is
+depicted with blue arrows. It is obtained by running the \gls{ghost} algorithm
+on the pictured view of the newtork, and would be the estimate of a new message
+sent by an honest validator that has this view.
+
+Figure~\ref{fig:example2} examplifies validator \(v_1\) producing a new message
+and the resulting new blockchain. An honnest node includes all the latest
+messages it has received (including its own last message). When a validator does
+not include its own messages in its justification, it is considered as an
+\textit{equivocator}, does not follow the protocol, and could be punished by
+the network for such a behavior. Note that validator \(v_1\) does not equivovate
+because its first message is in the justification of \(v_2\)'s first message,
+and \(v_1\) has this message in the justification of its second message. It is
+said that \(v_1\)'s first message is in the \textit{dependency} of its later
+messages.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\columnwidth]{cbc-example-2}
+  \captionsetup{justification=centering}
+    \caption{\gls{cbc} blockchain example 2}
+	\label{fig:example2}
+\end{figure}
+
+\todo{include a schema showing validators, justifications, estimates, \ldots in
+more depth}
+
+\todo{talk about finality, safety oracles, \ldots }
 \todo{change structure; make comparison not between POS and POW but between POW
 and CBC}
 
-\subsection{POS vs POW}
+\subsection{\gls{pos} vs \gls{pow}}
 \todo{talk about differences between pos and pow }
 
 \begin{table}[H]
-    \centering
-    {
+    \centering{
         \begin{tabular}{|l|p{47mm}|p{47mm}|}
             \hline
             & \gls{pow} & \gls{pos} \\
@@ -90,6 +127,7 @@ offers an abstract structure that can be used to create consensus on any value.
 \section{the other casper?}
 \section{Parity Ethereum}
 \todo{remove redundancy in this chapter}
+\todo{parity networking/gossiping layer research?}
 Parity is a Rust Ethereum client. It includes a \textit{Pluggable Consensus}
 module that allows one to easily add new consensus protocols by implementing an
 interface.  At first, the goal of this project was to implement a small bridge
