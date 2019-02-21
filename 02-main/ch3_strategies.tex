@@ -18,30 +18,48 @@ want to have a latency as low as possible to reach finality as soon as possible.
 The latency is a way to measure liveness in a blockchain system. If it is low,
 then the system is considered more "live", as less messages are needed in order
 to confirm a transaction, and therefore less time.
-\todo{schema for latency}
 
 \subsubsection{Number of nodes}
-The number of nodes is quite straightforward; it is the number of nodes that can
-be included in the validator set. This number should be as high as possible to
-guarantee decentralization and therefore safety.
-\todo{schema for number of nodes}
+The number of nodes is quite straightforward; it is the number of nodes that are
+in the validator set. This number should be as high as possible to guarantee
+decentralization and therefore safety.
 
 \subsubsection{Overhead}
 The overhead is the number of messages that are sent over the network between
 one step of the consensus and the next. It should be as low as possible to keep
 the costs in bandwidth low.
-\todo{schema for overhead}
 
+\subsubsection{Example}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\columnwidth]{metrics-example}
+  \captionsetup{justification=centering}
+    \caption{Metrics computation example}
+	\label{fig:metricsSchema}
+\end{figure}
+
+Figure~\ref{fig:metricsSchema} describes how the computation of the metrics
+takes place. The left half of the figure shows an initial view of the system. At
+time \(t_1\), message \(m_1\) is finalized. The right half of the figure shows a
+view of the system at \(t_2\), time at which \(m_2\) is finalized. The latency
+of \(m_2\) is \(l_2\), the difference of heights between \(m_3\) and \(m_2\). In
+this example, \(l_2 = 4\). \(o_2\), the overhead for \(m_2\), is the number of
+messages that have been sent between \(t_1\) and \(t_2\), \(t_1\) being the time
+at which the previous message has been finalized and \(t_2\) the time at which
+the current message is finalized. In the example, \(o_2 = 3\).
 
 \subsection{Tradeoff triangle/Trilemma}
 In a standard consensus protocol, the three metrics form a trade-off triangle in
-kind of a "pick two" fashion. \todo{not a pick two} \gls{cbc}-Casper has no assumptions on timings,
-sources, contents, destinations of the messages that are exchanged, and can
-therefore explore the whole trade-off space. This project aims to find
-strategies that span the entierty of the triangle and 
+kind of a "pick two" fashion. \todo{not a pick two} \gls{cbc}-Casper has no
+assumptions on timings, sources, contents, destinations of the messages that are
+exchanged, and can therefore explore the whole trade-off space. This project
+aims to find strategies that span the entierty of the triangle and 
+\todo{finish sentence what}
 
-\subsection{Model}
-The model that has been chosen for the evaluation is the following:
+\subsection{Basic model}
+\label{ssec:model}
+The first model that has been chosen for the evaluation is the following:
 \[1 = s_n \cdot \frac{1}{n} + s_l\cdot l + s_o\cdot o\]
 This model binds 3 scores \(s_x\) to their respective variables \(x\).
 Variables are as follows:
@@ -50,8 +68,12 @@ Variables are as follows:
     \item \(l\) the latency;
     \item \(o\) the overhead.
 \end{itemize}
-The higher the score \(s_x\) is, the more its related variable is preponderant
+The higher the score \(s_x\) is, the more its related variable is dominant
 in the strategy and therefore the closer to a corner of the triangle the strategy is.
+\(\frac{1}{n}\) is used because a large number of nodes is wanted.
+This model is a basic one, where everything is linear. It is probably wrong but
+will serve as a base for a more complex one once data have been plotted using
+this model.
 \todo{why 1/n, why everything linear?}
 
 \subsection{Model Evaluation}
@@ -116,7 +138,7 @@ The \texttt{proptest} implementation is able to run blockchain simulations off
 the following parameters:
 \begin{itemize}
     \item Number of validators;
-    \item Ending condition;
+    \item Terminating condition;
     \item Sender strategy;
     \item Receiver strategy.
 \end{itemize}
@@ -125,8 +147,8 @@ the following parameters:
 This parameter is quite straightforward, it is the number of nodes that can
 validate blocks.
 
-\subsubsection{Ending condition}
-The ending condition is a predicate that tells whether or not the simulation has
+\subsubsection{Terminating condition}
+The terminating condition is a predicate that tells whether or not the simulation has
 reached an end. In our case, the end of the simulation is reached when at least
 one node finds a safety oracle for a blockchain that has an height of 4.
 \todo{why 4}
@@ -155,15 +177,215 @@ one without latency (\textit{all receivers}), and a random one (\textit{some
 receivers}) and will be both taken into account to compare the sender
 strategies.
 
+\subsection{Metrics measurements}
+Metrics are not computed as-is in the \texttt{proptest} implementation. Simpler
+datas are logged into \texttt{csv} files, and are processed by a \texttt{Python}
+script. \todo{what data} This two steps processing permitted the generation of
+data before having a precise definition of the metrics. It also permits to vary
+the way metrics are recorded. For example, from the same log file, you could
+extract metrics only when the last step of the consensus is reached, or have an
+average of the metrics at each step of the consensus.
+
+\subsection{Tests}
+Table~\ref{fig:recapTests} summarizes which tests have been run.
+All of them have the same terminating condition, which is reached when at least a
+node finds a safety oracle at height 4. The number of nodes is chosen at random
+in the interval \([1, 20[\). It has been decided to perform tests on this
+interval because it is large enough to give an insight on the behavior of the
+relations between the metrics, and small enough to reach the terminating condition in
+a reasonable time (1 run with a number of nodes chosen at random takes on average 1 hour
+with the Maximal overhead strategy).
+
+
+\begin{table}[H]
+    \centering{
+        \begin{tabular}{|c|c|c|}
+            \hline
+            & All receivers & Some receivers \\
+            \hline
+            Round-robin & \checkmark & \checkmark\\
+            \hline
+            Double round-robin & \checkmark & \checkmark\\
+            \hline
+            Maximal overhead & (\checkmark) & (\checkmark) \\
+            \hline
+            Arbitrary & \checkmark & \checkmark\\
+            \hline
+        \end{tabular}
+        \captionsetup{justification=centering}
+        \caption{Summary of tests that have been run. A tick in parenthesis
+        implies that tests were run but that there are not many data points or
+        big disparities in the distribution of the number of nodes}
+        \label{fig:recapTests}
+    }
+\end{table}
+
 \todo{schema with what to measure}
 \todo{how the measurements take place in the code}
 
-\section{Visualization}
-\begin{figure}
-	\centering
-	\includegraphics[width=0.8\columnwidth]{truc}
-  \captionsetup{justification=centering}
-  \caption{exmaple}
-	\label{fig:asdasdasdasd}
+\section{Visualization I: All receivers}
+This chapter presents a visualization of the datas obtained through the multiple
+test runs with the All receivers strategy.  Each subsection shows the results
+using 3 histograms, representing the raw data, followed by 3 scatter plots
+picturing each metric against each other. These graphs also show a simple linear
+regression as an attempt to find a relation between each metric. At the end of
+the discussion of each strategy a linear regression is performed in order to
+find the scores of each variable according to the model presented in
+Subsection~\ref{ssec:model}.
+
+
+\todo{3D plotting?}
+\todo{undersampling issue?}
+
+\subsection{Round-robin}
+
+The distributions of the number of nodes and the latency
+(Figure~\ref{fig:distRR} left and center) have the same
+shapes except for the gaps every 3 steps. The resemblance in shape is explained
+by the fact that the latency is strictly correlated to the number of nodes, as
+expected.
+The gaps will be explained in the next section, using the graphs that show
+relations between variables. \todo{explain gaps}
+
+\triplefigure
+    {hist_nb_nodes_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {hist_latency_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {hist_overhead_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {Distributions of the dataset. Number of nodes (left), latency (center)
+    and overhead (right) \todo{change xticks label frequency}}
+    {fig:distRR}
+
+The histogram for the overhead is easy to analyse as well; the overhead is
+expected to be 1 because once consensus is obtained for the genesis block, only
+one message from the next validator is needed to finalize the next block.
+
+\triplefigure
+    {relation_nb_nodes_latency_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {relation_nb_nodes_overhead_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {relation_overhead_latency_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {Relations between all the variables. Latency/Number of nodes (left),
+    Overhead/Number of nodes (center) and Latency/Overhead (right)}
+    {fig:relRR}
+
+The right and center graphs on Figure~\ref{fig:relRR} do not give more insight on the
+data, as the Overhead is always \(1\). On the other hand, the graph on the left
+shows a clear linear relationship between the latency and the number of nodes.
+The fitted line has the following equation:
+\[l = 1.403402\cdot n\]
+
+\subsection{Double round-robin}
+\triplefigure
+    {hist_nb_nodes_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {hist_latency_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {hist_overhead_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {Distribution of the dataset. Number of nodes (left), latency (center)
+    and overhead (right)}
+    {fig:distDRR}
+\triplefigure
+    {relation_nb_nodes_latency_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {relation_nb_nodes_overhead_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {relation_overhead_latency_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {Relations between all the variables. Latency/Number of nodes (left),
+    Overhead/Number of nodes (center) and Latency/Overhead (right)}
+    {fig:relDRR}
+
+\subsection{Triple round-robin}
+\triplefigure
+    {hist_nb_nodes_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {hist_latency_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {hist_overhead_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {Distributions of the dataset. Number of nodes (left), latency (center)
+    and overhead (right)}
+    {fig:distTRR}
+\triplefigure
+    {relation_nb_nodes_latency_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {relation_nb_nodes_overhead_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {relation_overhead_latency_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    {Relations between all the variables. Latency/Number of nodes (left),
+    Overhead/Number of nodes (center) and Latency/Overhead (right)}
+    {fig:relTRR}
+
+\subsection{Maximal overhead}
+\todo{talk about why the number of nodes is not even}
+\todo{maybe add the undersample one}
+\triplefigure
+    {hist_nb_nodes_overhead_10-20_nodes_4_depth_all_receivers_gen_averages}
+    {hist_latency_overhead_10-20_nodes_4_depth_all_receivers_gen_averages}
+    {hist_overhead_overhead_10-20_nodes_4_depth_all_receivers_gen_averages}
+    {Distribution of the dataset. Number of nodes (left), latency (center)
+    and overhead (right)}
+    {fig:distOverhead}
+\triplefigure
+    {relation_nb_nodes_latency_overhead_10-20_nodes_4_depth_all_receivers_gen_averages}
+    {relation_nb_nodes_overhead_overhead_10-20_nodes_4_depth_all_receivers_gen_averages}
+    {relation_overhead_latency_overhead_10-20_nodes_4_depth_all_receivers_gen_averages}
+    {Relations between all the variables. Latency/Number of nodes (left),
+    Overhead/Number of nodes (center) and Latency/Overhead (right)}
+    {fig:relOverhead}
+
+\subsection{Arbitrary}
+\triplefigure
+    {hist_nb_nodes_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
+    {hist_latency_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
+    {hist_overhead_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
+    {Distribution of the dataset. Number of nodes (left), latency (center)
+    and overhead (right)}
+    {fig:distArbitrary}
+\triplefigure
+    {relation_nb_nodes_latency_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
+    {relation_nb_nodes_overhead_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
+    {relation_overhead_latency_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
+    {Relations between all the variables. Latency/Number of nodes (left),
+    Overhead/Number of nodes (center) and Latency/Overhead (right)}
+    {fig:relArbitrary}
+
+
+\subsection{Fitting of the basic model}
+Fitting the basic model described in \todo{section} to the data gives the
+following result.
+
+\begin{table}[H]
+    \centering{
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+            Sending Strategy & \(s_n\) & \(s_l\) & \(s_o\) \\
+            \hline
+            Round-robin &  8.191362192111169e-15 & 1.3877787807814457e-17 &
+            1.0000000000000004\\
+            \hline
+            Double round-robin & 0.11909308040094774 & 0.036185425185665365 &
+            0.6012986563849584\\
+            \hline
+            Triple round-robin & 0.4048674665564243 & 0.08250874411097947 &
+            0.4014266527787466\\
+            \hline
+            Maximal overhead & 6.345629668569573e-15 & 0.987729767831156 & 0.0\\
+            \hline
+            Arbitrary & 0.861515329981979 & 0.035444068265105426 &
+            0.10625656632727554\\
+            \hline
+        \end{tabular}
+        \captionsetup{justification=centering}
+        \caption{Raw fitted values for the simple model}
+        \label{fig:recapTests}
+    }
+\end{table}
+
+\begin{figure}[H] 
+    \centering
+    \includegraphics[width=0.8\columnwidth]{hist_overhead_rr_20_nodes_4_depth_all_receivers_gen_averages}
+    \captionsetup{justification=centering}
+    \caption{Histogram of the overhead. Round-robin and all receivers strategies}
+    \label{fig:relOverheadLatencyRR}
 \end{figure}
+
+
+
+\subsection{Improvements of the basic model and new fitting}
+
+\section{Analysis}
+
+\todo{here will be a table containing all the fitted lines values and a
+comparison and explanation of the behaviors that are observed}
+
 
