@@ -4,17 +4,21 @@
 \section{Context}
 
 The Ethereum blockchain aims to move from the current \gls{pow} consensus
-protocol to a \gls{pos} one. Multiple teams are currently researching ways to describe, and implement
-such a protocol. One of these teams, lead by Vlad Zamfir, is working on a protocol family called \gls{cbc} Casper.
-\gls{cbc}-Casper describes an abstract set of protocols that can achieve consensus between any kind of value, for example
-an integer, a vote, or a blockchain. This project aims to find and compare block publishing strategies
+protocol to a \gls{pos} one. Multiple teams are currently researching ways to
+describe, and implement such a protocol. One of these teams, lead by Vlad
+Zamfir, is working on a protocol family called \gls{cbc} Casper.
+\gls{cbc}-Casper describes an abstract set of protocols that can achieve
+consensus between any kind of value, for example an integer, a vote, or a
+blockchain. This project aims to find and compare block publishing strategies
 for a \gls{cbc}-Casper blockchain consensus.
 
 \section{Objectives}
-As the \gls{cbc}-Casper paper only describes an abstract way of consctructing \gls{pos} consensus protocols, and does not
-make any assumptions on synchrony, one of the main challenges of the actual implementation is to find
-incentive mechanisms and strategies telling the nodes when to produce blocks.
-The main goals of this project are:
+As the \gls{cbc}-Casper paper only describes an abstract way of consctructing
+\gls{pos} consensus protocols, and does not make any assumptions on synchrony,
+one of the main challenges of the actual implementation is to find incentive
+mechanisms and strategies telling the nodes when to produce blocks.  The main
+goals of this project are:
+
 \begin{itemize}
         \item to propose multiple block producing strategies;
         \item to create a model that allows one to easily compare said strategies;
