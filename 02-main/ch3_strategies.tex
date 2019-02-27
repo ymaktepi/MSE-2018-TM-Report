@@ -90,10 +90,10 @@ The following strategies were proposed in order to visit the entierty of the
 trade-off triangle:
 \begin{itemize}
         \item round-robin;
-        \item randomness;
         \item double round-robin;
         \item triple round-robin;
-        \item overhead.
+        \item overhead;
+        \item arbitrary.
 \end{itemize}
 These strategies should allow one to visit the whole triangle and to discuss
 their respective strength and weaknesses. The following sections describe the
@@ -105,10 +105,6 @@ messages one after the other, in a fixed order.
 \todo{talk about real life implications? aka synchronize all nodes?,\ldots and
 that for every strategy}
 
-\subsection{Randomness}
-The next strategy is the simplest to think of: complete randomness. Using fixed
-probability density functions, nodes chose when to create messages and to which
-other validator to send them.
 
 \subsection{Double Round-robin}
 In this setting, two nodes send messages at the same time, in a fixed order. If
@@ -130,6 +126,11 @@ This strategy is the most expensive in terms of bandwidth; at each step, each
 validator sends a message to the others. This example strategy should give a
 baseline value for the maximum overhead that is reachable in the tradeoff
 triangle.
+
+\subsection{Arbitrary}
+The next strategy is the simplest to think of: complete randomness. Using fixed
+probability density functions, one node is arbitrarily selected at each step to
+create a message. 
 
 \subsection{Bottom-up strategies}
 All the previous strategies (except the Arbitrary one) can be viewed as
@@ -403,7 +404,11 @@ acknowledgments.
 
 \subsection{Arbitrary}
 This strategy is the only one that uses a random factor and that can be
-considered as a "bottom-up" strategy.
+considered as a "bottom-up" strategy. The main goal of this strategy is to
+have a reference point when comparing new strategies.
+The overhead distribution \todo{what is this shape? how to compute
+characteristics?}
+
 
 \triplefigure
     {hist_nb_nodes_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
@@ -412,6 +417,21 @@ considered as a "bottom-up" strategy.
     {Distribution of the dataset. Number of nodes (left), latency (center)
     and overhead (right)}
     {fig:distArbitrary}
+
+The top-left graph on Figure~\ref{fig:relArbitrary} shows a linear relationship
+between the latency and the number of nodes. The equation of the fitted line is
+\[l = 2.091255 \cdot n\]. Even tough it shows some variance, the slope is
+not that far from a simple round-robin strategy. \todo{rephrase <-}
+
+The two other graphs on the Figure are less straightforward to explain than the
+previous strategies'. The plot that pictures the relationship between the
+overhead and the number of nodes shows two linear branches that split quite
+clearly, and the same goes for the plot of the latency against the overhead.
+The latter one shows an even weirder artifact: 
+
+
+
+
 \triplefigure
     {relation_nb_nodes_latency_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
     {relation_nb_nodes_overhead_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
@@ -422,10 +442,11 @@ considered as a "bottom-up" strategy.
 
 
 \subsection{Fitting of the basic model}
-Fitting the basic model described in \todo{section} to the data gives the
-following result.
+Fitting the basic model described in \todo{section} to the datai using a simple
+linear regression gives the results as shown in a raw manner on Figure~\ref{fig:recapTests} and
+in a bar graph on Figure~\ref{fig:recapTestsPlot}.
 
-\begin{table}[H]
+\begin{table}
     \centering{
         \begin{tabular}{|c|c|c|c|}
             \hline
@@ -461,6 +482,7 @@ and the latency scores, compared to the ones for the round-robin are also in
 accordance with what is expected; the latency decreases when the number of round
 augments and the overhead increases along with the number of nodes sending
 messages in a single round.
+
 \subsubsection{Number of nodes}
 The main problem with these results is the evolution of the score for the number
 of nodes, particularly for the arbitrary strategy. Based on the observations
@@ -505,18 +527,20 @@ score for the number of nodes is forced to be high.
 %        \label{fig:recapTests}
 %    }
 %\end{table}
-%
-\begin{figure}[H] 
-    \centering
-    \includegraphics[width=0.8\columnwidth]{hist_overhead_rr_20_nodes_4_depth_all_receivers_gen_averages}
-    \captionsetup{justification=centering}
-    \caption{Histogram of the overhead. Round-robin and all receivers strategies}
-    \label{fig:relOverheadLatencyRR}
-\end{figure}
+
+%\begin{figure}[H] 
+%    \centering
+%    \includegraphics[width=0.8\columnwidth]{hist_overhead_rr_20_nodes_4_depth_all_receivers_gen_averages}
+%    \captionsetup{justification=centering}
+%    \caption{Histogram of the overhead. Round-robin and all receivers strategies}
+%    \label{fig:relOverheadLatencyRR}
+%\end{figure}
 
 
 
 \subsection{Improvements of the basic model and new fitting}
+Show normalized output/radar graphs\
+Explain why changing exponents could lead to a better model
 
 \section{Analysis}
 \todo{why the model is bad according to the number of nodes}
@@ -524,4 +548,32 @@ score for the number of nodes is forced to be high.
 \todo{here will be a table containing all the fitted lines values and a
 comparison and explanation of the behaviors that are observed}
 
-\section{Future works}
+\section{Further research}
+\subsection{Half set strategy}
+A new sending strategy that could be interesting to implement is a strategy
+where half the validator set sends a message at each step. That would give a new
+comparison point with a fixed latency and an overhead that would be half the one
+for the Maximal overhead strategy. It would be useful to have it to find better
+coefficients for the refined model.
+
+\subsection{Bottom up strategies}
+Now that the framework is functional and can give some reference points and has
+ways to compare strategies, one obvious next step would be to implement bottom
+up strategies that could include rewarding/slashing the stake of the nodes.
+
+\subsection{Optimize model}
+As seen in the final comparison plots, the model might be too restrictive for
+the actual problem. It might be worth trying to find a better fitting model to
+better reproduce the real life use case.
+
+\subsection{Better network modeling}
+Currently, the \texttt{proptest} implementation does not include a good model
+for the network layer. The three proposed receiving strategies are naive but
+permitted to validate the framework, from the metrics measurements to the actual
+model fitting. A step forward would be to create better models for the
+network, based on real life topology, latencies, number of nodes, \ldots
+
+\subsection{Simplify model}
+One could argue that tying the number of nodes to the rest of the variables
+might be too restrictive, and getting rid of the parameter could offer other
+insights while comparing strategies.
