@@ -16,7 +16,7 @@ that:
 The latency is the number of messages needed to finalize a block. Ideally, you
 want to have a latency as low as possible to reach finality as soon as possible.
 The latency is a way to measure liveness in a blockchain system. If it is low,
-then the system is considered more "live", as less messages are needed in order
+then the system is considered more "live", as fewer messages are needed in order
 to confirm a transaction, and therefore less time.
 
 \subsubsection{Number of nodes}
@@ -60,7 +60,9 @@ aims to find strategies that span the entierty of the triangle and
 \subsection{Basic model}
 \label{ssec:model}
 The first model that has been chosen for the evaluation is the following:
+
 \[1 = s_n \cdot \frac{1}{n} + s_l\cdot l + s_o\cdot o\]
+
 This model binds 3 scores \(s_x\) to their respective variables \(x\).
 Variables are as follows:
 \begin{itemize}
@@ -71,8 +73,8 @@ Variables are as follows:
 The higher the score \(s_x\) is, the more its related variable is dominant
 in the strategy and therefore the closer to a corner of the triangle the strategy is.
 \(\frac{1}{n}\) is used because a large number of nodes is wanted.
-This model is a basic one, where everything is linear. It is probably wrong but
-will serve as a base for a more complex one once data have been plotted using
+This model is a basic one, where everything is linear. It is probably not accurate but
+will serve as a base for a closer to reality one once data have been plotted using
 this model.
 \todo{why 1/n, why everything linear?}
 
@@ -90,6 +92,7 @@ trade-off triangle:
         \item round-robin;
         \item randomness;
         \item double round-robin;
+        \item triple round-robin;
         \item overhead.
 \end{itemize}
 These strategies should allow one to visit the whole triangle and to discuss
@@ -114,6 +117,14 @@ set of validators \todo{explain better}, the latency to finality is supposedly
 half as much as the simple round-robin strategy. The overhead is however
 doubled.\todo{add that we could have a triple rr, quadrr, \ldots}
 
+\subsection{Triple Round-robin}
+This strategy is similar to the Double round-robin, except that three nodes send
+a message a each step. It was decided to add this strategy at a later stage of
+the project in order to have intermediate comparison points between the Double
+round-robin and the Maximal overhead strategy. As for the Double round-robin
+strategy, the latency should be divided by three compared to the simple
+round-robin and the overhead should be three times higher.
+
 \subsection{Maximal Overhead}
 This strategy is the most expensive in terms of bandwidth; at each step, each
 validator sends a message to the others. This example strategy should give a
@@ -121,10 +132,18 @@ baseline value for the maximum overhead that is reachable in the tradeoff
 triangle.
 
 \subsection{Bottom-up strategies}
-\todo{talk about strategies that are obtained from a bottom-up point of view,
-instead of a global vision, each node decides when and why it has to send a
-message}
-\todo{talk about incentives, slashing and such}
+All the previous strategies (except the Arbitrary one) can be viewed as
+"top-down" strategies, as there has to be a way for nodes to be synchronized.
+Strategies that are easier to implement from a real-life point of view would be
+strategies that only depend on the data available on a node. For exemple, a node
+could keep track of the whole state of the finalization of messages, and only
+publish a message itself when it facilitates the finalization. That kind of
+strategy has not been implemented but the testing and scoring framework allows
+one to easily add them.
+
+Such strategies should implement incentives for the nodes not to spam the
+network and include mechanisms to slash nodes not following some rules the
+strategies dictate.
 
 \section{Experimentations}
 Over the duration of this thesis, the \texttt{core-cbc} library has included a
@@ -196,6 +215,7 @@ relations between the metrics, and small enough to reach the terminating conditi
 a reasonable time (1 run with a number of nodes chosen at random takes on average 1 hour
 with the Maximal overhead strategy).
 
+\todo{renove table}
 
 \begin{table}[H]
     \centering{
@@ -247,6 +267,7 @@ expected.
 The gaps will be explained in the next section, using the graphs that show
 relations between variables. \todo{explain gaps}
 
+\todo{fix center/left/right in captions and text}
 \triplefigure
     {hist_nb_nodes_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {hist_latency_rr_20_nodes_4_depth_all_receivers_gen_averages}
@@ -272,6 +293,12 @@ data, as the Overhead is always \(1\). On the other hand, the graph on the left
 shows a clear linear relationship between the latency and the number of nodes.
 The fitted line has the following equation:
 \[l = 1.403402\cdot n\]
+The latency is expected to be around \(1.5\cdot n\) because the finality is
+reached when at least 50\% of the network has acknowledged that the whole
+network has the finalized message in its justification. As pictured in the
+top-left graph of Figure~\ref{fig:relRR}, the fitted line has a slightly small
+slope compared to the data points due to the fact that the line is fitted to be
+linear and the data points are close the origin. \todo{insert line with 1.5*n ?}
 
 \subsection{Double round-robin}
 \triplefigure
@@ -281,6 +308,14 @@ The fitted line has the following equation:
     {Distribution of the dataset. Number of nodes (left), latency (center)
     and overhead (right)}
     {fig:distDRR}
+As for the simple round-robin case, the latency and number of nodes
+distributions show a similar shape. The latency is less spread than for the
+singl round-robin, which explains some dissimilarities between the
+distributions. The distribution of the overhead presents a peak at 2, which is
+expected but also shows that there are some messages that have double this
+overhead, at 4. This will be explained using the following graphs. \todo{explain
+outliers}
+
 \triplefigure
     {relation_nb_nodes_latency_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {relation_nb_nodes_overhead_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
@@ -289,7 +324,22 @@ The fitted line has the following equation:
     Overhead/Number of nodes (center) and Latency/Overhead (right)}
     {fig:relDRR}
 
+As for the simple round-robin strategy, the plots including the Overhead are not
+of much use here, except they show that its value is 2, as it is expected. 
+On the other hand, the plot on the top-left of Figure~\ref{fig:relDRR} shows a
+linear relation between the number of nodes and the latency: 
+\[l = 0.721750 \cdot n\]
+This value is about half of the slope obtained for the same relation with the
+round-robin strategy. The double round-robin strategy was supposed to show half
+the latency with respect to the simple round-robin and this value is therefore
+correct. The value of 2 for the overhead is also twice the overhead for the
+single round-robin and confirms the hypothesis.
+    
+
 \subsection{Triple round-robin}
+The triple round-robin strategy shows  the same kind of information as the
+double round-robin one. The overhead is 3 for almost all cases (this will be
+discussed later), and the number of nodes and latency are lineraly correlated.
 \triplefigure
     {hist_nb_nodes_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {hist_latency_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
@@ -297,6 +347,14 @@ The fitted line has the following equation:
     {Distributions of the dataset. Number of nodes (left), latency (center)
     and overhead (right)}
     {fig:distTRR}
+
+The relationship with the overhead are again not of much use because its value
+is always 3. Again, there is a linear relationship between the latency and the
+number of nodes, which follows this equation:
+    \[l = 0.496152 * n\]
+The slope is a third as the slope for the simple round-robin strategy. Moreover
+the overhead is three times larger for the triple round-robin than it is for the
+simple.
 \triplefigure
     {relation_nb_nodes_latency_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {relation_nb_nodes_overhead_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
@@ -306,8 +364,18 @@ The fitted line has the following equation:
     {fig:relTRR}
 
 \subsection{Maximal overhead}
+This strategie aims to reduce latency to its minimum, which is shown in the
+top-right plot on Figure~\ref{fig:distOverhead}. The distributions of the number
+of nodes and overhead are of the same shape because they are lineraly
+correlated, as will be shown in the next paragraph. 
+Note that the experiments have been run with a lower number of nodes because the
+simulations for a large number of nodes takes a large amount of time. The
+simulations are currently implemented following the mathematical formulae found
+in \todo{VLADS PAPER} and not yet optimized. For completeness's sake, a few runs
+have been performed with the same amount of nodes as for the other experiments
+to show whether or not there were divergences. It turned out that there was not
+such divergences. 
 \todo{talk about why the number of nodes is not even}
-\todo{maybe add the undersample one}
 \triplefigure
     {hist_nb_nodes_overhead_10-20_nodes_4_depth_all_receivers_gen_averages}
     {hist_latency_overhead_10-20_nodes_4_depth_all_receivers_gen_averages}
@@ -315,6 +383,16 @@ The fitted line has the following equation:
     {Distribution of the dataset. Number of nodes (left), latency (center)
     and overhead (right)}
     {fig:distOverhead}
+
+The top-right plot on Figure~\ref{fig:relOverhead} clearly shows a linear
+dependency between the number of nodes and the overhead. The relation is \(o =
+n\), as it is expected.
+The two other plots on the same Figure only confirm that the latency equals 2,
+which is the minimum that can be reached, as there needs to be two steps to
+finalize a message. During the first step, all nodes acknowledge they have seen
+a message, and the second step confirms that everyone has seen the other nodes
+acknowledgments.
+
 \triplefigure
     {relation_nb_nodes_latency_overhead_10-20_nodes_4_depth_all_receivers_gen_averages}
     {relation_nb_nodes_overhead_overhead_10-20_nodes_4_depth_all_receivers_gen_averages}
@@ -324,6 +402,9 @@ The fitted line has the following equation:
     {fig:relOverhead}
 
 \subsection{Arbitrary}
+This strategy is the only one that uses a random factor and that can be
+considered as a "bottom-up" strategy.
+
 \triplefigure
     {hist_nb_nodes_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
     {hist_latency_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
@@ -350,27 +431,81 @@ following result.
             \hline
             Sending Strategy & \(s_n\) & \(s_l\) & \(s_o\) \\
             \hline
-            Round-robin &  8.191362192111169e-15 & 1.3877787807814457e-17 &
-            1.0000000000000004\\
+            Round-robin & 0.0 & 0.0 & 1.0\\
             \hline
-            Double round-robin & 0.11909308040094774 & 0.036185425185665365 &
-            0.6012986563849584\\
+            Double round-robin & 1.435 & 0.055 & 0.162\\
             \hline
-            Triple round-robin & 0.4048674665564243 & 0.08250874411097947 &
-            0.4014266527787466\\
+            Triple round-robin & 1.686 & 0.084 & 0.091\\
             \hline
-            Maximal overhead & 6.345629668569573e-15 & 0.987729767831156 & 0.0\\
+            Maximal overhead & 0.0 & 0.5 & 0.0\\
             \hline
-            Arbitrary & 0.861515329981979 & 0.035444068265105426 &
-            0.10625656632727554\\
+            Arbitrary & 2.556 & 0.026 & 0.002\\
             \hline
         \end{tabular}
         \captionsetup{justification=centering}
-        \caption{Raw fitted values for the simple model}
+        \caption{Raw fitted values for the simple model, rounded to the 3rd
+        decimal place}
         \label{fig:recapTests}
     }
 \end{table}
 
+The scores obtained for the round-robin and the maximal overhead strategies are
+the expected ones. The round-robin strategy optimizes the overhead (one message
+per new finalized block) and the latency evolves linearly with the number of
+nodes and is therefore bad. The score for the number of nodes will be discussed
+later in this chapter. The maximal overhead strategy shows that it maximizes the
+latency (which is \(2\), the minimal value for the latency) and therefore the
+rest of the scores are non influential.
+For the double and triple round-robin strategies, the variation for the overhead
+and the latency scores, compared to the ones for the round-robin are also in
+accordance with what is expected; the latency decreases when the number of round
+augments and the overhead increases along with the number of nodes sending
+messages in a single round.
+\subsubsection{Number of nodes}
+The main problem with these results is the evolution of the score for the number
+of nodes, particularly for the arbitrary strategy. Based on the observations
+made in \todo{section}, the arbitrary strategy clearly is worse than the other ones for
+the latency and overhead. That is reflected with the values obtained for their
+respective scores. The main issue with it is that the score for the number of
+nodes is used as a buffer for how well the two other variables perform in a set
+strategy. Indeed, the model forces the relation between the scores and the
+variables, and if the scores for both the latency and the overhead are low, the
+score for the number of nodes is forced to be high.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{final_plot_basic_model}
+    \captionsetup{justification=centering}
+    \caption{Raw fitted calues for the simple model. The strategies are listed
+    on the x-axis and their scores are plotted along the y-axis. \todo{prettify
+    the x-axis and bar legend}}
+    \label{fig:recapTestsPlot}
+\end{figure}
+
+%\begin{table}[H]
+%    \centering{
+%        \begin{tabular}{|c|c|c|c|}
+%            \hline
+%            Sending Strategy & \(s_n\) & \(s_l\) & \(s_o\) \\
+%            \hline
+%            Round-robin & 0.0 & 0.0 &
+%            1.0\\
+%            \hline
+%            Double round-robin & 0.119 & 0.036 & 0.601\\
+%            \hline
+%            Triple round-robin & 0.404 & 0.082 & 0.401\\
+%            \hline
+%            Maximal overhead & 0.0 & 0.987 & 0.0\\
+%            \hline
+%            Arbitrary & 0.861 & 0.035 & 0.106\\
+%            \hline
+%        \end{tabular}
+%        \captionsetup{justification=centering}
+%        \caption{Raw fitted values for the simple model, rounded to the 3rd decimal}
+%        \label{fig:recapTests}
+%    }
+%\end{table}
+%
 \begin{figure}[H] 
     \centering
     \includegraphics[width=0.8\columnwidth]{hist_overhead_rr_20_nodes_4_depth_all_receivers_gen_averages}
@@ -384,8 +519,9 @@ following result.
 \subsection{Improvements of the basic model and new fitting}
 
 \section{Analysis}
+\todo{why the model is bad according to the number of nodes}
 
 \todo{here will be a table containing all the fitted lines values and a
 comparison and explanation of the behaviors that are observed}
 
-
+\section{Future works}
