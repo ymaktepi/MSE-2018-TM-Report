@@ -177,6 +177,16 @@ ways:
     \item fully connected;
     \item ring.
 \end{itemize}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\columnwidth]{rings}
+  \captionsetup{justification=centering}
+    \caption{Parity nodes topologiess implemented in the Docker testnet. Ring
+    layout (left), fully connected (right)}
+	\label{fig:example2}
+\end{figure}
+
 The created nodes have the same types of accounts as for the local testnet.
 \todo{include schemas of fully connected and ring layouts}
 In the fully connected setting, each node is connected to every other node. In
@@ -185,4 +195,6 @@ Those were the two first layouts that were implemented for simplicity. It was
 thought to add new layouts afterwards in order to match more precisely the real
 network topology of the Ethereum \textit{mainnet}. However, because the Parity
 implementation was deemed too time consuming to be used before the end of this
-project, no further efforts have been put in that direction.
+project, no further efforts have been put in that direction. Nevertheless, the
+software architecture is in such a state than adding and removing topologies is
+easily done through abstract structures.
