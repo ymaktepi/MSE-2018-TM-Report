@@ -273,8 +273,12 @@ relations between variables. \todo{explain gaps}
     {hist_nb_nodes_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {hist_latency_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {hist_overhead_rr_20_nodes_4_depth_all_receivers_gen_averages}
-    {Distributions of the dataset. Number of nodes (left), latency (center)
-    and overhead (right) \todo{change xticks label frequency}}
+    {Distributions of the dataset for the round-robin strategy and all
+    receivers. As the latency (top-right) presents a linear correlation with the number of
+    nodes (top-left), the shapes of the histograms are similar. The overhead
+    (bottom) always
+    equals to 1 because only one message is sent per step, and each step
+    finalizes a block.}
     {fig:distRR}
 
 The histogram for the overhead is easy to analyse as well; the overhead is
@@ -285,8 +289,9 @@ one message from the next validator is needed to finalize the next block.
     {relation_nb_nodes_latency_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {relation_nb_nodes_overhead_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {relation_overhead_latency_rr_20_nodes_4_depth_all_receivers_gen_averages}
-    {Relations between all the variables. Latency/Number of nodes (left),
-    Overhead/Number of nodes (center) and Latency/Overhead (right)}
+    {The round-robin strategy shows a linear relation between the number of
+    nodes and the latency (top-left). The overhead is a constant for this
+    strategy (top-right, bottom).}
     {fig:relRR}
 
 The right and center graphs on Figure~\ref{fig:relRR} do not give more insight on the
@@ -306,8 +311,10 @@ linear and the data points are close the origin. \todo{insert line with 1.5*n ?}
     {hist_nb_nodes_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {hist_latency_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {hist_overhead_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
-    {Distribution of the dataset. Number of nodes (left), latency (center)
-    and overhead (right)}
+    {Distributions of the dataset for the double round-robin strategy and all
+    receivers. As the latency (top-right) and the number of nodes (top-left) are
+    linearly correlated, their distributions are of similar shapes. The
+    overhead (bottom) equals 2, as expected and shows an outlying value at 4.}
     {fig:distDRR}
 As for the simple round-robin case, the latency and number of nodes
 distributions show a similar shape. The latency is less spread than for the
@@ -321,8 +328,10 @@ outliers}
     {relation_nb_nodes_latency_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {relation_nb_nodes_overhead_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {relation_overhead_latency_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
-    {Relations between all the variables. Latency/Number of nodes (left),
-    Overhead/Number of nodes (center) and Latency/Overhead (right)}
+    {The double round-robin strategy shows a linear relation between the number of
+    nodes and the latency (top-left). The overhead is a constant for this
+    strategy (top-right, bottom). The top-right plot indicates that the outliers
+    only emerge when the tests are run with 3 or 5 nodes.}
     {fig:relDRR}
 
 As for the simple round-robin strategy, the plots including the Overhead are not
@@ -345,8 +354,11 @@ discussed later), and the number of nodes and latency are lineraly correlated.
     {hist_nb_nodes_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {hist_latency_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {hist_overhead_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
-    {Distributions of the dataset. Number of nodes (left), latency (center)
-    and overhead (right)}
+    {Distributions of the dataset for the triple round-robin strategy and all
+    receivers. As the latency (top-right) and the number of nodes (top-left) are
+    linearly correlated, their distributions are of similar shapes. The
+    overhead (bottom) equals 3, as expected and shows two outlying values at 1
+    and 6.}
     {fig:distTRR}
 
 The relationship with the overhead are again not of much use because its value
@@ -360,8 +372,12 @@ simple.
     {relation_nb_nodes_latency_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {relation_nb_nodes_overhead_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {relation_overhead_latency_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
-    {Relations between all the variables. Latency/Number of nodes (left),
-    Overhead/Number of nodes (center) and Latency/Overhead (right)}
+    {The triple round-robin strategy shows a linear relation between the number of
+    nodes and the latency (top-left). The overhead is a constant for this
+    strategy (top-right, bottom) except for some outliers. The top-right plot
+    indicates that the overhead is lower for 2 nodes, which is expected because
+    fewer than 3 messages are sent in this case. Outliers are also found when
+    running 5 and 11 nodes.}
     {fig:relTRR}
 
 \subsection{Maximal overhead}
@@ -381,8 +397,13 @@ such divergences.
     {hist_nb_nodes_overhead_10-20_nodes_4_depth_all_receivers_gen_averages}
     {hist_latency_overhead_10-20_nodes_4_depth_all_receivers_gen_averages}
     {hist_overhead_overhead_10-20_nodes_4_depth_all_receivers_gen_averages}
-    {Distribution of the dataset. Number of nodes (left), latency (center)
-    and overhead (right)}
+    {Distributions of the dataset for the maximal overhead strategy and all
+    receivers. As the overhead (bottom) and the number of nodes (top-left) are
+    linearly correlated, their distributions are of similar shapes. The
+    latency (top-righ) equals 2, as expected. Note that because the maximal
+    overhead strategy is computationally heavy, tests were run for 10 nodes and
+    a few of them were run for 19 nodes, which is reflected in the shapes of the
+    bottom and top-left histograms.}
     {fig:distOverhead}
 
 The top-right plot on Figure~\ref{fig:relOverhead} clearly shows a linear
@@ -414,8 +435,9 @@ characteristics?}
     {hist_nb_nodes_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
     {hist_latency_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
     {hist_overhead_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
-    {Distribution of the dataset. Number of nodes (left), latency (center)
-    and overhead (right)}
+    {Distributions of the dataset for the arbitrary strategy and all
+    receivers. Only the overhead seems to be distributed in a \todo{name of
+    distrib} manner. }
     {fig:distArbitrary}
 
 The top-left graph on Figure~\ref{fig:relArbitrary} shows a linear relationship
