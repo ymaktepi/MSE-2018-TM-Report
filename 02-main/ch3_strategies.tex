@@ -39,7 +39,7 @@ the costs in bandwidth low.
 	\label{fig:metricsSchema}
 \end{figure}
 
-Figure~\ref{fig:metricsSchema} describes how the computation of the metrics
+\fig{fig:metricsSchema} describes how the computation of the metrics
 takes place. The left half of the figure shows an initial view of the system. At
 time \(t_1\), message \(m_1\) is finalized. The right half of the figure shows a
 view of the system at \(t_2\), time at which \(m_2\) is finalized. The latency
@@ -143,6 +143,7 @@ probability density functions, one node is arbitrarily selected at each step to
 create a message. 
 
 \subsection{Bottom-up strategies}
+\label{ssec:bottomUpStrats}
 All the previous strategies (except the Arbitrary one) can be viewed as
 "top-down" strategies, as there has to be a way for nodes to be synchronized.
 Strategies that are easier to implement from a real-life point of view would be
@@ -156,7 +157,7 @@ Such strategies should implement incentives for the nodes not to spam the
 network and include mechanisms to slash nodes not following some rules the
 strategies dictate.
 
-\section{Experimentations}
+\section{Methodology}
 Over the duration of this thesis, the \texttt{core-cbc} library has included a
 test framework called \texttt{proptest}. The testing framework that has been
 implemented includes ways to simulate the behavior of the Casper protocol over
@@ -180,7 +181,7 @@ validate blocks.
 \subsubsection{Terminating condition}
 The terminating condition is a predicate that tells whether or not the simulation has
 reached an end. In our case, the end of the simulation is reached when at least
-one node finds a safety oracle for a blockchain that has an height of 4. This
+one node finds a safety oracle for a blockchain that has a height of 4. This
 height was chosen because it offered a balance between the computation speed and
 the variance in output values. If the chosen value was smaller, the generated
 blockchains would all look alike and some side effects would have been observed
@@ -189,7 +190,7 @@ near the genesis block. A bigger value would imply more computation time.
 \subsubsection{Sender strategy}
 The sender strategy selects one or more nodes that will create new messages and
 forward them to the rest of the network. All the basic strategies that have been
-presented in Section~\ref{sec:strategies} are implemented as Sender strategies.
+presented in \sec{sec:strategies} are implemented as Sender strategies.
 New strategies (including bottom-up ones) can be easily implemented as well.
 
 \subsubsection{Receiver strategy}
@@ -212,7 +213,7 @@ strategies.
 
 \subsection{Metrics measurements}
 Metrics are not computed as-is in the \texttt{proptest} implementation. Simpler
-datas are logged into \texttt{csv} files, and are processed by a \texttt{Python}
+data are logged into \texttt{csv} files, and are processed by a \texttt{Python}
 script. \todo{what data} This two steps processing permitted the generation of
 data before having a precise definition of the metrics. It also permits to vary
 the way metrics are recorded. For example, from the same log file, you could
@@ -220,7 +221,7 @@ extract metrics only when the last step of the consensus is reached, or have an
 average of the metrics at each step of the consensus.
 
 \subsection{Tests}
-Table~\ref{fig:recapTests} summarizes which tests have been run.
+\tab{fig:recapTests} summarizes which tests have been run.
 All of them have the same terminating condition, which is reached when at least a
 node finds a safety oracle at height 4. The number of nodes is chosen at random
 in the interval \([1, 20[\). It has been decided to perform tests on this
@@ -258,14 +259,14 @@ with the Maximal overhead strategy).
 \todo{how the measurements take place in the code}
 
 \section{Visualization I: All receivers}
-This chapter presents a visualization of the datas obtained through the multiple
+This chapter presents a visualization of the the data obtained through the multiple
 test runs with the All receivers strategy.  Each subsection shows the results
 using 3 histograms, representing the raw data, followed by 3 scatter plots
 picturing each metric against each other. These graphs also show a simple linear
 regression as an attempt to find a relation between each metric. At the end of
 the discussion of each strategy a linear regression is performed in order to
 find the scores of each variable according to the model presented in
-Subsection~\ref{ssec:model}.
+\ssec{ssec:model}.
 
 
 \todo{3D plotting?}
@@ -274,7 +275,7 @@ Subsection~\ref{ssec:model}.
 \subsection{Round-robin}
 
 The distributions of the number of nodes and the latency
-(Figure~\ref{fig:distRR} left and center) have the same
+(\fig{fig:distRR} left and center) have the same
 shapes except for the gaps every 3 steps. The resemblance in shape is explained
 by the fact that the latency is strictly correlated to the number of nodes, as
 expected.
@@ -306,7 +307,7 @@ one message from the next validator is needed to finalize the next block.
     strategy (top-right, bottom).}
     {fig:relRR}
 
-The right and center graphs on Figure~\ref{fig:relRR} do not give more insight on the
+The right and center graphs on \fig{fig:relRR} do not give more insight on the
 data, as the Overhead is always \(1\). On the other hand, the graph on the left
 shows a clear linear relationship between the latency and the number of nodes.
 The fitted line has the following equation:
@@ -314,7 +315,7 @@ The fitted line has the following equation:
 The latency is expected to be around \(1.5\cdot n\) because the finality is
 reached when at least 50\% of the network has acknowledged that the whole
 network has the finalized message in its justification. As pictured in the
-top-left graph of Figure~\ref{fig:relRR}, the fitted line has a slightly small
+top-left graph of \fig{fig:relRR}, the fitted line has a slightly small
 slope compared to the data points due to the fact that the line is fitted to be
 linear and the data points are close the origin. \todo{insert line with 1.5*n ?}
 
@@ -348,7 +349,7 @@ outliers}
 
 As for the simple round-robin strategy, the plots including the Overhead are not
 of much use here, except they show that its value is 2, as it is expected. 
-On the other hand, the plot on the top-left of Figure~\ref{fig:relDRR} shows a
+On the other hand, the plot on the top-left of \fig{fig:relDRR} shows a
 linear relation between the number of nodes and the latency: 
 \[l = 0.721750 \cdot n\]
 This value is about half of the slope obtained for the same relation with the
@@ -380,7 +381,7 @@ number of nodes, which follows this equation:
 The slope is a third as the slope for the simple round-robin strategy. Moreover
 the overhead is three times larger for the triple round-robin than it is for the
 simple.
-Figure~\ref{fig:relTRR} shows clear outliersfor the overhead value when running
+\fig{fig:relTRR} shows clear outliersfor the overhead value when running
 2, 5 and 11 nodes. When running 2 nodes, which is an obvious edge case for this
 strategy (as there are only 2 nodes and there should be at least 3 to send
 different messages), the overhead is only 1 because only one node sends a
@@ -401,7 +402,7 @@ message in this case.
 
 \subsection{Maximal overhead}
 This strategie aims to reduce latency to its minimum, which is shown in the
-top-right plot on Figure~\ref{fig:distOverhead}. The distributions of the number
+top-right plot on \fig{fig:distOverhead}. The distributions of the number
 of nodes and overhead are of the same shape because they are lineraly
 correlated, as will be shown in the next paragraph. 
 Note that the experiments have been run with a lower number of nodes because the
@@ -425,7 +426,7 @@ such divergences.
     bottom and top-left histograms.}
     {fig:distOverhead}
 
-The top-right plot on Figure~\ref{fig:relOverhead} clearly shows a linear
+The top-right plot on \fig{fig:relOverhead} clearly shows a linear
 dependency between the number of nodes and the overhead. The relation is \(o =
 n\), as it is expected.
 The two other plots on the same Figure only confirm that the latency equals 2,
@@ -462,7 +463,7 @@ characteristics?}
     distrib} manner. }
     {fig:distArbitrary}
 
-The top-left graph on Figure~\ref{fig:relArbitrary} shows a linear relationship
+The top-left graph on \fig{fig:relArbitrary} shows a linear relationship
 between the latency and the number of nodes. The equation of the fitted line is
 \[l = 2.091255 \cdot n\]. Even tough it shows some variance, the slope is
 not that far from a simple round-robin strategy. \todo{rephrase <-}
@@ -488,11 +489,11 @@ The latter one shows an even weirder artifact:
 
 
 \subsection{Fitting of the basic model}
-Fitting the basic model described in Subsection~\ref{ssec:model} (\(1 = s_n
+Fitting the basic model described in \ssec{ssec:model} (\(1 = s_n
 \cdot \frac{1}{n} + s_l\cdot l + s_o\cdot o\)) to the data using a simple linear
 regression gives the results as shown as raw values on
-Figure~\ref{fig:recapTests} and in a bar graph on
-Figure~\ref{fig:recapTestsPlot}.
+\fig{fig:recapTests} and in a bar graph on
+\fig{fig:recapTestsPlot}.
 
 \todo{add error value}
 \begin{table}
@@ -533,9 +534,10 @@ augments and the overhead increases along with the number of nodes sending
 messages in a single round.
 
 \subsubsection{Number of nodes}
+\label{ssec:nbNodes}
 The main problem with these results is the evolution of the score for the number
 of nodes, particularly for the arbitrary strategy. Based on the observations
-made in Subsection~\ref{ssec:arbitrary}, the arbitrary strategy clearly is worse than the other ones for
+made in \ssec{ssec:arbitrary}, the arbitrary strategy clearly is worse than the other ones for
 the latency and overhead. That is reflected with the values obtained for their
 respective scores. The main issue with it is that the score for the number of
 nodes is used as a buffer for how well the two other variables perform in a set
@@ -608,21 +610,20 @@ coefficients for the refined model.
 \subsection{Bottom up strategies}
 Now that the framework is functional and can give some reference points and has
 ways to compare strategies, one obvious next step would be to implement bottom
-up strategies that could include rewarding/slashing the stake of the nodes.
+up strategies (see \ssec{ssec:bottomUpStrats}) that could include rewarding/slashing the stake of the nodes.
 
-\subsection{Optimize model}
-As seen in the final comparison plots, the model might be too restrictive for
+\subsection{Optimize and simplify model}
+As seen in the final comparison plots \todo{section}, the model might be too restrictive for
 the actual problem. It might be worth trying to find a better fitting model to
-better reproduce the real life use case.
+better reproduce the real life use case.\
+One could argue that tying the number of nodes to the rest of the variables
+might be too restrictive, and getting rid of the parameter could offer other
+insights while comparing strategies.
 
 \subsection{Better network modeling}
 Currently, the \texttt{proptest} implementation does not include a good model
 for the network layer. The three proposed receiving strategies are naive but
 permitted to validate the framework, from the metrics measurements to the actual
 model fitting. A step forward would be to create better models for the
-network, based on real life topology, latencies, number of nodes, \ldots
+network, based on real life network topologies, latencies, number of nodes, \ldots
 
-\subsection{Simplify model}
-One could argue that tying the number of nodes to the rest of the variables
-might be too restrictive, and getting rid of the parameter could offer other
-insights while comparing strategies.
