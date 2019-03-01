@@ -274,6 +274,8 @@ find the scores of each variable according to the model presented in
 
 \subsection{Round-robin}
 
+\FloatBarrier
+
 The distributions of the number of nodes and the latency
 (\fig{fig:distRR} left and center) have the same
 shapes except for the gaps every 3 steps. The resemblance in shape is explained
@@ -319,6 +321,7 @@ top-left graph of \fig{fig:relRR}, the fitted line has a slightly small
 slope compared to the data points due to the fact that the line is fitted to be
 linear and the data points are close the origin. \todo{insert line with 1.5*n ?}
 
+\FloatBarrier
 \subsection{Double round-robin}
 \triplefigure
     {hist_nb_nodes_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
@@ -359,6 +362,7 @@ correct. The value of 2 for the overhead is also twice the overhead for the
 single round-robin and confirms the hypothesis.
     
 
+\FloatBarrier
 \subsection{Triple round-robin}
 The triple round-robin strategy shows  the same kind of information as the
 double round-robin one. The overhead is 3 for almost all cases (this will be
@@ -400,6 +404,7 @@ message in this case.
     running 5 and 11 nodes.}
     {fig:relTRR}
 
+\FloatBarrier
 \subsection{Maximal overhead}
 This strategie aims to reduce latency to its minimum, which is shown in the
 top-right plot on \fig{fig:distOverhead}. The distributions of the number
@@ -444,6 +449,7 @@ acknowledgments.
     strategy (top-left, bottom).}
     {fig:relOverhead}
 
+\FloatBarrier
 \subsection{Arbitrary}
 \label{ssec:arbitrary}
 
@@ -488,6 +494,7 @@ The latter one shows an even weirder artifact:
     {fig:relArbitrary}
 
 
+\FloatBarrier
 \subsection{Fitting of the basic model}
 Fitting the basic model described in \ssec{ssec:model} (\(1 = s_n
 \cdot \frac{1}{n} + s_l\cdot l + s_o\cdot o\)) to the data using a simple linear
