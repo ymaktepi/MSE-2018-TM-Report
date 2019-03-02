@@ -9,7 +9,7 @@ replace \gls{pow} with \gls{pos}.
 
 \subsection{What is \gls{pow}?}
 \gls{pow} is the current consensus protocol used to decide on a blockchain in
-Ethereum. In order To create a new valid block, a node has to solve a
+Ethereum. In order to create a new valid block, a node has to solve a
 cryptographic puzzle and include its solution in the newly created block. The
 difficulty of the puzzle is parametrized in order to have -on average- a block
 created at a set interval. A reward is given to the creator of each block.  The
@@ -27,6 +27,7 @@ weight (or stake). This weight can be the node's age, wealth, etc. In this
 report, we will mainly discuss a specific \gls{pos} protocol, \gls{cbc}-Casper.
 
 \subsection{\gls{cbc}-Casper}
+\FloatBarrier
 \gls{cbc}-Casper \todo{cite somewhere} is an abstract consensus protocol family
 which is \gls{pos}-ready. Nodes, called validators in this context, send
 messages to each other, acknowledging they saw other messages by including them
@@ -38,7 +39,7 @@ as their estimate and form a \textit{block-\gls{dag}}. Running a slightly
 modified version of the \gls{ghost} algorithm on the \gls{dag} returns a
 blockchain.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{cbc-example}
   \captionsetup{justification=centering}
@@ -46,14 +47,14 @@ blockchain.
 	\label{fig:example}
 \end{figure}
 
-The Figure~\ref{fig:example} shows a small example of a \gls{cbc} execution
+\fig{fig:example} shows a small example of a \gls{cbc} execution
 over a blockchain. Four nodes are pictured. Colored circles are messages sent by
 validators, dotted arrows show their justifications. The selected blockchain is
 depicted with blue arrows. It is obtained by running the \gls{ghost} algorithm
 on the pictured view of the newtork, and would be the estimate of a new message
 sent by an honest validator that has this view.
 
-Figure~\ref{fig:example2} examplifies validator \(v_1\) producing a new message
+\fig{fig:example2} examplifies validator \(v_1\) producing a new message
 and the resulting new blockchain. An honnest node includes all the latest
 messages it has received (including its own last message). When a validator does
 not include its own messages in its justification, it is considered as an
@@ -64,7 +65,7 @@ and \(v_1\) has this message in the justification of its second message. It is
 said that \(v_1\)'s first message is in the \textit{dependency} of its later
 messages.
 
-\begin{figure}
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{cbc-example-2}
   \captionsetup{justification=centering}
@@ -75,18 +76,56 @@ messages.
 \todo{include a schema showing validators, justifications, estimates, \ldots in
 more depth}
 
+\todo{describe liveness, safety}
 \todo{talk about finality, safety oracles, \ldots }
 \todo{change structure; make comparison not between POS and POW but between POW
 and CBC}
+\FloatBarrier
+\subsection{\gls{cbc} Casper vs \gls{pow}}
+\label{ssec:powVsPos}
 
-\subsection{\gls{pos} vs \gls{pow}}
-\todo{talk about differences between pos and pow }
+\subsubsection{Block production}
+\todo{cite ref}
+In a \gls{pow} setting, a miner can broadcast any block to the network, but the
+block will only be picked up by the other nodes if it is valid. As the miner has
+to work to produce a valid block, it cannot create blocks on the fly at any
+time, whereas in a \gls{cbc} Casper setting, a node can broadcast blocks at any
+time. 
+
+\subsubsection{Timing assumption}
+In a \gls{pow} protocol, the work a miner has to do to create a block is
+parametrized by the difficulty of the cryptographic puzzle it has to solve. This
+difficulty is set in such a way that it takes a certain time -on average- to
+solve the puzzle. On the contrary, the \gls{cbc} Casper protocol family does not
+make any timing assumption.
+
+\subsubsection{Spam}
+The two previous points imply that spamming issues are mitigated by the need to
+work to produce blocks in a \gls{pow} chain. However, as there is a negligible
+computational cost to produce Casper messages, a node could easily spam the
+whole network.
+
+\subsubsection{Economic majority}
+\todo{cite ref, and better explanation}
+As machines that are better at solving the cryptographic puzzle in a \gls{pow}
+context are more expensive to buy and to operate, \todo{nah}
+Economic majority is however built in the \gls{cbc} Casper protocol, in the form
+of the weight that validators have.
+
+\subsubsection{Building strategy}
+In order to receive a reward for its work, a miner wants a block it has produced
+to be included in the main chain. A \gls{pow} protocol usually states that the
+chain with the most total difficulty is the main one. Therefore, a miner is
+incentivised to build on top of the main chain. 
+In a Casper setting, as there is no such incentive, a validator could build on
+any chain, or even on its own chain.
+
 
 \begin{table}[H]
     \centering{
         \begin{tabular}{|l|p{47mm}|p{47mm}|}
             \hline
-            & \gls{pow} & \gls{pos} \\
+            & \gls{pow} & \gls{cbc} Casper \\
             \hline
             Block production & Miners can publish blocks if the can prove they
             worked for it & Nodes can publish blocks at any time \\
@@ -100,7 +139,7 @@ and CBC}
             majority \\
             \hline
             Building strategy & Nodes are incentivised to build on the longest
-            chain because they have to work for to build blocks & No clear
+            chain because they have to work to build blocks & No clear
             incentive to build on the longest chain \\
             \hline
         \end{tabular}
@@ -109,22 +148,23 @@ and CBC}
         \label{fig:keyDiffPowPos}
     }
 \end{table}
-\subsection{key differences}
 
-\subsection{new problems}
+\section{Main problematic}
+\todo{rename section}
+As seen in \ssec{ssec:powVsPos}, many real-life implementation points are still
+to define in order to have a practical \gls{cbc} Casper blockchain. One main
+problem that arises is the selection of a block building strategy. This project
+will try to propose a model to compare strategies, as well as a framework that
+allows one to easily implement new strategies and discuss their performances
+based on the proposed model.
+Basic strategies that have predictable outputs will be implemented as well, in
+order to validate the functionality of the framework.
 
-\todo{talk about key differences and what this project is about}
-
-\section{CBC casper}
-\todo{describe the protocol in my own words}
-
-\todo{describe liveness, safety}
 \section{\texttt{core\_cbc}}
 \texttt{core\_cbc} a Rust implementation of the \gls{cbc}-Casper, made by
-TrueLevel. It implements the consensus algorithms proposed in the paper and
+TrueLevel \todo{introduce somewhere}. It implements the consensus algorithms proposed in the paper and
 offers an abstract structure that can be used to create consensus on any value.
 
-\section{the other casper?}
 \section{Parity Ethereum}
 \todo{remove redundancy in this chapter}
 \todo{parity networking/gossiping layer research?}
