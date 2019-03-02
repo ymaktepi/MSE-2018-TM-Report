@@ -51,15 +51,15 @@ blockchain.
 over a blockchain. Four nodes are pictured. Colored circles are messages sent by
 validators, dotted arrows show their justifications. The selected blockchain is
 depicted with blue arrows. It is obtained by running the \gls{ghost} algorithm
-on the pictured view of the newtork, and would be the estimate of a new message
+on the pictured view of the network, and would be the estimate of a new message
 sent by an honest validator that has this view.
 
 \fig{fig:example2} examplifies validator \(v_1\) producing a new message
-and the resulting new blockchain. An honnest node includes all the latest
+and the resulting new blockchain. An honest node includes all the latest
 messages it has received (including its own last message). When a validator does
 not include its own messages in its justification, it is considered as an
 \textit{equivocator}, does not follow the protocol, and could be punished by
-the network for such a behavior. Note that validator \(v_1\) does not equivovate
+the network for such a behavior. Note that validator \(v_1\) does not equivocate
 because its first message is in the justification of \(v_2\)'s first message,
 and \(v_1\) has this message in the justification of its second message. It is
 said that \(v_1\)'s first message is in the \textit{dependency} of its later
@@ -200,7 +200,7 @@ and that further testing was needed before being able to test parity}
 \subsection{Local testnet}
 Scripts that create and manage two local nodes have been written. They launch 2
 Parity instances with the \gls{cbc}-Casper consensus engine, and connect them
-together. Each node has an user account to send transactions, as well as a
+to each other. Each node has a user account to send transactions, as well as a
 sender account, that can act as a validator in a Casper sense. Currently, each
 node produces a block every 10 seconds. This is a basic strategy that enabled
 further testing of the Parity inclusion of the \texttt{core-cbc}.
