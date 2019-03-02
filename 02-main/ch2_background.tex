@@ -171,7 +171,7 @@ offers an abstract structure that can be used to create consensus on any value.
 Parity is a Rust Ethereum client. It includes a \textit{Pluggable Consensus}
 module that allows one to easily add new consensus protocols by implementing an
 interface.  At first, the goal of this project was to implement a small bridge
-between the Parity module and the core cbc implementation to test block creation
+between the Parity module and the \texttt{core\_cbc} implementation to test block creation
 strategies in a pseudo real-like manner. The implementation of the bridge was
 not as straight forward as planned so it has been decided to cut it out and test
 strategies without mimicking the network and client settings.
@@ -228,7 +228,6 @@ ways:
 \end{figure}
 
 The created nodes have the same types of accounts as for the local testnet.
-\todo{include schemas of fully connected and ring layouts}
 In the fully connected setting, each node is connected to every other node. In
 the ring case, each node is connected to two other nodes in a circular manner.
 Those were the two first layouts that were implemented for simplicity. It was

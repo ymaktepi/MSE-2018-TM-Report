@@ -62,8 +62,8 @@ The distributions of the number of nodes and the latency
 shapes except for the gaps every 3 steps. The resemblance in shape is explained
 by the fact that the latency is strictly correlated to the number of nodes, as
 expected.
-The gaps will be explained in the next section, using the graphs that show
-relations between variables. \todo{explain gaps}
+The gaps will be explained at the end of the section, using the graphs that show
+relations between variables.
 
 \triplefigure
     {hist_nb_nodes_rr_20_nodes_4_depth_all_receivers_gen_averages}
@@ -100,7 +100,15 @@ reached when at least 50\% of the network has acknowledged that the whole
 network has the finalized message in its justification. As pictured in the
 top-left graph of \fig{fig:relRR}, the fitted line has a slightly small
 slope compared to the data points due to the fact that the line is fitted to be
-linear and the data points are close the origin. \todo{insert line with 1.5*n ?}
+linear and the data points are close the origin. \todo{insert line with 1.5*n
+?}\
+The gaps in the histogram showed in \fig{fig:distRR} are explained by the fact
+that we expect the relation to be \(l = 1.5\cdot n\), and therefore the span of
+the latency distribution is bigger than the one for the number of nodes. The
+regularity of the gaps (which appear to be every 3 units of latency), is caused
+by the regularity of the sending and receiving strategies. As all nodes receive
+the messages at the same time, they all finalize the same blocks together, and
+there cannot be a non-integer average value for the latency in this case.
 
 \FloatBarrier
 \subsection{Double round-robin}
