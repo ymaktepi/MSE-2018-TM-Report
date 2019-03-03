@@ -1,46 +1,32 @@
 \chapter{Framework and Strategies Evaluation}
 \label{chap:strategies}
 
-\subsection{Tests}
-\tab{fig:recapTests} summarizes which tests have been run.
-All of them have the same terminating condition, which is reached when at least one
-node finds a safety oracle at height 4. The number of nodes is chosen at random
-in the interval \([1, 20[\). It has been decided to perform tests on this
+This chapter shows visualizations of the data collected through tests run with
+the proposed strategies. The first part of the chapter explains the data
+obtained and compares them to the expected results for each strategy described
+in \sect{sec:strategies}. The second part of the chapter shows the scores of the
+strategies when the obtained data are fitted to the model discussed in
+\ssec{ssec:model}. The latter part of the chapter describes improvements to the
+model for a better comparison between strategies.
+
+\section{Tests}
+Tests that cover all the combinations between sending strategies and receivers
+strategies have been run.
+All of them have the same terminating condition, which is reached when at least
+one node finds a safety oracle at height 4 (in other words, that the block at
+height 4 in a node's view is finalized). The number of nodes is chosen at random
+in the interval \([2, 20[\). It has been decided to perform tests on this
 interval because it is large enough to give an insight on the behavior of the
-relations between the metrics, and small enough to reach the terminating condition in
-a reasonable time (1 run with a number of nodes chosen at random takes on average 1 hour
-with the Maximal overhead strategy).
-
-\todo{renove table}
-
-\begin{table}[H]
-    \centering{
-        \begin{tabular}{|c|c|c|}
-            \hline
-            & All receivers & Some receivers \\
-            \hline
-            Round-robin & \checkmark & \checkmark\\
-            \hline
-            Double round-robin & \checkmark & \checkmark\\
-            \hline
-            Maximal overhead & (\checkmark) & (\checkmark) \\
-            \hline
-            Arbitrary & \checkmark & \checkmark\\
-            \hline
-        \end{tabular}
-        \captionsetup{justification=centering}
-        \caption{Summary of tests that have been run. A tick in parenthesis
-        implies that tests were run but that there are not many data points or
-        big disparities in the distribution of the number of nodes}
-        \label{fig:recapTests}
-    }
-\end{table}
-
-\todo{schema with what to measure}
-\todo{how the measurements take place in the code}
+relations between all the metrics, and small enough to reach the terminating
+condition in a reasonable time (1 run with a number of nodes chosen at random
+takes on average 1 hour with the Maximal overhead strategy). Because the Maximal
+overhead strategy takes way more time than the others to give results, this
+strategy has first been run with a number of nodes in the interval \([2,10[\),
+then with the whole \([2, 20[\) a lower number of times to confirm the
+tendencies observed with the lower number of nodes.
 
 \section{Visualization I: All receivers}
-This chapter presents a visualization of the data obtained through the multiple
+This section presents a visualization of the data obtained through the multiple
 test runs with the All receivers strategy.  Each subsection shows the results
 using 3 histograms, representing the raw data, followed by 3 scatter plots
 picturing each metric against each other. These graphs also show a simple linear
@@ -49,12 +35,7 @@ the discussion of each strategy a linear regression is performed in order to
 find the scores of each variable according to the model presented in
 \ssec{ssec:model}.
 
-
-\todo{3D plotting?}
-\todo{undersampling issue?}
-
 \subsection{Round-robin}
-
 \FloatBarrier
 
 The distributions of the number of nodes and the latency
@@ -203,7 +184,7 @@ correlated, as will be shown in the next paragraph.
 Note that the experiments have been run with a lower number of nodes because the
 simulations for a large number of nodes takes a large amount of time. The
 simulations are currently implemented following the mathematical formulae found
-in \todo{VLADS PAPER} and not yet optimized. For completeness's sake, a few runs
+in \cite{abstractCBC} and not yet optimized. For completeness's sake, a few runs
 have been performed with the same amount of nodes as for the other experiments
 to show whether or not there were divergences. It turned out that there was not
 such divergences. 
@@ -321,21 +302,29 @@ latency (which is \(2\), the minimal value for the latency) and therefore the
 rest of the scores are non influential.
 For the double and triple round-robin strategies, the variation for the overhead
 and the latency scores, compared to the ones for the round-robin are also in
-accordance with what is expected; the latency decreases when the number of round
-augments and the overhead increases along with the number of nodes sending
-messages in a single round.
+accordance with what is expected; the latency decreases when the number of
+rounds augments and the overhead increases along with the number of nodes
+sending messages in a single round.
 
 \subsubsection{Number of nodes}
 \label{ssec:nbNodes}
 The main problem with these results is the evolution of the score for the number
 of nodes, particularly for the arbitrary strategy. Based on the observations
-made in \ssec{ssec:arbitrary}, the arbitrary strategy clearly is worse than the other ones for
-the latency and overhead. That is reflected with the values obtained for their
-respective scores. The main issue with it is that the score for the number of
-nodes is used as a buffer for how well the two other variables perform in a set
-strategy. Indeed, the model forces the relation between the scores and the
-variables, and if the scores for both the latency and the overhead are low, the
-score for the number of nodes is forced to be high.
+made in \ssec{ssec:arbitrary}, the arbitrary strategy clearly is worse than the
+other ones for the latency and overhead. That is reflected with the values
+obtained for their respective scores. The main issue with it is that the score
+for the number of nodes is used as a buffer for how well the two other variables
+perform in a set strategy. Indeed, the model forces the relation between the
+scores and the variables, and if the scores for both the latency and the
+overhead are low, the score for the number of nodes is forced to be high.
+\todo{add comments on error as well}
+
+\subsection{Normalized model}
+
+\fig{fig:recapTestsPlotNorm} presents a normalized visualization of the same
+data. The normalization is made per-class, i. e. each class is normalized
+against the best score for this class. This normalization mainly permits to
+better visually compare the strategies on a per-class basis.
 
 \begin{figure}[H]
     \centering
@@ -354,7 +343,7 @@ score for the number of nodes is forced to be high.
     \caption{Normalized fitted values for the simple model. The strategies are listed
     on the x-axis and their scores are plotted along the y-axis. \todo{prettify
     the x-axis and bar legend}}
-    \label{fig:recapTestsPlot}
+    \label{fig:recapTestsPlotNorm}
 \end{figure}
 
 
@@ -393,6 +382,7 @@ score for the number of nodes is forced to be high.
 
 
 \subsection{Improvements of the basic model and new fitting}
+
 Show normalized output/radar graphs\
 Explain why changing exponents could lead to a better model
 
@@ -403,7 +393,7 @@ Explain why changing exponents could lead to a better model
     \caption{Raw fitted values for the improved model. The strategies are listed
     on the x-axis and their scores are plotted along the y-axis. \todo{prettify
     the x-axis and bar legend}}
-    \label{fig:recapTestsPlot}
+    \label{fig:recapTestsPlotNew}
 \end{figure}
 \section{Analysis}
 \todo{why the model is bad according to the number of nodes}

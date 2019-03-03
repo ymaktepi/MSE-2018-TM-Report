@@ -28,7 +28,7 @@ report, we will mainly discuss a specific \gls{pos} protocol, \gls{cbc}-Casper.
 
 \subsection{\gls{cbc}-Casper}
 \FloatBarrier
-\gls{cbc}-Casper \todo{cite somewhere} is an abstract consensus protocol family
+\gls{cbc}-Casper \cite{abstractCBC} \cite{abstractCBC2} is an abstract consensus protocol family
 which is \gls{pos}-ready. Nodes, called validators in this context, send
 messages to each other, acknowledging they saw other messages by including them
 in a \textit{justification}, that is attached to each message. Based on its
@@ -36,7 +36,8 @@ justification as well as a weighted list of validators, each message defines an
 \textit{estimate}, which is the consensus value proposed by the sender of the
 message. In the case of a blockchain, messages each point to one older message
 as their estimate and form a \textit{block-\gls{dag}}. Running a slightly
-modified version of the \gls{ghost} algorithm on the \gls{dag} returns a
+modified version of the \gls{ghost} algorithm on the \gls{dag}
+\cite{abstractCBC} \cite{GHOST} returns a
 blockchain.
 
 \begin{figure}[h]

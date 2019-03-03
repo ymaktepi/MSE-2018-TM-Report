@@ -1,5 +1,11 @@
 \chapter{Testing Framework Implementation}
 \label{chap:implementation}
+
+This chapter describes the modelisation of the problem, the block building
+strategies that have been implemented in order to validate the correctness of
+the proposed model as well as the methodology that has been employed to test the
+framework.
+
 \section{Modelisation}
 \subsection{Metrics}
 \FloatBarrier
@@ -52,7 +58,7 @@ the current message is finalized. In the example, \(o_2 = 3\).
 
 \subsection{Tradeoff triangle/Trilemma}
 In a standard consensus protocol, the three metrics form a trade-off triangle in
-kind of a "pick two" fashion. \todo{not a pick two} \gls{cbc}-Casper has no
+kind of a ``pick two'' fashion. \todo{not a pick two} \gls{cbc}-Casper has no
 assumptions on timings, sources, contents, destinations of the messages that are
 exchanged, and can therefore explore the whole trade-off space. This project
 aims to find strategies that span the entierty of the triangle and 
@@ -86,7 +92,7 @@ will be performed in order to find the scores \(s_x\).
 \section{Strategies}
 \label{sec:strategies}
 
-The following strategies were proposed in order to visit the entirety of the
+The following strategies were proposed in order to visit know parts of the
 trade-off triangle:
 \begin{itemize}
         \item round-robin;
@@ -111,15 +117,20 @@ strategies as well as their expected locations in the triangle.
 
 \subsection{Round-robin}
 The first strategy that comes to mind is a simple round-robin. Nodes send
-messages one after the other, in a fixed order.
+messages one after the other, in a fixed order. The expected overhead for this
+strategy should be the lowest of all the strategies, are only one message is
+sent at a time, and each sent message should finalize a new block. The latency
+on the overhead should be quite high because as seen in \todo{create section
+that explains finality, cite,}
 
 
 \subsection{Double Round-robin}
 In this setting, two nodes send messages at the same time, in a fixed order. If
 the two nodes that send messages at the same step are as far as possible from each
 other in the set of validators, the latency to finality is supposedly
-half as much as the simple round-robin strategy. The overhead is however
-doubled.
+half as much as the simple round-robin strategy, as the whole validator set
+sends a message in half the number of steps. The overhead is however
+doubled because two messages are sent at each step.
 
 \subsection{Triple Round-robin}
 This strategy is similar to the Double round-robin, except that three nodes send
@@ -130,25 +141,29 @@ strategy, the latency should be divided by three compared to the simple
 round-robin and the overhead should be three times higher.
 Note that a N-uple round-robin could be implemented in order to change the
 position in the trade-off triangle but it would lose meaning for a number of
-nodes smaller than N so there is no quadruple (or bigger) round-robin.
+nodes smaller than N so there is no quadruple (or bigger) round-robin
+implementation.
 
 \subsection{Maximal Overhead}
 This strategy is the most expensive in terms of bandwidth; at each step, each
 validator sends a message to the others. This example strategy should give a
 baseline value for the maximum overhead that is reachable in the tradeoff
 triangle. It also minimizes the latency as only two steps are needed in order to
-finalize a block. This strategy is similar to the pBFT \todo{cite} protocol, as each
+finalize a block. This strategy is similar to the pBFT\cite{pBFT} protocol, as each
 node sends a message to every other one over two steps.
 
 \subsection{Arbitrary}
-The next strategy is the simplest to think of: complete randomness. Using fixed
+The Arbitrary strategy is the simplest to think of: complete randomness. Using fixed
 probability density functions, one node is arbitrarily selected at each step to
-create a message. 
+create a message. This strategy could be modified in the same way the
+simple Round-robin has evolved into the Double and Triple round robin
+strategies to show the evolution of the metrics with the number of messages sent
+at each step.
 
 \subsection{Bottom-up strategies}
 \label{ssec:bottomUpStrats}
 All the previous strategies (except the Arbitrary one) can be viewed as
-"top-down" strategies, as there has to be a way for nodes to be synchronized.
+``top-down'' strategies, as there has to be a way for nodes to be synchronized.
 Bottom-up strategies are more likely to be implemented from a real-life point of
 view. Each node has its own view of the messages and acts in its own interest
 based on that view.
@@ -165,7 +180,7 @@ strategies dictate.
 Over the duration of this thesis, the \texttt{core-cbc} library has included a
 test framework called \texttt{proptest}. The testing framework that has been
 implemented includes ways to simulate the behavior of the Casper protocol over
-multiple nodes and thousands \todo{numbers} of blocks. At the time of the
+multiple nodes and thousands of blocks. At the time of the
 writing, the simulations do not include networking latencies.
 
 \subsection{\texttt{proptest}}
@@ -194,14 +209,15 @@ near the genesis block. A bigger value would imply more computation time.
 \subsubsection{Sender strategy}
 The sender strategy selects one or more nodes that will create new messages and
 forward them to the rest of the network. All the basic strategies that have been
-presented in \sec{sec:strategies} are implemented as Sender strategies.
+presented in \sect{sec:strategies} are implemented as Sender strategies.
 New strategies (including bottom-up ones) can be easily implemented as well.
 
 \subsubsection{Receiver strategy}
 Receiver strategies select a set of validators that receive messages created by
-Sender strategies. Two strategies have been implemented for now: 
+Sender strategies. Three strategies have been implemented for now: 
 \begin{itemize}
         \item All receivers;
+        \item Half receivers;
         \item Some receivers.
 \end{itemize}
 
@@ -214,14 +230,27 @@ two extreme points on the spectrum of the network topology: a fully connected
 one without latency (\textit{all receivers}), and a random one (\textit{some
 receivers}) and will be both taken into account to compare the sender
 strategies.
+The \textit{half receivers} strategy sends a message to half the validator set,
+chosen at random. It has been implemented at a later stage of the project
+because the \textit{some receivers} strategy ended up modifying multiple
+parameters at once rendering the analysis of the output data too complex for the
+proposed model and tools.
 
 \subsection{Metrics measurements}
 Metrics are not computed as-is in the \texttt{proptest} implementation. Simpler
 data are logged into \texttt{csv} files, and are processed by a \texttt{Python}
-script. \todo{what data} This two steps processing permitted the generation of
+script. The recorded data are: 
+
+\begin{itemize}
+    \item the number of nodes;
+    \item the identity of the current node;
+    \item the height of the chain;
+    \item the height of the higher finalized block;
+    \item and the total number of messages that have been sent.
+\end{itemize}
+
+This two steps processing permitted the generation of
 data before having a precise definition of the metrics. It also permits to vary
 the way metrics are recorded. For example, from the same log file, you could
 extract metrics only when the last step of the consensus is reached, or have an
 average of the metrics at each step of the consensus.
-
-
