@@ -282,13 +282,20 @@ regression gives the results as shown as raw values on
             \hline
             Maximal overhead & 0.0 & 0.5 & 0.0 & 0.0\\
             \hline
+            \hline
             Arbitrary & 2.556 & 0.026 & 0.002 & 0.233\\
             \hline
         \end{tabular}
         \captionsetup{justification=centering}
         \caption{Raw fitted values for the simple model, rounded to the 3rd
         decimal place. The RMSE column shows the error value for the linear
-        regression}
+        regression. The rows for both round-robin and maximal overhead are both
+        expected; the round robin strategy maximizes the overhead score and the
+        maximal overhead strategy maximizes the latency score. The score for the
+        latency increases with the number of message per step as the score for
+        the overhead decreases. The score for the number of nodes seems to be a
+        buffer that depends on how bad the two other scores are, which is
+        confirmed by the error that increases with it.}
         \label{fig:recapTests}
     }
 \end{table}
@@ -306,6 +313,23 @@ accordance with what is expected; the latency decreases when the number of
 rounds augments and the overhead increases along with the number of nodes
 sending messages in a single round.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{final_plot_basic_model}
+    \captionsetup{justification=centering}
+    \caption{Raw fitted values for the simple model. The strategies are listed
+    on the x-axis and their scores are plotted along the y-axis. The RMSE column shows the error value for the linear
+        regression. The rows for both round-robin and maximal overhead are both
+        expected; the round robin strategy maximizes the overhead score and the
+        maximal overhead strategy maximizes the latency score. The score for the
+        latency increases with the number of message per step as the score for
+        the overhead decreases. The score for the number of nodes seems to be a
+        buffer that depends on how bad the two other scores are, which is
+        confirmed by the error that increases with it.
+    }
+    \label{fig:recapTestsPlot}
+\end{figure}
+
 \subsubsection{Number of nodes}
 \label{ssec:nbNodes}
 The main problem with these results is the evolution of the score for the number
@@ -320,71 +344,34 @@ overhead are low, the score for the number of nodes is forced to be high. This
 is confirmed by looking at the error column in \tab{fig:recapTests}; the bigger
 the score for number of nodes is, the higher the error.
 
+\FloatBarrier
 \subsection{Normalized model}
 
 \fig{fig:recapTestsPlotNorm} presents a normalized visualization of the same
 data. The normalization is made per-class, i. e. each class is normalized
 against the best score for this class. This normalization mainly permits to
 better visually compare the strategies on a per-class basis. It also shows a
-correlation between the scores for the number of nodes and the error values.
+correlation between the scores for the number of nodes and the error values,
+which further confirms that the score for the number of nodes is used as a
+buffer when the two other scores are bad and don't fit the model.
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.8\columnwidth]{final_plot_basic_model}
-    \captionsetup{justification=centering}
-    \caption{Raw fitted values for the simple model. The strategies are listed
-    on the x-axis and their scores are plotted along the y-axis. \todo{prettify
-    the x-axis and bar legend}}
-    \label{fig:recapTestsPlot}
-\end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\columnwidth]{final_plot_norm_model}
     \captionsetup{justification=centering}
     \caption{Normalized fitted values for the simple model. The strategies are listed
-    on the x-axis and their scores are plotted along the y-axis. \todo{prettify
-    the x-axis and bar legend}}
+    on the x-axis and their scores are plotted along the y-axis. 
+    This per-class normalization facilitates the comparison of strategies on one
+    particular score.
+    The correlation between the error score and the score for the number of
+    nodes is also clearer when presented this way than, compared to the raw
+    values.
+    }
     \label{fig:recapTestsPlotNorm}
 \end{figure}
 
-
-%\begin{table}[H]
-%    \centering{
-%        \begin{tabular}{|c|c|c|c|}
-%            \hline
-%            Sending Strategy & \(s_n\) & \(s_l\) & \(s_o\) \\
-%            \hline
-%            Round-robin & 0.0 & 0.0 &
-%            1.0\\
-%            \hline
-%            Double round-robin & 0.119 & 0.036 & 0.601\\
-%            \hline
-%            Triple round-robin & 0.404 & 0.082 & 0.401\\
-%            \hline
-%            Maximal overhead & 0.0 & 0.987 & 0.0\\
-%            \hline
-%            Arbitrary & 0.861 & 0.035 & 0.106\\
-%            \hline
-%        \end{tabular}
-%        \captionsetup{justification=centering}
-%        \caption{Raw fitted values for the simple model, rounded to the 3rd decimal}
-%        \label{fig:recapTests}
-%    }
-%\end{table}
-
-%\begin{figure}[H] 
-%    \centering
-%    \includegraphics[width=0.8\columnwidth]{hist_overhead_rr_20_nodes_4_depth_all_receivers_gen_averages}
-%    \captionsetup{justification=centering}
-%    \caption{Histogram of the overhead. Round-robin and all receivers strategies}
-%    \label{fig:relOverheadLatencyRR}
-%\end{figure}
-
-
-
 \subsection{Improvements of the basic model and new fitting}
-
 Show normalized output/radar graphs\
 Explain why changing exponents could lead to a better model
 
