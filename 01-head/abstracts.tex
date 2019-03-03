@@ -2,11 +2,21 @@
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract} % adds an entry to the table of contents
 
-\todo{add abstract}
+The Ethereum blockchain wants to move from a Proof-of-Work consensus protocol to
+a Proof-fo-Stake one. Correct-by-Construction Casper proposes an abstract family
+of Proof-of-Stake consensus protocols in a mathematical sense but does not
+provide block production strategies for nodes. This project aims to propose some
+basic strategies as well as a model to compare them. A testing framework based
+on an existing Casper library has been implemented in order to simulate
+blockchains ruled by the proposed basic strategies. Latency, number of nodes and
+overhead have been measured during the simulations.
+The implemented framework has been validated using the basic strategies and
+permits the implementation of more complex ones through a generic code
+architecture. The proposed model offers a good way to compare latency and
+overhead for strategies but is not efficient to evaluate the way a strategy scales
+with the number of nodes in the network.
+
 
 \vskip0.5cm
 \noindent\textbf{Keywords:}
 \Keywords
-
-% (\url{https://en.bitcoin.it/wiki/Payment_channels#Nakamoto_high-frequency_transactions};
-% \url{https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2013-April/002417.html})

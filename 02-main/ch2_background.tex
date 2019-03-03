@@ -28,17 +28,16 @@ report, we will mainly discuss a specific \gls{pos} protocol, \gls{cbc}-Casper.
 
 \subsection{\gls{cbc}-Casper}
 \FloatBarrier
-\gls{cbc}-Casper \cite{abstractCBC} \cite{abstractCBC2} is an abstract consensus protocol family
-which is \gls{pos}-ready. Nodes, called validators in this context, send
-messages to each other, acknowledging they saw other messages by including them
-in a \textit{justification}, that is attached to each message. Based on its
-justification as well as a weighted list of validators, each message defines an
-\textit{estimate}, which is the consensus value proposed by the sender of the
-message. In the case of a blockchain, messages each point to one older message
-as their estimate and form a \textit{block-\gls{dag}}. Running a slightly
-modified version of the \gls{ghost} algorithm on the \gls{dag}
-\cite{abstractCBC} \cite{GHOST} returns a
-blockchain.
+\gls{cbc}-Casper \cite{abstractCBC} \cite{abstractCBC2} is an abstract consensus
+protocol family which is \gls{pos}-ready. Nodes, called validators in this
+context, send messages to each other, acknowledging they saw other messages by
+including them in a \textit{justification}, that is attached to each message.
+Based on its justification as well as a weighted list of validators, each
+message defines an \textit{estimate}, which is the consensus value proposed by
+the sender of the message. In the case of a blockchain, messages each point to
+one older message as their estimate and form a \textit{block-\gls{dag}}. Running
+a slightly modified version of the \gls{ghost} algorithm on the \gls{dag}
+\cite{abstractCBC} \cite{GHOST} returns a blockchain.
 
 \begin{figure}[h]
 	\centering
@@ -74,13 +73,8 @@ messages.
 	\label{fig:example2}
 \end{figure}
 
-\todo{include a schema showing validators, justifications, estimates, \ldots in
-more depth}
-
 \todo{describe liveness, safety}
 \todo{talk about finality, safety oracles, \ldots }
-\todo{change structure; make comparison not between POS and POW but between POW
-and CBC}
 \FloatBarrier
 \subsection{\gls{cbc} Casper vs \gls{pow}}
 \label{ssec:powVsPos}
@@ -191,12 +185,12 @@ which happen to work well with containerized software. After seeing that the
 Parity implementation would take too much time to be completed, and therefore
 might be unusable for this thesis, it has been decided to evaluate strategies
 inside the \texttt{core-cbc} library instead of the more real-life-like setting
-that is a Parity testnet. The main disadvantage of doing the experimentations in
+that is a Parity testnet. The core library was still being implemented at the
+time and further testing was needed. The main disadvantage of doing the experimentations in
 the library is that the whole network latencies and topology are not taken into
 account. However, a non-negligible advantage of implementing strategies in the
 core library is that it will be easier to test them on consensus values that are
-not only blockchains.  \todo{add that the lib was not fully tested at this point
-and that further testing was needed before being able to test parity}
+not only blockchains.
 
 \subsection{Local testnet}
 Scripts that create and manage two local nodes have been written. They launch 2

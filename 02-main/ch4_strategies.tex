@@ -268,27 +268,27 @@ regression gives the results as shown as raw values on
 \tab{fig:recapTests} and in a bar graph on
 \fig{fig:recapTestsPlot}.
 
-\todo{add error value}
 \begin{table}
     \centering{
-        \begin{tabular}{|c|c|c|c|}
+        \begin{tabular}{|c|c|c|c|c|}
             \hline
-            Sending Strategy & \(s_n\) & \(s_l\) & \(s_o\) \\
+            Sending Strategy & \(s_n\) & \(s_l\) & \(s_o\) & RMSE \\
             \hline
-            Round-robin & 0.0 & 0.0 & 1.0\\
+            Round-robin & 0.0 & 0.0 & 1.0 & 0.0\\
             \hline
-            Double round-robin & 1.435 & 0.055 & 0.162\\
+            Double round-robin & 1.435 & 0.055 & 0.162 & 0.141\\
             \hline
-            Triple round-robin & 1.686 & 0.084 & 0.091\\
+            Triple round-robin & 1.686 & 0.084 & 0.091 & 0.115\\
             \hline
-            Maximal overhead & 0.0 & 0.5 & 0.0\\
+            Maximal overhead & 0.0 & 0.5 & 0.0 & 0.0\\
             \hline
-            Arbitrary & 2.556 & 0.026 & 0.002\\
+            Arbitrary & 2.556 & 0.026 & 0.002 & 0.233\\
             \hline
         \end{tabular}
         \captionsetup{justification=centering}
         \caption{Raw fitted values for the simple model, rounded to the 3rd
-        decimal place}
+        decimal place. The RMSE column shows the error value for the linear
+        regression}
         \label{fig:recapTests}
     }
 \end{table}
@@ -316,17 +316,19 @@ obtained for their respective scores. The main issue with it is that the score
 for the number of nodes is used as a buffer for how well the two other variables
 perform in a set strategy. Indeed, the model forces the relation between the
 scores and the variables, and if the scores for both the latency and the
-overhead are low, the score for the number of nodes is forced to be high.
-\todo{add comments on error as well}
+overhead are low, the score for the number of nodes is forced to be high. This
+is confirmed by looking at the error column in \tab{fig:recapTests}; the bigger
+the score for number of nodes is, the higher the error.
 
 \subsection{Normalized model}
 
 \fig{fig:recapTestsPlotNorm} presents a normalized visualization of the same
 data. The normalization is made per-class, i. e. each class is normalized
 against the best score for this class. This normalization mainly permits to
-better visually compare the strategies on a per-class basis.
+better visually compare the strategies on a per-class basis. It also shows a
+correlation between the scores for the number of nodes and the error values.
 
-\begin{figure}[H]
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.8\columnwidth]{final_plot_basic_model}
     \captionsetup{justification=centering}
@@ -336,7 +338,7 @@ better visually compare the strategies on a per-class basis.
     \label{fig:recapTestsPlot}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.8\columnwidth]{final_plot_norm_model}
     \captionsetup{justification=centering}
@@ -386,7 +388,7 @@ better visually compare the strategies on a per-class basis.
 Show normalized output/radar graphs\
 Explain why changing exponents could lead to a better model
 
-\begin{figure}[H]
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.8\columnwidth]{final_plot_new_model}
     \captionsetup{justification=centering}
