@@ -33,24 +33,60 @@
 \newcommand{\fig}[1]{Fig.\hspace{0.7mm}\ref{#1}}
 \newcommand{\tab}[1]{Table\hspace{0.7mm}\ref{#1}}
 
+\newcommand{\doublefigure}[4]{%
+    \begin{figure}[h]
+        \centering
+        \begin{array}{cc}
+
+            \includegraphics[width=0.5\linewidth]{#1} &
+        \includegraphics[width=0.5\linewidth]{#2}
+
+        \end{array}
+        \caption{#3}
+        \captionsetup{justification=centering}
+        \label{#4}
+    \end{figure}
+}
+
+%\newcommand{\doublefigure}[4]{%
+%    \begin{figure}[h]
+%        \centering
+%
+%        \minipage{0.49\columnwidth}
+%        \includegraphics[width=\linewidth]{#1}
+%        %\caption{Histogram of the number of nodes. Round-robin and all receivers strategies}
+%        \endminipage\hfill
+%        
+%        \minipage{0.49\columnwidth}
+%        \includegraphics[width=\linewidth]{#2}
+%        %\caption{Histogram of the number of nodes. Round-robin and all receivers strategies}
+%        \endminipage\hfill
+%
+%        \caption{#3}
+%        \captionsetup{justification=centering}
+%        \label{#4}
+%    \end{figure}
+%}
+
 \newcommand{\triplefigure}[5]{%
     \begin{figure}[h]
         \centering
-        \minipage{0.5\columnwidth}
 
+        \minipage{0.5\columnwidth}
         \includegraphics[width=\linewidth]{#1}
         %\caption{Histogram of the number of nodes. Round-robin and all receivers strategies}
         \endminipage\hfill
-        \minipage{0.5\columnwidth}
 
+        \minipage{0.5\columnwidth}
         \includegraphics[width=\linewidth]{#2}
         %\caption{Histogram of the number of nodes. Round-robin and all receivers strategies}
         \endminipage\hfill
-        \minipage{0.5\columnwidth}
 
+        \minipage{0.5\columnwidth}
         \includegraphics[width=\linewidth]{#3}
         %\caption{Histogram of the number of nodes. Round-robin and all receivers strategies}
         \endminipage\hfill
+
         \caption{#4}
         \captionsetup{justification=centering}
         \label{#5}

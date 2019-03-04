@@ -262,6 +262,7 @@ The latter one shows an even weirder artifact:
 
 \FloatBarrier
 \subsection{Fitting of the basic model}
+\label{ssec:fittingBase}
 Fitting the basic model described in \ssec{ssec:model} (\(1 = s_n
 \cdot \frac{1}{n} + s_l\cdot l + s_o\cdot o\)) to the data using a simple linear
 regression gives the results as shown as raw values on
@@ -343,6 +344,10 @@ scores and the variables, and if the scores for both the latency and the
 overhead are low, the score for the number of nodes is forced to be high. This
 is confirmed by looking at the error column in \tab{fig:recapTests}; the bigger
 the score for number of nodes is, the higher the error.
+\todo{explain why 2.5; number of nodes is the one with lower variance therefore
+the linear regression fits using only it as a preponderant variable. the mean
+number of nodes is roughly 10.5. when fitting the model, it is therefore reduced
+to \(1 = s_n/n = 2.5 / \)}
 
 \FloatBarrier
 \subsection{Normalized model}
@@ -371,9 +376,65 @@ buffer when the two other scores are bad and don't fit the model.
     \label{fig:recapTestsPlotNorm}
 \end{figure}
 
+\FloatBarrier
 \subsection{Improvements of the basic model and new fitting}
-Show normalized output/radar graphs\
-Explain why changing exponents could lead to a better model
+Now that there are exploitable results for the basic model, some obvious
+improvements can be made. The first step is to have the same scale, because it
+offers a better visual comparison. The chosen scale is \([0,1]\). The next step
+is to try to give a meaning to relative values for the same score when comparing
+two strategies. This is obtained by finding better exponents for the variables
+in the model.
+
+\subsubsection{Improving factors}
+As seen in \ssec{ssec:fittingBase}, the best score for
+the latency is \(0.5\), which is due to the fact that latency is at least \(2\).
+A \(0.5\) factor can therefore be added to the model to obtain a value of \(1\)
+as the maximum score for the latency: \todo{insert images of new outputs}
+\[1 = s_n \cdot \frac{1}{n} + \frac{1}{2} s_l\cdot l + s_o\cdot o\]
+In the same manner, to scale the possible scores for the number of nodes to the
+chosen interval of \([0,1]\), a factor of 2.556 can be added to the model:
+\[1 = 2.556\cdot s_n \cdot \frac{1}{n} + \frac{1}{2} s_l\cdot l + s_o\cdot o\]
+
+\doublefigure
+    {final_plot_new_model_factor_latency}
+    {final_plot_new_model_factor_latency_and_nodes}
+    {Improvement of the factors of the basic model. On the left, the latency
+    score has a maximum of \(1.0\). On the right, the score for the number of nodes
+    is also normalized to a maximum of 1.0.}
+    {fig:improgedFactors}
+
+
+\subsubsection{Improving exponents}
+Now that the model gives a normalized output, it is possible to improve it by
+changing the exponents applied to the variables. Modifying the exponents could
+give scores that are easier to reason about. For example, it is known that the
+overhead for the double-round robin is 2/3 of the overhead for the triple
+round-robin, and therefore its score should be 3/2 of the overhead score for the
+triple round-robin. However, by looking at the scores in \tab{fig:recapTests},
+we see it is not the case. \todo{numbers?}
+By performing a simple bisection, an exponent of \(frac{1}{2}\) is found. As
+showed in \todo{graphics}, not only using this exponent gives a better ratio
+between the overhead score for the double and triple round-robin strategies, but
+it also gives a better ratio between the simple and double and between the
+single and triple round-robin strategies. Indeed, the overhead score for the
+single round-robin strategy should be twice the one for the double round robin
+strategy and three times as much as the score for the triple round-robin.
+By looking at the error values obtained by the fitting of the new model on the
+data, it can be seen that those are marginally lower than the original basic
+model, which means the model better fits the data that output predictable
+results. 
+
+The exponent for the latency is not to be changed because the scores already
+match the expectations (the score for the triple round-robin is 3/2 of the score
+for the double round-robin strategy). 
+
+Again, the exponent for the number of nodes will not be modified because of the
+buffer role the score has in the model.
+
+The final model is therefore: 
+\[1 = 2.556\cdot s_n \cdot \frac{1}{n} + \frac{1}{2} s_l\cdot l + s_o\cdot
+\sqrt{o}\]
+
 
 \begin{figure}[h]
     \centering
@@ -384,11 +445,6 @@ Explain why changing exponents could lead to a better model
     the x-axis and bar legend}}
     \label{fig:recapTestsPlotNew}
 \end{figure}
-\section{Analysis}
-\todo{why the model is bad according to the number of nodes}
-
-\todo{here will be a table containing all the fitted lines values and a
-comparison and explanation of the behaviors that are observed}
 
 \section{Further research}
 \subsection{Half set strategy}
