@@ -35,16 +35,35 @@
 
 \newcommand{\doublefigure}[4]{%
     \begin{figure}[h]
-        \centering
+        \begin{center}
         \begin{array}{cc}
 
-            \includegraphics[width=0.5\linewidth]{#1} &
+        \includegraphics[width=0.5\linewidth]{#1} &
         \includegraphics[width=0.5\linewidth]{#2}
 
+        \end{center}
         \end{array}
         \caption{#3}
         \captionsetup{justification=centering}
         \label{#4}
+    \end{figure}
+}
+
+\newcommand{\triplefigure}[5]{%
+    \begin{figure}[h]
+        \begin{center}
+        \begin{array}{cc}
+
+        \includegraphics[width=0.5\linewidth]{#1} &
+        \includegraphics[width=0.5\linewidth]{#2} \\
+
+        \includegraphics[width=0.5\linewidth]{#3} & \\
+
+        \end{center}
+        \end{array}
+        \caption{#4}
+        \captionsetup{justification=centering}
+        \label{#5}
     \end{figure}
 }
 
@@ -68,27 +87,27 @@
 %    \end{figure}
 %}
 
-\newcommand{\triplefigure}[5]{%
-    \begin{figure}[h]
-        \centering
-
-        \minipage{0.5\columnwidth}
-        \includegraphics[width=\linewidth]{#1}
-        %\caption{Histogram of the number of nodes. Round-robin and all receivers strategies}
-        \endminipage\hfill
-
-        \minipage{0.5\columnwidth}
-        \includegraphics[width=\linewidth]{#2}
-        %\caption{Histogram of the number of nodes. Round-robin and all receivers strategies}
-        \endminipage\hfill
-
-        \minipage{0.5\columnwidth}
-        \includegraphics[width=\linewidth]{#3}
-        %\caption{Histogram of the number of nodes. Round-robin and all receivers strategies}
-        \endminipage\hfill
-
-        \caption{#4}
-        \captionsetup{justification=centering}
-        \label{#5}
-    \end{figure}
-}
+%\newcommand{\triplefigure}[5]{%
+%    \begin{figure}[h]
+%        \centering
+%
+%        \minipage{0.5\columnwidth}
+%        \includegraphics[width=\linewidth]{#1}
+%        %\caption{Histogram of the number of nodes. Round-robin and all receivers strategies}
+%        \endminipage\hfill
+%
+%        \minipage{0.5\columnwidth}
+%        \includegraphics[width=\linewidth]{#2}
+%        %\caption{Histogram of the number of nodes. Round-robin and all receivers strategies}
+%        \endminipage\hfill
+%
+%        \minipage{0.5\columnwidth}
+%        \includegraphics[width=\linewidth]{#3}
+%        %\caption{Histogram of the number of nodes. Round-robin and all receivers strategies}
+%        \endminipage\hfill
+%
+%        \caption{#4}
+%        \captionsetup{justification=centering}
+%        \label{#5}
+%    \end{figure}
+%}

@@ -40,7 +40,7 @@ the costs in bandwidth low.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\columnwidth]{metrics-example}
-  \captionsetup{justification=centering}
+  %\captionsetup{justification=centering}
     \caption{Metrics computation example}
 	\label{fig:metricsSchema}
 \end{figure}
@@ -108,7 +108,7 @@ strategies as well as their expected locations in the triangle.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{all_strats}
-  \captionsetup{justification=centering}
+  %\captionsetup{justification=centering}
     \caption{Strategies examples with 4 validators. Top-left: Round-robin.
     Top-right: Double round-robin. Bottom-left: Maximal overhead. Bottom-right:
     Arbitrary. Arrows here show justifications for all messages.}
@@ -120,8 +120,12 @@ The first strategy that comes to mind is a simple round-robin. Nodes send
 messages one after the other, in a fixed order. The expected overhead for this
 strategy should be the lowest of all the strategies, are only one message is
 sent at a time, and each sent message should finalize a new block. The latency
-on the overhead should be quite high because as seen in \todo{create section
-that explains finality, cite,}
+on the other hand should be quite high because as seen in \ssec{ssec:cbc},
+\(50\%\) of the validators have to acknowledge the messages to finalize them and
+since the round-robin has a fixed rotation order for the message production,
+this only happens after making one and a half rotations (the first one to
+acknoledge the messages existance and the next half to confirm the
+acknoledgment.
 
 
 \subsection{Double Round-robin}
@@ -184,6 +188,8 @@ multiple nodes and thousands of blocks. At the time of the
 writing, the simulations do not include networking latencies.
 
 \subsection{\texttt{proptest}}
+\label{ssec:proptest}
+
 The \texttt{proptest} implementation is able to run blockchain simulations off
 the following parameters:
 \begin{itemize}

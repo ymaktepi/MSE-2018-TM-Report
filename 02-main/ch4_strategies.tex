@@ -269,25 +269,25 @@ regression gives the results as shown as raw values on
 \tab{fig:recapTests} and in a bar graph on
 \fig{fig:recapTestsPlot}.
 
-\begin{table}
+\begin{table}[h]
     \centering{
         \begin{tabular}{|c|c|c|c|c|}
             \hline
             Sending Strategy & \(s_n\) & \(s_l\) & \(s_o\) & RMSE \\
             \hline
-            Round-robin & 0.0 & 0.0 & 1.0 & 0.0\\
+            Round-robin        & 0.000 & 0.000 & 1.000 & 0.000\\
             \hline
             Double round-robin & 1.435 & 0.055 & 0.162 & 0.141\\
             \hline
             Triple round-robin & 1.686 & 0.084 & 0.091 & 0.115\\
             \hline
-            Maximal overhead & 0.0 & 0.5 & 0.0 & 0.0\\
+            Maximal overhead   & 0.000 & 0.500 & 0.000 & 0.000\\
             \hline
             \hline
-            Arbitrary & 2.556 & 0.026 & 0.002 & 0.233\\
+            Arbitrary          & 2.556 & 0.026 & 0.002 & 0.233\\
             \hline
         \end{tabular}
-        \captionsetup{justification=centering}
+        %\captionsetup{justification=centering}
         \caption{Raw fitted values for the simple model, rounded to the 3rd
         decimal place. The RMSE column shows the error value for the linear
         regression. The rows for both round-robin and maximal overhead are both
@@ -317,7 +317,7 @@ sending messages in a single round.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\columnwidth]{final_plot_basic_model}
-    \captionsetup{justification=centering}
+    %\captionsetup{justification=centering}
     \caption{Raw fitted values for the simple model. The strategies are listed
     on the x-axis and their scores are plotted along the y-axis. The RMSE column shows the error value for the linear
         regression. The rows for both round-robin and maximal overhead are both
@@ -364,7 +364,7 @@ buffer when the two other scores are bad and don't fit the model.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\columnwidth]{final_plot_norm_model}
-    \captionsetup{justification=centering}
+    %\captionsetup{justification=centering}
     \caption{Normalized fitted values for the simple model. The strategies are listed
     on the x-axis and their scores are plotted along the y-axis. 
     This per-class normalization facilitates the comparison of strategies on one
@@ -389,19 +389,20 @@ in the model.
 As seen in \ssec{ssec:fittingBase}, the best score for
 the latency is \(0.5\), which is due to the fact that latency is at least \(2\).
 A \(0.5\) factor can therefore be added to the model to obtain a value of \(1\)
-as the maximum score for the latency: \todo{insert images of new outputs}
+as the maximum score for the latency:
 \[1 = s_n \cdot \frac{1}{n} + \frac{1}{2} s_l\cdot l + s_o\cdot o\]
 In the same manner, to scale the possible scores for the number of nodes to the
 chosen interval of \([0,1]\), a factor of 2.556 can be added to the model:
 \[1 = 2.556\cdot s_n \cdot \frac{1}{n} + \frac{1}{2} s_l\cdot l + s_o\cdot o\]
+Both models are represented on \fig{fig:improvedFactors}
 
 \doublefigure
     {final_plot_new_model_factor_latency}
     {final_plot_new_model_factor_latency_and_nodes}
     {Improvement of the factors of the basic model. On the left, the latency
     score has a maximum of \(1.0\). On the right, the score for the number of nodes
-    is also normalized to a maximum of 1.0.}
-    {fig:improgedFactors}
+    is also normalized to a maximum of \(1.0\).}
+    {fig:improvedFactors}
 
 
 \subsubsection{Improving exponents}
@@ -412,15 +413,15 @@ overhead for the double-round robin is 2/3 of the overhead for the triple
 round-robin, and therefore its score should be 3/2 of the overhead score for the
 triple round-robin. However, by looking at the scores in \tab{fig:recapTests},
 we see it is not the case. \todo{numbers?}
-By performing a simple bisection, an exponent of \(frac{1}{2}\) is found. As
-showed in \todo{graphics}, not only using this exponent gives a better ratio
+By performing a simple bisection, an exponent of \(\frac{1}{2}\) is found. As
+showed in \fig{fig:recapTestsPlotNew} and \tab{fig:recapTestsNew}, not only using this exponent gives a better ratio
 between the overhead score for the double and triple round-robin strategies, but
 it also gives a better ratio between the simple and double and between the
 single and triple round-robin strategies. Indeed, the overhead score for the
 single round-robin strategy should be twice the one for the double round robin
 strategy and three times as much as the score for the triple round-robin.
 By looking at the error values obtained by the fitting of the new model on the
-data, it can be seen that those are marginally lower than the original basic
+data (\fig{fig:errorComparison}), it can be seen that those are marginally lower than the original basic
 model, which means the model better fits the data that output predictable
 results. 
 
@@ -435,17 +436,77 @@ The final model is therefore:
 \[1 = 2.556\cdot s_n \cdot \frac{1}{n} + \frac{1}{2} s_l\cdot l + s_o\cdot
 \sqrt{o}\]
 
-
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\columnwidth]{final_plot_new_model}
-    \captionsetup{justification=centering}
-    \caption{Raw fitted values for the improved model. The strategies are listed
-    on the x-axis and their scores are plotted along the y-axis. \todo{prettify
-    the x-axis and bar legend}}
+    %\captionsetup{justification=centering}
+    \caption{Raw fitted values for the simple model, rounded to the 3rd
+        decimal place. The RMSE column shows the error value for the linear
+        regression. The scores are now normalized to the \([0, 1]\)
+        interval. The new model also improves the relatives values for the
+        overhead score, the double round-robin score is roughly half the one for
+        the simple round-robin and the triple round-robin score is roughly a
+        third of the overhead score for the simple round-robin strategy.}
     \label{fig:recapTestsPlotNew}
 \end{figure}
 
+\begin{table}[h]
+    \centering{
+        \begin{tabular}{|c|c|c|c|c|}
+            \hline
+            Sending Strategy & \(s_n\) & \(s_l\) & \(s_o\) & RMSE \\
+            \hline
+            Round-robin        & 0.000 & 0.000 & 1.000 & 0.000\\
+            \hline
+            Double round-robin & 0.209 & 0.055 & 0.478 & 0.090 \\
+            \hline
+            Triple round-robin & 0.480 & 0.107 & 0.299 & 0.079 \\
+            \hline
+            Maximal overhead   & 0.000 & 1.000 & 0.000 & 0.000 \\
+            \hline
+            \hline
+            Arbitrary          & 0.929 & 0.043 & 0.049 & 0.219\\
+            \hline
+        \end{tabular}
+       % %\captionsetup{justification=centering}
+        \caption{Raw fitted values for the simple model, rounded to the 3rd
+        decimal place. The RMSE column shows the error value for the linear
+        regression. The scores are now normalized to the \([0, 1]\)
+        interval. The new model also improves the relatives values for the
+        overhead score, the double round-robin score is roughly half the one for
+        the simple round-robin and the triple round-robin score is roughly a
+        third of the overhead score for the simple round-robin strategy.}
+        \label{fig:recapTestsNew}
+    }
+\end{table}
+
+\begin{table}[h]
+    \centering{
+        \begin{tabular}{|c|c|c|}
+            \hline
+            Sending Strategy & RMSE Basic model & RMSE Improved model \\
+            \hline
+            Round-robin        & 0.000 & 0.000\\
+            \hline                     
+            Double round-robin & 0.141 & 0.090 \\
+            \hline                     
+            Triple round-robin & 0.115 & 0.079 \\
+            \hline                     
+            Maximal overhead   & 0.000 & 0.000 \\
+            \hline                     
+            \hline                     
+            Arbitrary          & 0.233 & 0.219\\
+            \hline
+        \end{tabular}
+       % %\captionsetup{justification=centering}
+        \caption{Raw error values for the simple and improved models, rounded to the 3rd
+        decimal place. The error values are lower for the improved model which
+        implies that it better fits the data.}
+        \label{fig:errorComparison}
+    }
+\end{table}
+
+\FloatBarrier
 \section{Further research}
 \subsection{Half set strategy}
 A new sending strategy that could be interesting to implement is a strategy
@@ -474,3 +535,13 @@ permitted to validate the framework, from the metrics measurements to the actual
 model fitting. A step forward would be to create better models for the
 network, based on real life network topologies, latencies, number of nodes, \ldots
 
+\subsection{Further analyse the data}
+As seen in \ssec{ssec:proptest}, more than one sending strategy have been
+implemented, but only one has been thoroughly analysed. The some receivers
+strategy was implemented early in the project for other purposes but it turned
+out during the analysis phase that chosing both the number of nodes that receive
+the message as well as which ones get them was too many varying parameters
+added at once. The half receivers strategy was then implemented but data points
+were generated too late into the project's lifetime to fully analyse them as
+well. A next step would therefore to use the half receivers strategy to validate
+that the chosen model does not overfit the all receivers strategy data.

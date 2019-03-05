@@ -27,6 +27,7 @@ weight (or stake). This weight can be the node's age, wealth, etc. In this
 report, we will mainly discuss a specific \gls{pos} protocol, \gls{cbc}-Casper.
 
 \subsection{\gls{cbc}-Casper}
+\label{ssec:cbc}
 \FloatBarrier
 \gls{cbc}-Casper \cite{abstractCBC} \cite{abstractCBC2} is an abstract consensus
 protocol family which is \gls{pos}-ready. Nodes, called validators in this
@@ -42,7 +43,7 @@ a slightly modified version of the \gls{ghost} algorithm on the \gls{dag}
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{cbc-example}
-  \captionsetup{justification=centering}
+  %\captionsetup{justification=centering}
     \caption{\gls{cbc} blockchain example}
 	\label{fig:example}
 \end{figure}
@@ -65,23 +66,28 @@ and \(v_1\) has this message in the justification of its second message. It is
 said that \(v_1\)'s first message is in the \textit{dependency} of its later
 messages.
 
+\textit{Finality} is a key concept to understand for this project. A block is
+considered as finalized in a view if it cannot be removed from the blockchain by
+receiving new messages from honest nodes. In this project, a block is considered
+as finalized when a \textit{safety oracle} \cite{abstractCBC} is detected on it.
+Without entering into too much detail, the safety oracle that is used marks
+blocks as safe when at least \(50\%\) of the validators acknowledge that they
+saw the block in their chosen blockchain. \todo{more details, more precise?}
+
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{cbc-example-2}
-  \captionsetup{justification=centering}
+  %\captionsetup{justification=centering}
     \caption{\gls{cbc} blockchain example 2}
 	\label{fig:example2}
 \end{figure}
 
-\todo{describe liveness, safety}
-\todo{talk about finality, safety oracles, \ldots }
 \FloatBarrier
 \subsection{Differences between \gls{cbc} Casper and \gls{pow}}
 \label{ssec:powVsPos}
 
 \subsubsection{Block production}
-\todo{cite ref}
-In a \gls{pow} setting, a miner can broadcast any block to the network, but the
+In a \gls{pow}\cite{yellowpaper} setting, a miner can broadcast any block to the network, but the
 block will only be picked up by the other nodes if it is valid. As the miner has
 to work to produce a valid block, it cannot create blocks on the fly at any
 time, whereas in a \gls{cbc} Casper setting, a node can broadcast blocks at any
@@ -138,7 +144,7 @@ any chain, or even on its own chain.
             incentive to build on the longest chain \\
             \hline
         \end{tabular}
-        \captionsetup{justification=centering}
+        %\captionsetup{justification=centering}
         \caption{Summary of key differences between \gls{pow} and \gls{pos}}
         \label{fig:keyDiffPowPos}
     }
@@ -216,7 +222,7 @@ ways:
 \begin{figure}
 	\centering
 	\includegraphics[width=0.8\columnwidth]{rings}
-  \captionsetup{justification=centering}
+  %\captionsetup{justification=centering}
     \caption{Parity nodes topologiess implemented in the Docker testnet. Ring
     layout (left), fully connected (right)}
 	\label{fig:example2}
