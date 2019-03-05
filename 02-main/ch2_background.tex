@@ -2,29 +2,28 @@
 \label{chap:background}
 
 \section{\gls{pow} and \gls{pos}}
-In Ethereum, \gls{pos} is aiming at replacing \gls{pow} as a distributed
-consensus algorithm. This section succintly describe both methods as well as the
-main differences between them, and then explains which problems arise when you
-replace \gls{pow} with \gls{pos}.
+In Ethereum, \gls{pos} is aiming to replace \gls{pow} as a distributed consensus
+algorithm. This section succintly describes both methods, their main
+differences, and which problems arise when you replace \gls{pow} with \gls{pos}.
 
 \subsection{What is \gls{pow}?}
-\gls{pow} is the current consensus protocol used to decide on a blockchain in
-Ethereum. In order to create a new valid block, a node has to solve a
+\gls{pow} is the current consensus protocol used to decide between blockchains
+in Ethereum. In order to create a new valid block, a node has to solve a
 cryptographic puzzle and include its solution in the newly created block. The
-difficulty of the puzzle is parametrized in order to have -on average- a block
-created at a set interval. A reward is given to the creator of each block.  The
+difficulty of the puzzle is parametrized in order to output a block on an
+average time interval and a reward is given to the creator of each block.  The
 consensus rule states that the chain with the greatest total difficulty is to be
-considered the main one. Miners are therefore incentivised to build on the main
-chain if they want to get rewards for their work. The fact that the difficulty
-changes to keep a certain interval between blocks means that said work is a
-proxy for timing; a miner cannot create an arbitrary large number of blocks in a
-short time because it's inherent to the protocol.
+considered the main one which incentives miners to build on the main chain if
+they want to get rewards for their work. The fact that the difficulty changes to
+keep a certain interval between blocks means that work is a proxy for timing; a
+miner cannot create an arbitrarily large number of blocks in a short time
+because it's inherent to the protocol.
 
 
 \subsection{What is \gls{pos}?}
-\gls{pos}, on the other hand, selects a new block creator according to its
-weight (or stake). This weight can be the node's age, wealth, etc. In this
-report, we will mainly discuss a specific \gls{pos} protocol, \gls{cbc}-Casper.
+\gls{pos} selects a new block creator according to their weight -or stake- which
+is determined through the node's age, wealth, etc. In this report, we will
+mainly discuss a specific \gls{pos} protocol, \gls{cbc}-Casper.
 
 \subsection{\gls{cbc}-Casper}
 \label{ssec:cbc}
