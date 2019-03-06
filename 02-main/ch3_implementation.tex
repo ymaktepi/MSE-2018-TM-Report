@@ -21,7 +21,11 @@ that:
 \subsubsection{Latency}
 The latency is the number of messages required to finalize a block and is a
 measure of a blockchain's liveness. Latency should be as close to two so as to
-reach finality as soon as possible and the closer the latency is to the ideal
+reach finality as soon as possible \todo{explain why a latency of two is the
+  minimum (and for n validators, it will be $2 \times
+  safety\_threshold/validator\_weight$, assuming uniform weight distribution).
+  Maybe more appropriate in Chapter 2:Finality though}
+and the closer the latency is to the ideal
 value, the more alive the system is as transactions take less time to be
 confirmed.
 
