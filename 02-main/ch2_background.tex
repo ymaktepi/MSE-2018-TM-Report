@@ -34,8 +34,8 @@ context, send messages to each other, acknowledging they saw other messages by
 including them in a \textit{justification}, that is attached to each message.
 Based on its justification as well as a weighted list of validators, each
 message defines an \textit{estimate}, which is the consensus value proposed by
-the sender of the message. In the case of a blockchain, messages each point to
-one older message as their estimate and form a \textit{block-\gls{dag}}. Running
+the sender of the message. In the case of a blockchain, each message points to a
+single older message as their estimate and form a \textit{block-\gls{dag}}. Running
 a slightly modified version of the \gls{ghost} algorithm on the \gls{dag}
 \cite{abstractCBC} \cite{GHOST} returns a blockchain.
 
@@ -43,41 +43,41 @@ a slightly modified version of the \gls{ghost} algorithm on the \gls{dag}
 	\centering
 	\includegraphics[width=0.8\columnwidth]{cbc-example}
   %\captionsetup{justification=centering}
-    \caption{\gls{cbc} blockchain example}
+    \caption{\gls{cbc} blockchain example \todo{comment}}
 	\label{fig:example}
 \end{figure}
 
-\fig{fig:example} shows a small example of a \gls{cbc} execution
-over a blockchain. Four nodes are pictured. Colored circles are messages sent by
-validators, dotted arrows show their justifications. The selected blockchain is
-depicted with blue arrows. It is obtained by running the \gls{ghost} algorithm
-on the pictured view of the network, and would be the estimate of a new message
-sent by an honest validator that has this view.
+\fig{fig:example} demonstrates a small example of a \gls{cbc} exectution oer a
+blockchain with four nodes, messages sent by validators as colored circles,
+justifications as dotted arrows, and the selected blockchain with blue arrows.
+The blockchain is obtained by running the \gls{ghost} algorithm on the state of
+the network as shown in \fig{fig:example} and the result of this algorithm would
+be the estimate of a new message sent by an honest validator within this network
+state. 
 
-\fig{fig:example2} examplifies validator \(v_1\) producing a new message
-and the resulting new blockchain. An honest node includes all the latest
-messages it has received (including its own last message). When a validator does
-not include its own messages in its justification, it is considered as an
-\textit{equivocator}, does not follow the protocol, and could be punished by
+\fig{fig:example2} examplifies validator \(v_1\) producing a new message and the
+resulting new blockchain. An honest node includes all the latest messages it has
+received (including its own last message).  When a validator does not include
+its own messages in its justifications, it is considered as an
+\textit{equivocator} which does not follow the protocol, and may be punished by
 the network for such a behavior. Note that validator \(v_1\) does not equivocate
 because its first message is in the justification of \(v_2\)'s first message,
-and \(v_1\) has this message in the justification of its second message. It is
-said that \(v_1\)'s first message is in the \textit{dependency} of its later
+and \(v_1\) has this message in the justification of its second message. This is
+legal because \(v_1\)'s first message is in the dependency of its later
 messages.
 
-\textit{Finality} is a key concept to understand for this project. A block is
-considered as finalized in a view if it cannot be removed from the blockchain by
-receiving new messages from honest nodes. In this project, a block is considered
-as finalized when a \textit{safety oracle} \cite{abstractCBC} is detected on it.
-Without entering into too much detail, the safety oracle that is used marks
-blocks as safe when at least \(50\%\) of the validators acknowledge that they
-saw the block in their chosen blockchain. \todo{more details, more precise?}
+\textit{Finality} is a key concept to address for this project whereby,
+currently a block is considered finalized in a network state if it cannot be
+removed by receiving new messages by receiving new messages from honest nodes. 
+For \gls{cbc} Casper, a block is considered finalized when a safety oracle is
+detected. There are multiple parameters and ways to compute safety oracles and
+the one that has been used for this project is: \todo{TODODODODO}
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.8\columnwidth]{cbc-example-2}
   %\captionsetup{justification=centering}
-    \caption{\gls{cbc} blockchain example 2}
+    \caption{\gls{cbc} blockchain example 2 \todo{comment}}
 	\label{fig:example2}
 \end{figure}
 
@@ -86,24 +86,23 @@ saw the block in their chosen blockchain. \todo{more details, more precise?}
 \label{ssec:powVsPos}
 
 \subsubsection{Block production}
-In a \gls{pow}\cite{yellowpaper} setting, a miner can broadcast any block to the network, but the
-block will only be picked up by the other nodes if it is valid. As the miner has
-to work to produce a valid block, it cannot create blocks on the fly at any
-time, whereas in a \gls{cbc} Casper setting, a node can broadcast blocks at any
-time. 
+In a \gls{pow}\cite{yellowpaper} setting, a miner can broadcast any block to the
+network, which will only be picked up by the other nodes if the block is valid,
+but the miner has to work to produce said valid block. This restriction implies
+that the block miner cannot create blocks at any given time, which is different
+to the \gls{cbc} Casper setting that allows nodes to broadcast whenever. 
 
 \subsubsection{Timing assumption}
-In a \gls{pow} protocol, the work a miner has to do to create a block is
-parametrized by the difficulty of the cryptographic puzzle it has to solve. This
-difficulty is set in such a way that it takes a certain time -on average- to
-solve the puzzle. On the contrary, the \gls{cbc} Casper protocol family does not
-make any timing assumption.
+Time is assumed in a \gls{pow} environment by the amount of work a miner has to
+provide to solve a cryptographic puzzle; the difficulty of this puzzle is
+determined in such a way that it would require an amount of time to solve that
+averages over the network. On the other hand, the \gls{cbc} Casper protocol
+family does not make any timing assumption.
 
 \subsubsection{Spam}
 The two previous points imply that spamming issues are mitigated by the need to
 work to produce blocks in a \gls{pow} chain. However, as there is a negligible
-computational cost to produce Casper messages, a node could easily spam the
-whole network.
+computational cost, a node could easily spam the Casper network.
 
 \subsubsection{Economic majority}
 \todo{cite ref, and better explanation}
@@ -181,21 +180,21 @@ During the early stages of this project, a clear objective was set: to be able
 to run a Casper \textit{testnet} with Parity custom nodes. Some work has been
 done for the implementation of the \texttt{core-cbc} library into Parity, but
 that was left to people that had a better understanding of the underlying
-library. Furthermore, \todo{rephrase "a lot of"} a lot of effort had been
-injected in the creation of a Docker infrastructure in order to easily deploy,
-connect and monitor multiple custom Parity nodes on a single machine in order to
-experiment with different message building strategies. The choice of using
-Docker was made because there was a  possibility to work on the UniNE clusters,
-which happen to work well with containerized software. After seeing that the
-Parity implementation would take too much time to be completed, and therefore
-might be unusable for this thesis, it has been decided to evaluate strategies
-inside the \texttt{core-cbc} library instead of the more real-life-like setting
-that is a Parity testnet. The core library was still being implemented at the
-time and further testing was needed. The main disadvantage of doing the experimentations in
-the library is that the whole network latencies and topology are not taken into
-account. However, a non-negligible advantage of implementing strategies in the
-core library is that it will be easier to test them on consensus values that are
-not only blockchains.
+library. Furthermore, considerable effort had been injected in the creation of a
+Docker infrastructure in order to easily deploy, connect and monitor multiple
+custom Parity nodes on a single machine in order to experiment with different
+message building strategies. Using Docker simplified access to the UnNE machine
+clusters for testing purposes as software on their clusters are heavily
+containerized. After seeing that the Parity implementation would take too much
+time to be completed, and therefore might be unusable for this thesis, it has
+been decided to evaluate strategies inside the \texttt{core-cbc} library instead
+of the more real-life-like setting that is a Parity testnet. The core library
+was still being implemented at the time and further testing was needed.  The
+main disadvantage of doing the experimentations in the library is that the whole
+network latencies and topology are not taken into account. However, a
+non-negligible advantage of implementing strategies in the core library is that
+it will be easier to test them on consensus values that are not only
+blockchains.
 
 \subsection{Local testnet}
 Scripts that create and manage two local nodes have been written. They launch 2
@@ -222,18 +221,18 @@ ways:
 	\centering
 	\includegraphics[width=0.8\columnwidth]{rings}
   %\captionsetup{justification=centering}
-    \caption{Parity nodes topologiess implemented in the Docker testnet. Ring
+    \caption{Parity nodes topologies implemented in the Docker testnet. Ring
     layout (left), fully connected (right)}
-	\label{fig:example2}
+	\label{fig:layout}
 \end{figure}
 
 The created nodes have the same types of accounts as for the local testnet.
-In the fully connected setting, each node is connected to every other node. In
+In the fully connected setting each node is connected to every other node. In
 the ring case, each node is connected to two other nodes in a circular manner.
 Those were the two first layouts that were implemented for simplicity. It was
 thought to add new layouts afterwards in order to match more precisely the real
 network topology of the Ethereum \textit{mainnet}. However, because the Parity
 implementation was deemed too time consuming to be used before the end of this
 project, no further efforts have been put in that direction. Nevertheless, the
-software architecture is in such a state than adding and removing topologies is
+software architecture is in such a state that adding and removing topologies is
 easily done through abstract structures.
