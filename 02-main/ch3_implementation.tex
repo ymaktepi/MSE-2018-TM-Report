@@ -21,7 +21,11 @@ that:
 \subsubsection{Latency}
 The latency is the number of messages required to finalize a block and is a
 measure of a blockchain's liveness. Latency should be as close to two so as to
-reach finality as soon as possible and the closer the latency is to the ideal
+reach finality as soon as possible \todo{explain why a latency of two is the
+  minimum (and for n validators, it will be $2 \times
+  safety\_threshold/validator\_weight$, assuming uniform weight distribution).
+  Maybe more appropriate in Chapter 2:Finality though}
+and the closer the latency is to the ideal
 value, the more alive the system is as transactions take less time to be
 confirmed.
 
@@ -59,7 +63,7 @@ In a standard consensus protocol, the three metrics form a trade-off triangle in
 kind of a ``pick two'' fashion. \todo{not a pick two} \gls{cbc}-Casper has no
 assumptions on timings, sources, contents, destinations of the messages that are
 exchanged, and can therefore explore the whole trade-off space. This project
-aims to find strategies that span the entierty of the triangle and 
+aims to find strategies that span the entirety of the triangle and
 \todo{finish sentence what}
 
 \subsection{Basic model}
@@ -70,7 +74,7 @@ The first strategy evaluation model that was chosen is:
 
 
 This model binds each 3 variable \(n\) (number of nodes), \(l\) (latency) and
-\(o\) (overhead) to their score \(s_variable\).
+\(o\) (overhead) to their score \(s_{variable}\).
 }
 
 
@@ -119,9 +123,8 @@ message is sent at a time and each sent message should finalize a new block.
 The latency, on the other hand, should be quite high because as seen in
 \ssec{ssec:cbc} \(50\%\) of the validators have to acknowledge the messages to
 finalize them. Since the round-robin has a fixed rotation order for the
-message production, finalization happens only a rotation and a half where the
-first rotation acknowledges the message's existance and the haf rotation to
-confirm acknowledgment.
+message production, finalization happens only a rotation and a half later, where the
+first rotation acknowledges the message's existence and the subsequent half rotation confirms acknowledgment.
 
 
 \subsection{Double Round-robin}
@@ -147,7 +150,7 @@ implementation.
 
 \subsection{Maximal Overhead}
 This strategy is the most expensive in terms of bandwidth; at each step, each
-validator sends a message to the others. This example strategy should give a
+validator sends a message to all others. This example strategy should give a
 baseline value for the maximum overhead that is reachable in the tradeoff
 triangle. It also minimizes the latency as only two steps are needed in order to
 finalize a block. This strategy is similar to the pBFT\cite{pBFT} protocol
@@ -180,8 +183,8 @@ strategies dictate.
 Over the duration of this thesis, the \texttt{core-cbc} library included a
 test framework called \texttt{proptest}. The testing framework that has been
 implemented includes ways to simulate the behavior of the Casper protocol over
-multiple nodes and thousands of blocks. At the time of the
-writing, the simulations do not include networking latencies.
+multiple nodes and thousands of blocks. At the time of
+writing, the simulations do not include network latencies.
 
 \subsection{\texttt{proptest}}
 \label{ssec:proptest}
@@ -248,7 +251,7 @@ script. The recorded data are:
     \item the number of nodes;
     \item the identity of the current node;
     \item the height of the chain;
-    \item the height of the higher finalized block;
+    \item the height of the highest finalized block;
     \item and the total number of messages that have been sent.
 \end{itemize}
 
