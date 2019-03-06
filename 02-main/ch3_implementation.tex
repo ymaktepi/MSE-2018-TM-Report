@@ -3,7 +3,7 @@
 
 This chapter describes the modelisation of the problem, the block building
 strategies that have been implemented in order to validate the correctness of
-the proposed model as well as the methodology that has been employed to test the
+the proposed model, and the methodology that has been employed to test the
 framework.
 
 \section{Modelisation}
@@ -19,16 +19,15 @@ that:
 \end{itemize}
 
 \subsubsection{Latency}
-The latency is the number of messages needed to finalize a block. Ideally, you
-want to have a latency as low as possible to reach finality as soon as possible.
-The latency is a way to measure liveness in a blockchain system. If it is low,
-then the system is considered more "live", as fewer messages are needed in order
-to confirm a transaction, and therefore less time.
+The latency is the number of messages required to finalize a block and is a
+measure of a blockchain's liveness. Latency should be as close to two so as to
+reach finality as soon as possible and the closer the latency is to the ideal
+value, the more alive the system is as transactions take less time to be
+confirmed.
 
 \subsubsection{Number of nodes}
-The number of nodes is quite straightforward; it is the number of nodes that are
-in the validator set. This number should be as high as possible to guarantee
-decentralization and therefore safety.
+The number of nodes in the validator set and should be as high as possible to
+guarantee decentralization and safety.
 
 \subsubsection{Overhead}
 The overhead is the number of messages that are sent over the network between
@@ -45,15 +44,14 @@ the costs in bandwidth low.
 	\label{fig:metricsSchema}
 \end{figure}
 
-\fig{fig:metricsSchema} describes how the computation of the metrics
-takes place. The left half of the figure shows an initial view of the system. At
-time \(t_1\), message \(m_1\) is finalized. The right half of the figure shows a
-view of the system at \(t_2\), time at which \(m_2\) is finalized. The latency
-of \(m_2\) is \(l_2\), the difference of heights between \(m_3\) and \(m_2\). In
-this example, \(l_2 = 4\). \(o_2\), the overhead for \(m_2\), is the number of
-messages that have been sent between \(t_1\) and \(t_2\), \(t_1\) being the time
-at which the previous message has been finalized and \(t_2\) the time at which
-the current message is finalized. In the example, \(o_2 = 3\).
+\fig{fig:metricsSchema} portrays how the metrics are computed: the left half of
+the Figure is the initial states of the system at time \(t_1\) where message
+\(m_1\) is finalized. The other half of the Figure is the same system at time
+\(t_2\) when \(m_2\) is finalized. The latency of \(m_2\) is \(l_2\)
+-represented by the difference in heights between \(m_3\) and \(m_2\)- which is
+worth 4 in this case. The overhead is measured by counting the number of
+messages that have been sent between \(t_1\) and \(t_2\), worth 3.
+
 \FloatBarrier
 
 \subsection{Tradeoff triangle/Trilemma}
@@ -66,39 +64,38 @@ aims to find strategies that span the entierty of the triangle and
 
 \subsection{Basic model}
 \label{ssec:model}
-The first model that has been chosen for the evaluation is the following:
+The first strategy evaluation model that was chosen is:
 
 \[1 = s_n \cdot \frac{1}{n} + s_l\cdot l + s_o\cdot o\]
 
-This model binds 3 scores \(s_x\) to their respective variables \(x\).
-Variables are as follows:
-\begin{itemize}
-    \item \(n\) the number of nodees;
-    \item \(l\) the latency;
-    \item \(o\) the overhead.
-\end{itemize}
-The higher the score \(s_x\) is, the more its related variable is dominant
-in the strategy and therefore the closer to a corner of the triangle the strategy is.
-\(\frac{1}{n}\) is used because a large number of nodes is wanted.
-This model is a basic one, where everything is linear. It is probably not accurate but
-will serve as a base for a closer to reality one once data have been plotted using
-this model.
+
+This model binds each 3 variable \(n\) (number of nodes), \(l\) (latency) and
+\(o\) (overhead) to their score \(s_variable\).
+}
+
+
+The higher the score \(s_x\) is, the more its related variable is dominant in
+the strategy and therefore the closer to a corner of the triangle the strategy
+is.  \(\frac{1}{n}\) is used because a large number of nodes is wanted.  The
+basic model has linear dependencies between scores and variables and is probably
+highly inaccurate but serves as a decent starting point to analyze the
+simulation dataset.
 
 \subsection{Model Evaluation}
 After running the strategies in the simulation environment, metrics for \(n\),
-\(l\) and \(o\) will be recorded. Then, for multiple runs, a linear regression
-will be performed in order to find the scores \(s_x\).
+\(l\) and \(o\) have been recorded. Then, for multiple runs, a linear regression
+has been performed in order to find the scores \(s_x\).
 
 \section{Strategies}
 \label{sec:strategies}
 
-The following strategies were proposed in order to visit know parts of the
+The following strategies were proposed in order to visit known parts of the
 trade-off triangle:
 \begin{itemize}
         \item round-robin;
         \item double round-robin;
         \item triple round-robin;
-        \item overhead;
+        \item maximal overhead;
         \item arbitrary.
 \end{itemize}
 These strategies should allow one to visit the whole triangle and to discuss
@@ -111,21 +108,20 @@ strategies as well as their expected locations in the triangle.
   %\captionsetup{justification=centering}
     \caption{Strategies examples with 4 validators. Top-left: Round-robin.
     Top-right: Double round-robin. Bottom-left: Maximal overhead. Bottom-right:
-    Arbitrary. Arrows here show justifications for all messages.}
+    Arbitrary. Arrows here show justifications for all messages.\todo{ref}}
 	\label{fig:allStrats}
 \end{figure}
 
 \subsection{Round-robin}
-The first strategy that comes to mind is a simple round-robin. Nodes send
-messages one after the other, in a fixed order. The expected overhead for this
-strategy should be the lowest of all the strategies, are only one message is
-sent at a time, and each sent message should finalize a new block. The latency
-on the other hand should be quite high because as seen in \ssec{ssec:cbc},
-\(50\%\) of the validators have to acknowledge the messages to finalize them and
-since the round-robin has a fixed rotation order for the message production,
-this only happens after making one and a half rotations (the first one to
-acknoledge the messages existance and the next half to confirm the
-acknoledgment.
+Nodes send messages one after the other in a fixed order. The expected overhead
+for this strategy should be the lowest of all the strategies as only one
+message is sent at a time and each sent message should finalize a new block.
+The latency, on the other hand, should be quite high because as seen in
+\ssec{ssec:cbc} \(50\%\) of the validators have to acknowledge the messages to
+finalize them. Since the round-robin has a fixed rotation order for the
+message production, finalization happens only a rotation and a half where the
+first rotation acknowledges the message's existance and the haf rotation to
+confirm acknowledgment.
 
 
 \subsection{Double Round-robin}
@@ -135,17 +131,18 @@ other in the set of validators, the latency to finality is supposedly
 half as much as the simple round-robin strategy, as the whole validator set
 sends a message in half the number of steps. The overhead is however
 doubled because two messages are sent at each step.
+\todo{remove - before cbc and casper}
 
 \subsection{Triple Round-robin}
 This strategy is similar to the Double round-robin, except that three nodes send
-a message a each step. It was decided to add this strategy at a later stage of
+a message at each step. It was decided to add this strategy at a later stage of
 the project in order to have intermediate comparison points between the Double
 round-robin and the Maximal overhead strategy. As for the Double round-robin
 strategy, the latency should be divided by three compared to the simple
 round-robin and the overhead should be three times higher.
-Note that a N-uple round-robin could be implemented in order to change the
+Note that a \(N\)-parallelized round-robins could be implemented in order to change the
 position in the trade-off triangle but it would lose meaning for a number of
-nodes smaller than N so there is no quadruple (or bigger) round-robin
+nodes smaller than \(N\) so there is no quadruple (or bigger) round-robin
 implementation.
 
 \subsection{Maximal Overhead}
@@ -153,35 +150,34 @@ This strategy is the most expensive in terms of bandwidth; at each step, each
 validator sends a message to the others. This example strategy should give a
 baseline value for the maximum overhead that is reachable in the tradeoff
 triangle. It also minimizes the latency as only two steps are needed in order to
-finalize a block. This strategy is similar to the pBFT\cite{pBFT} protocol, as each
-node sends a message to every other one over two steps.
+finalize a block. This strategy is similar to the pBFT\cite{pBFT} protocol
+because each node sends a message to every other one over two steps.
 
 \subsection{Arbitrary}
-The Arbitrary strategy is the simplest to think of: complete randomness. Using fixed
-probability density functions, one node is arbitrarily selected at each step to
-create a message. This strategy could be modified in the same way the
-simple Round-robin has evolved into the Double and Triple round robin
+The Arbitrary strategy is the simplest to think of: pick a sender at random.
+Using fixed probability density functions, one node is arbitrarily selected at
+each step to create a message. This strategy could be modified in the same way
+the simple Round-robin has evolved into the Double and Triple round robin
 strategies to show the evolution of the metrics with the number of messages sent
 at each step.
 
 \subsection{Bottom-up strategies}
 \label{ssec:bottomUpStrats}
-All the previous strategies (except the Arbitrary one) can be viewed as
-``top-down'' strategies, as there has to be a way for nodes to be synchronized.
+All the previous strategies except Arbitrary require an overarching view
+(``top-down'' view) of the system and the nodes to be synchronized.
 Bottom-up strategies are more likely to be implemented from a real-life point of
 view. Each node has its own view of the messages and acts in its own interest
 based on that view.
-For exemple, a node could keep track of the whole state of the finalization of
+For example a node could keep track of the whole state of the finalization of
 messages, and only publish a message itself when it facilitates the
 finalization. That kind of strategy has not been implemented but the testing and
 scoring framework allows one to easily add them.
-
 Such strategies should implement incentives for the nodes not to spam the
 network and include mechanisms to slash nodes not following some rules the
 strategies dictate.
 
 \section{Methodology}
-Over the duration of this thesis, the \texttt{core-cbc} library has included a
+Over the duration of this thesis, the \texttt{core-cbc} library included a
 test framework called \texttt{proptest}. The testing framework that has been
 implemented includes ways to simulate the behavior of the Casper protocol over
 multiple nodes and thousands of blocks. At the time of the
@@ -200,17 +196,16 @@ the following parameters:
 \end{itemize}
 
 \subsubsection{Number of validators}
-This parameter is quite straightforward, it is the number of nodes that can
-validate blocks.
+The number of nodes that can validate blocks.
 
 \subsubsection{Terminating condition}
 The terminating condition is a predicate that tells whether or not the simulation has
-reached an end. In our case, the end of the simulation is reached when at least
+reached an end. In this case, the end of the simulation is reached when at least
 one node finds a safety oracle for a blockchain that has a height of 4. This
 height was chosen because it offered a balance between the computation speed and
-the variance in output values. If the chosen value was smaller, the generated
+the variance in output values. If the chosen value was smaller the generated
 blockchains would all look alike and some side effects would have been observed
-near the genesis block. A bigger value would imply more computation time.
+near the genesis block whereas a bigger value would imply more computation time.
 
 \subsubsection{Sender strategy}
 The sender strategy selects one or more nodes that will create new messages and
@@ -229,7 +224,7 @@ Sender strategies. Three strategies have been implemented for now:
 
 The \textit{all receivers} strategy broadcasts messages to each other validator.
 The \textit{some receivers} strategy sends a message to \(1\) or more validator,
-using an uniform probability density function.  As of now, none of the
+using a uniform probability density function.  As of now, none of the
 implemented strategies are a good modelisation of a typical Ethereum network and
 this will be fixed at a later iteration.  Nonetheless, these strategies offer
 two extreme points on the spectrum of the network topology: a fully connected
@@ -237,9 +232,9 @@ one without latency (\textit{all receivers}), and a random one (\textit{some
 receivers}) and will be both taken into account to compare the sender
 strategies.
 The \textit{half receivers} strategy sends a message to half the validator set,
-chosen at random. It has been implemented at a later stage of the project
+chosen at random which has been implemented at a later stage of the project
 because the \textit{some receivers} strategy ended up modifying multiple
-parameters at once rendering the analysis of the output data too complex for the
+parameters at once rendering the analysis of the output too complex for the
 proposed model and tools.
 
 \subsection{Metrics measurements}
@@ -257,7 +252,7 @@ script. The recorded data are:
     \item and the total number of messages that have been sent.
 \end{itemize}
 
-This two steps processing permitted the generation of
+This two step processing enabled the generation of
 data before having a precise definition of the metrics. It also permits to vary
 the way metrics are recorded. For example, from the same log file, you could
 extract metrics only when the last step of the consensus is reached, or have an
