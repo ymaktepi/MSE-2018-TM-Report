@@ -93,6 +93,7 @@ there cannot be a non-integer average value for the latency in this case.
 
 \FloatBarrier
 \subsection{Double round-robin}
+\label{ssec:doubleRR}
 \triplefigure
     {hist_nb_nodes_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {hist_latency_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
@@ -108,8 +109,8 @@ distributions show a similar shape. The latency is less spread than for the
 singl round-robin, which explains some dissimilarities between the
 distributions. The distribution of the overhead presents a peak at 2, which is
 expected but also shows that there are some messages that have double this
-overhead, at 4. This will be explained using the following graphs. \todo{explain
-outliers}
+overhead, at 4. The appearence of these outliers is explained further in
+\ssec{ssec:arbitrary}. 
 
 \triplefigure
     {relation_nb_nodes_latency_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
@@ -135,6 +136,7 @@ single round-robin and confirms the hypothesis.
 
 \FloatBarrier
 \subsection{Triple round-robin}
+\label{ssec:tripleRR}
 The triple round-robin strategy shows  the same kind of information as the
 double round-robin one. The overhead is 3 for almost all cases (this will be
 discussed later), and the number of nodes and latency are linearly correlated.
@@ -160,9 +162,9 @@ simple.
 2, 5 and 11 nodes. When running 2 nodes, which is an obvious edge case for this
 strategy (as there are only 2 nodes and there should be at least 3 to send
 different messages), the overhead is only 1 because only one node sends a
-message in this case. 
+message in this case. The appearence of the other two outliers is explained further in
+\ssec{ssec:arbitrary}. 
 
-\todo{explain other outliers}
 \triplefigure
     {relation_nb_nodes_latency_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
     {relation_nb_nodes_overhead_triple_rr_20_nodes_4_depth_all_receivers_gen_averages}
@@ -259,6 +261,34 @@ The latter one shows an even weirder artifact:
     variables both seem to be split into two linear functions with a clear gaps
     between them.}
     {fig:relArbitrary}
+
+During the analysis phase of this strategy and particularly when trying to
+explain the straight line appearing on the bottom-left graph on
+\fig{fig:relArbitrary}, a critical bug was discovered. This bug happens when two
+or more messages are finalized during the last step of the simulation. As the
+bug was discovered at the near end of the projet, it has not been corrected, but
+it will have to be fixed for the further research that is planned on the
+subject. As the data collection process is segregated from the metrics
+computations (\ssec{ssec:metricsMeasurements}), data that has elready been
+generated are not lost and can be used again when the bug is corrected. Note
+that this bug also explains the outliers observed for the Double round-robin and
+Triple round-robin strategies as well (\ssec{ssec:doubleRR} and
+\ssec{ssec:tripleRR}).  Nonetheless, a version of the graphs with the edge cases
+filtered out was made in order to better picture the performances of the
+strategy (\fig{fig:relArbitraryFiltered}).
+
+\triplefigure
+    {relation_nb_nodes_latency_arbitrary_filtered_20_nodes_4_depth_all_receivers_gen_averages}
+    {relation_nb_nodes_overhead_arbitrary_filtered_20_nodes_4_depth_all_receivers_gen_averages}
+    {relation_overhead_latency_arbitrary_filtered_20_nodes_4_depth_all_receivers_gen_averages}
+    {The arbitrary strategy shows a linear relation between the number of
+    nodes and the latency (top-left). However, the other relations between
+    variables both seem to be split into two linear functions with a clear gaps
+    between them.}
+    {fig:relArbitraryFiltered}
+
+
+\todo{finish analysis}
 
 \FloatBarrier
 \subsection{Fitting of the basic model}
@@ -508,6 +538,12 @@ The final model is therefore:
 
 \FloatBarrier
 \section{Further research}
+
+\subsection{Resolve edge case bug}
+As discussed in \ssec{ssec:arbitrary}, an edge case bug has been discovered at
+the near end of the project. It is necessary to fix this implementation error
+before researching further on the subject.
+
 \subsection{Half set strategy}
 A new sending strategy that could be interesting to implement is a strategy
 where half the validator set sends a message at each step. That would give a new
