@@ -47,7 +47,7 @@ a slightly modified version of the \gls{ghost} algorithm on the \gls{dag}
 	\label{fig:example}
 \end{figure}
 
-\fig{fig:example} demonstrates a small example of a \gls{cbc} exectution oer a
+\fig{fig:example} demonstrates a small example of a \gls{cbc} execution oer a
 blockchain with four nodes, messages sent by validators as colored circles,
 justifications as dotted arrows, and the selected blockchain with blue arrows.
 The blockchain is obtained by running the \gls{ghost} algorithm on the state of
@@ -66,12 +66,20 @@ and \(v_1\) has this message in the justification of its second message. This is
 legal because \(v_1\)'s first message is in the dependency of its later
 messages.
 
+\subsubsection{Finality}
+\label{ssec:finality}
+
 \textit{Finality} is a key concept to address for this project whereby,
 currently a block is considered finalized in a network state if it cannot be
 removed by receiving new messages by receiving new messages from honest nodes. 
 For \gls{cbc} Casper, a block is considered finalized when a safety oracle is
 detected. There are multiple parameters and ways to compute safety oracles and
-the one that has been used for this project is: \todo{TODODODODO}
+the one that has been used for this project is: \todo{TODODODODO
+
+A block is considered safe when every node in a subset of the network has seen
+each other member of the same subset agreeing on said block. Two nodes agree on
+a block when they both include it in the blockchain of their estimate. In this
+project, the subset will be any 50\% of the network.  }
 
 \begin{figure}[h]
 	\centering
@@ -149,24 +157,22 @@ any chain, or even on its own chain.
 \end{table}
 
 \section{Main problematic}
-\todo{rename section}
 As seen in \ssec{ssec:powVsPos}, many real-life implementation points are still
 to define in order to have a practical \gls{cbc} Casper blockchain. One main
 problem that arises is the selection of a block building strategy. This project
 will try to propose a model to compare strategies, as well as a framework that
 allows one to easily implement new strategies and discuss their performances
-based on the proposed model.
-Basic strategies that have predictable outputs will be implemented as well, in
-order to validate the functionality of the framework.
+based on the proposed model.  Basic strategies that have predictable outputs
+will be implemented as well, in order to validate the functionality of the
+framework.
 
 \section{\texttt{core\_cbc}}
 \texttt{core\_cbc} a Rust implementation of the \gls{cbc}-Casper, made by
-TrueLevel \todo{introduce somewhere}. It implements the consensus algorithms proposed in the paper and
-offers an abstract structure that can be used to create consensus on any value.
+TrueLevel \todo{introduce somewhere}. It implements the consensus algorithms
+proposed in the paper and offers an abstract structure that can be used to
+create consensus on any value.
 
 \section{Parity Ethereum}
-\todo{remove redundancy in this chapter}
-\todo{parity networking/gossiping layer research?}
 Parity is a Rust Ethereum client. It includes a \textit{Pluggable Consensus}
 module that allows one to easily add new consensus protocols by implementing an
 interface.  At first, the goal of this project was to implement a small bridge

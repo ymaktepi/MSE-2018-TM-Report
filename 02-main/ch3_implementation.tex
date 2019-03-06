@@ -20,14 +20,16 @@ that:
 
 \subsubsection{Latency}
 The latency is the number of messages required to finalize a block and is a
-measure of a blockchain's liveness. Latency should be as close to two so as to
+measure of a blockchain's liveness. Latency should be as close to \(2\) 
+ so as to
 reach finality as soon as possible \todo{explain why a latency of two is the
   minimum (and for n validators, it will be $2 \times
   safety\_threshold/validator\_weight$, assuming uniform weight distribution).
   Maybe more appropriate in Chapter 2:Finality though}
 and the closer the latency is to the ideal
 value, the more alive the system is as transactions take less time to be
-confirmed.
+confirmed. The minimal value for latency is \(2\) because a minimum of two steps
+are needed for nodes to both acknowledge the existance of a block and 
 
 \subsubsection{Number of nodes}
 The number of nodes in the validator set and should be as high as possible to
@@ -36,7 +38,8 @@ guarantee decentralization and safety.
 \subsubsection{Overhead}
 The overhead is the number of messages that are sent over the network between
 one step of the consensus and the next. It should be as low as possible to keep
-the costs in bandwidth low.
+the costs in bandwidth low, the minimum being 1 as at least one message is
+needed to move consensus forward.
 
 \subsubsection{Example}
 
@@ -44,7 +47,7 @@ the costs in bandwidth low.
 	\centering
 	\includegraphics[width=\columnwidth]{metrics-example}
   %\captionsetup{justification=centering}
-    \caption{Metrics computation example}
+    \caption{Metrics computation example \todo{comment}}
 	\label{fig:metricsSchema}
 \end{figure}
 
@@ -75,8 +78,6 @@ The first strategy evaluation model that was chosen is:
 
 This model binds each 3 variable \(n\) (number of nodes), \(l\) (latency) and
 \(o\) (overhead) to their score \(s_{variable}\).
-}
-
 
 The higher the score \(s_x\) is, the more its related variable is dominant in
 the strategy and therefore the closer to a corner of the triangle the strategy
@@ -117,24 +118,24 @@ strategies as well as their expected locations in the triangle.
 \end{figure}
 
 \subsection{Round-robin}
-Nodes send messages one after the other in a fixed order. The expected overhead
-for this strategy should be the lowest of all the strategies as only one
-message is sent at a time and each sent message should finalize a new block.
-The latency, on the other hand, should be quite high because as seen in
-\ssec{ssec:cbc} \(50\%\) of the validators have to acknowledge the messages to
-finalize them. Since the round-robin has a fixed rotation order for the
-message production, finalization happens only a rotation and a half later, where the
-first rotation acknowledges the message's existence and the subsequent half rotation confirms acknowledgment.
-
+Nodes send messages one after the other in a fixed order (\fig{fig:allStrats},
+top-left). The expected overhead for this strategy should be the lowest of all
+the strategies as only one message is sent at a time and each sent message
+should finalize a new block.  The latency, on the other hand, should be quite
+high because as seen in \ssec{ssec:cbc} \(50\%\) of the validators have to
+acknowledge the messages to finalize them. Since the round-robin has a fixed
+rotation order for the message production, finalization happens only a rotation
+and a half later, where the first rotation acknowledges the message's existence
+and the subsequent half rotation confirms acknowledgment.
 
 \subsection{Double Round-robin}
-In this setting, two nodes send messages at the same time, in a fixed order. If
-the two nodes that send messages at the same step are as far as possible from each
-other in the set of validators, the latency to finality is supposedly
-half as much as the simple round-robin strategy, as the whole validator set
-sends a message in half the number of steps. The overhead is however
-doubled because two messages are sent at each step.
-\todo{remove - before cbc and casper}
+In this setting, two nodes send messages at the same time, in a fixed order
+(\fig{fig:allStrats}, top-right). If the two nodes that send messages at the
+same step are as far as possible from each other in the set of validators, the
+latency to finality is supposedly half as much as the simple round-robin
+strategy, as the whole validator set sends a message in half the number of
+steps. The overhead is however doubled because two messages are sent at each
+step.  \todo{remove - before cbc and casper}
 
 \subsection{Triple Round-robin}
 This strategy is similar to the Double round-robin, except that three nodes send
@@ -150,19 +151,20 @@ implementation.
 
 \subsection{Maximal Overhead}
 This strategy is the most expensive in terms of bandwidth; at each step, each
-validator sends a message to all others. This example strategy should give a
-baseline value for the maximum overhead that is reachable in the tradeoff
-triangle. It also minimizes the latency as only two steps are needed in order to
-finalize a block. This strategy is similar to the pBFT\cite{pBFT} protocol
-because each node sends a message to every other one over two steps.
+validator sends a message to all others(\fig{fig:allStrats}, bottom-left). This
+example strategy should give a baseline value for the maximum overhead that is
+reachable in the tradeoff triangle. It also minimizes the latency as only two
+steps are needed in order to finalize a block. This strategy is similar to the
+pBFT\cite{pBFT} protocol because each node sends a message to every other one
+over two steps.
 
 \subsection{Arbitrary}
-The Arbitrary strategy is the simplest to think of: pick a sender at random.
-Using fixed probability density functions, one node is arbitrarily selected at
-each step to create a message. This strategy could be modified in the same way
-the simple Round-robin has evolved into the Double and Triple round robin
-strategies to show the evolution of the metrics with the number of messages sent
-at each step.
+The Arbitrary strategy is the simplest to think of: pick a sender at
+random(\fig{fig:allStrats}, bottom-right).  Using fixed probability density
+functions, one node is arbitrarily selected at each step to create a message.
+This strategy could be modified in the same way the simple Round-robin has
+evolved into the Double and Triple round robin strategies to show the evolution
+of the metrics with the number of messages sent at each step.
 
 \subsection{Bottom-up strategies}
 \label{ssec:bottomUpStrats}

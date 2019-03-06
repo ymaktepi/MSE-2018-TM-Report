@@ -1,37 +1,36 @@
 \chapter{Framework and Strategies Evaluation}
 \label{chap:strategies}
 
-This chapter shows visualizations of the data collected through tests run with
-the proposed strategies. The first part of the chapter explains the data
-obtained and compares them to the expected results for each strategy described
-in \sect{sec:strategies}. The second part of the chapter shows the scores of the
+This chapter visualizes the data collected from the test runs with the various
+proposed strategies. The first part of the chapter explains the data obtained
+and compares them to the expected results for each strategy described in
+\sect{sec:strategies}. The second part of the chapter shows the scores of the
 strategies when the obtained data are fitted to the model discussed in
-\ssec{ssec:model}. The latter part of the chapter describes improvements to the
-model for a better comparison between strategies.
+\ssec{ssec:model}. The latter part of the chapter discusses suggested
+improvements to the model for a better strategiey juxtaposition.
 
 \section{Tests}
 Tests that cover all the combinations between sending strategies and receivers
-strategies have been run.
-All of them have the same terminating condition, which is reached when at least
-one node finds a safety oracle at height 4 (in other words, that the block at
-height 4 in a node's view is finalized). The number of nodes is chosen at random
-in the interval \([2, 20[\). It has been decided to perform tests on this
-interval because it is large enough to give an insight on the behavior of the
-relations between all the metrics, and small enough to reach the terminating
-condition in a reasonable time (1 run with a number of nodes chosen at random
-takes on average 1 hour with the Maximal overhead strategy). Because the Maximal
-overhead strategy takes way more time than the others to give results, this
-strategy has first been run with a number of nodes in the interval \([2,10[\),
-then with the whole \([2, 20[\) a lower number of times to confirm the
-tendencies observed with the lower number of nodes.
+strategies have been run.  All of them have the same terminating condition that
+is reached when at least one node finds a safety oracle at height 4 (in other
+words, that the block at height 4 in a node's view is finalized). The number of
+nodes is chosen at random in the interval \([2, 20[\). Performing tests on this
+interval is large enough to give an insight on the interactions between all the
+metrics and small enough to reach the terminating condition in a reasonable
+amount of time (1 run with a number of nodes chosen at random takes on average 1
+hour with the Maximal overhead strategy). Because the Maximal overhead strategy
+takes way more time than the others to give results, this strategy has first
+been run with a number of nodes in the interval \([2,10[\), then with the whole
+\([2, 20[\) a lower number of times to confirm the tendencies observed with the
+lower number of nodes.
 
 \section{Visualization All receivers}
 This section presents a visualization of the data obtained through the multiple
 test runs with the All receivers strategy.  Each subsection shows the results
 using 3 histograms, representing the raw data, followed by 3 scatter plots
-picturing each metric against each other. These graphs also show a simple linear
+picturing each metric against one another. These graphs also show a simple linear
 regression as an attempt to find a relation between each metric. At the end of
-the discussion of each strategy a linear regression is performed in order to
+the chapter a linear regression is performed in order to
 find the scores of each variable according to the model presented in
 \ssec{ssec:model}.
 
@@ -88,7 +87,7 @@ that we expect the relation to be \(l = 1.5\cdot n\), and therefore the span of
 the latency distribution is bigger than the one for the number of nodes. The
 regularity of the gaps (which appear to be every 3 units of latency), is caused
 by the regularity of the sending and receiving strategies. As all nodes receive
-the messages at the same time, they all finalize the same blocks together, and
+the messages at the same time they all finalize the same blocks together and
 there cannot be a non-integer average value for the latency in this case.
 
 \FloatBarrier
@@ -105,12 +104,11 @@ there cannot be a non-integer average value for the latency in this case.
     {fig:distDRR}
 
 As for the simple round-robin case, the latency and number of nodes
-distributions show a similar shape. The latency is less spread than for the
-singl round-robin, which explains some dissimilarities between the
-distributions. The distribution of the overhead presents a peak at 2, which is
-expected but also shows that there are some messages that have double this
-overhead, at 4. The appearence of these outliers is explained further in
-\ssec{ssec:arbitrary}. 
+distributions show a similar shape. The latency is more localized than for the
+single round-robin and demonstrates a difference between distributions. The
+distribution of the overhead presents a peak at 2, which was expected, but also
+shows that there are some messages that have double this overhead at 4. The
+appearence of these outliers is explained further in \ssec{ssec:arbitrary}. 
 
 \triplefigure
     {relation_nb_nodes_latency_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
@@ -127,11 +125,12 @@ of much use here, except they show that its value is 2, as it is expected.
 On the other hand, the plot on the top-left of \fig{fig:relDRR} shows a
 linear relation between the number of nodes and the latency: 
 \[l = 0.721750 \cdot n\]
-This value is about half of the slope obtained for the same relation with the
-round-robin strategy. The double round-robin strategy was supposed to show half
-the latency with respect to the simple round-robin and this value is therefore
-correct. The value of 2 for the overhead is also twice the overhead for the
-single round-robin and confirms the hypothesis.
+
+The coefficient of this latency in relation to the number of nodes is about half
+that of one signe round-robin method. The double round-robin strategy was
+supposed to show half the latency with respect to the simple round-robin and
+this value is therefore correct. The value of 2 for the overhead is also twice
+the overhead for the single round-robin and confirms the hypothesis.
     
 
 \FloatBarrier
@@ -154,10 +153,9 @@ discussed later), and the number of nodes and latency are linearly correlated.
 The relationship with the overhead are again not of much use because its value
 is always 3. Again, there is a linear relationship between the latency and the
 number of nodes, which follows this equation:
-    \[l = 0.496152 * n\]
-The slope is a third as the slope for the simple round-robin strategy. Moreover
-the overhead is three times larger for the triple round-robin than it is for the
-simple.
+    \[l = 0.496152 \cdot n\]
+This coefficient is about a third that of the single round-robin method and the
+overhead is three times larger.
 \fig{fig:relTRR} shows clear outliersfor the overhead value when running
 2, 5 and 11 nodes. When running 2 nodes, which is an obvious edge case for this
 strategy (as there are only 2 nodes and there should be at least 3 to send
@@ -179,14 +177,14 @@ message in this case. The appearence of the other two outliers is explained furt
 
 \FloatBarrier
 \subsection{Maximal overhead}
-This strategy aims to reduce latency to its minimum, which is shown in the
+This strategy aims to reduce latency to its minimum, as shown in the
 top-right plot on \fig{fig:distOverhead}. The distributions of the number
 of nodes and overhead are of the same shape because they are lineraly
 correlated, as will be shown in the next paragraph. 
-Note that the experiments have been run with a lower number of nodes because the
+Note that the experiments were run with a lower number of nodes because the
 simulations for a large number of nodes takes a large amount of time. The
 simulations are currently implemented following the mathematical formulae found
-in \cite{abstractCBC} and not yet optimized. For completeness's sake, a few runs
+in \cite{abstractCBC} and not yet optimized. For the sake of completion, a few runs
 have been performed with the same amount of nodes as for the other experiments
 to show whether or not there were divergences. It turned out that there was not
 such divergences. 
@@ -204,14 +202,12 @@ such divergences.
     bottom and top-left histograms.}
     {fig:distOverhead}
 
-The top-right plot on \fig{fig:relOverhead} clearly shows a linear
-dependency between the number of nodes and the overhead. The relation is \(o =
-n\), as it is expected.
-The two other plots on the same Figure only confirm that the latency equals 2,
-which is the minimum that can be reached, as there needs to be two steps to
-finalize a message. During the first step, all nodes acknowledge they have seen
-a message, and the second step confirms that everyone has seen the other nodes
-acknowledgments.
+The top-right plot on \fig{fig:relOverhead} shows a linear dependency between
+overhead and number of nodes of \(o = n\), as was expected.  The two other plots
+on the same Figure only confirm that the latency equals 2, which is the minimum
+that can be reached, as there needs to be two steps to finalize a message.
+During the first step, all nodes acknowledge they have seen a message, and the
+second step confirms that everyone has seen the other nodes acknowledgments.
 
 \triplefigure
     {relation_nb_nodes_latency_overhead_10-20_nodes_4_depth_all_receivers_gen_averages}
@@ -242,9 +238,10 @@ characteristics?}
     {fig:distArbitrary}
 
 The top-left graph on \fig{fig:relArbitrary} shows a linear relationship
-between the latency and the number of nodes. The equation of the fitted line is
-\[l = 2.091255 \cdot n\]. Even tough it shows some variance, the slope is
-not that far from a simple round-robin strategy. \todo{rephrase <-}
+between the latency and the number of nodes. The equation of the fitted line is:
+\[l = 2.091255 \cdot n\]
+Though the slope varies a bit, it is still very similar to that of the simple
+round-robin strategy.
 
 The two other graphs on the Figure are less straightforward to explain than the
 previous strategies'. The plot that pictures the relationship between the
@@ -266,16 +263,15 @@ During the analysis phase of this strategy and particularly when trying to
 explain the straight line appearing on the bottom-left graph on
 \fig{fig:relArbitrary}, a critical bug was discovered. This bug happens when two
 or more messages are finalized during the last step of the simulation. As the
-bug was discovered at the near end of the projet, it has not been corrected, but
-it will have to be fixed for the further research that is planned on the
-subject. As the data collection process is segregated from the metrics
-computations (\ssec{ssec:metricsMeasurements}), data that has elready been
-generated are not lost and can be used again when the bug is corrected. Note
-that this bug also explains the outliers observed for the Double round-robin and
-Triple round-robin strategies as well (\ssec{ssec:doubleRR} and
-\ssec{ssec:tripleRR}).  Nonetheless, a version of the graphs with the edge cases
-filtered out was made in order to better picture the performances of the
-strategy (\fig{fig:relArbitraryFiltered}).
+bug was identified the near end of the projet's tomeframe, it was not corrected,
+but will require to be fixed in order to continue research on the subject. As
+the data collection process is segregated from the metrics computations
+(\ssec{ssec:metricsMeasurements}), data that has elready been generated are not
+lost and can be used again when the bug is corrected. Note that this bug also
+explains the outliers observed for the Double round-robin and Triple round-robin
+strategies as well (\ssec{ssec:doubleRR} and \ssec{ssec:tripleRR}).
+Nonetheless, a version of the graphs with the edge cases filtered out was made
+in order to better benchmark the strategy (\fig{fig:relArbitraryFiltered}).
 
 \triplefigure
     {relation_nb_nodes_latency_arbitrary_filtered_20_nodes_4_depth_all_receivers_gen_averages}
@@ -365,19 +361,19 @@ sending messages in a single round.
 \label{ssec:nbNodes}
 The main problem with these results is the evolution of the score for the number
 of nodes, particularly for the arbitrary strategy. Based on the observations
-made in \ssec{ssec:arbitrary}, the arbitrary strategy clearly is worse than the
-other ones for the latency and overhead. That is reflected with the values
-obtained for their respective scores. The main issue with it is that the score
-for the number of nodes is used as a buffer for how well the two other variables
-perform in a set strategy. Indeed, the model forces the relation between the
-scores and the variables, and if the scores for both the latency and the
-overhead are low, the score for the number of nodes is forced to be high. This
-is confirmed by looking at the error column in \tab{fig:recapTests}; the bigger
-the score for number of nodes is, the higher the error.
-\todo{explain why 2.5; number of nodes is the one with lower variance therefore
-the linear regression fits using only it as a preponderant variable. the mean
-number of nodes is roughly 10.5. when fitting the model, it is therefore reduced
-to \(1 = s_n/n = 2.5 / \)}
+made in \ssec{ssec:arbitrary}, the arbitrary strategy is clearly worse than the
+others ones for the latency and overhead which is reflected with the values
+obtained for their respective scores. The main issue with the arbitrary strategy
+relies in the fact that \(s_n\) serves as a buffer for how well the other two
+variables perfom in a given strategy.  Indeed, the model forces the relation
+between the scores and the variables, and if the scores for both the latency and
+the overhead are low, the score for the number of nodes is forced to be high.
+This is confirmed by looking at the error column in \tab{fig:recapTests}; the
+bigger the score for number of nodes is, the higher the error.  \todo{explain
+why 2.5; number of nodes is the one with lower variance therefore the linear
+regression fits using only it as a preponderant variable. the mean number of
+nodes is roughly 10.5. when fitting the model, it is therefore reduced to \(1 =
+s_n/n = 2.5 / \)}
 
 \FloatBarrier
 \subsection{Normalized model}
