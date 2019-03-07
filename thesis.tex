@@ -25,6 +25,7 @@
 \usepackage[T1]{fontenc}
 % \usepackage[french,english]{babel}
 \usepackage{svg}
+\usepackage{appendix}
 
 % -----------------------------------------------------------------------------
 % Preamble
@@ -97,14 +98,14 @@
 \include{02-main/ch5_conclusion}
 
 
-%\newpage\phantom{blank}
-%\thispagestyle{empty}
-%\cleardoublepage
+\newpage\phantom{blank}
+\thispagestyle{empty}
+\cleardoublepage
 
 % Appendices
-% \appendix
-% \include{03-tail/01_pipeline}
-
+\begin{appendices}
+\include{03-tail/codebase}
+\end{appendices}
 % Include WP
 % \newpage\phantom{blank}
 % \thispagestyle{empty}

@@ -221,16 +221,15 @@ second step confirms that everyone has seen the other nodes acknowledgments.
 This strategy is the only one that uses a random factor and that can be
 considered as a "bottom-up" strategy. The main goal of this strategy is to
 have a reference point when comparing new strategies.
-The overhead distribution \todo{what is this shape? how to compute
-characteristics?}
+The overhead and latency distributions both seem to follow a gamma distribution
+explained by the senders being selected at random.
 
 \triplefigure
     {hist_nb_nodes_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
     {hist_latency_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
     {hist_overhead_arbitrary_20_nodes_4_depth_all_receivers_gen_averages}
     {Distributions of the dataset for the arbitrary strategy and all
-    receivers. Only the overhead seems to be distributed in a \todo{name of
-    distrib} manner. }
+    receivers. The latency and overhead seem to follow a gamma distribution. }
     {fig:distArbitrary}
 
 The top-left graph on \fig{fig:relArbitrary} shows a linear relationship
@@ -268,19 +267,26 @@ explains the outliers observed for the Double round-robin and Triple round-robin
 strategies as well (\ssec{ssec:doubleRR} and \ssec{ssec:tripleRR}).
 Nonetheless, a version of the graphs with the edge cases filtered out was made
 in order to better benchmark the strategy (\fig{fig:relArbitraryFiltered}).
+The filtered data show a linear dependency between the number of nodes and
+the latency with the same slope as the unfiltered datapoints. There is no clear
+relation between number of nodes and overhead as the overhead is distributed
+evenly across all number of nodes which is confirmed by both the top-left graph
+on \fig{fig:relArbitraryFiltered} and the histogram on \fig{fig:distArbitrary}.
+The relationship between latency and overhead seem to be spread around a center
+of mass around the point \((4, 15)\) but more data is needed to show a clear
+correlation.
+
 
 \triplefigure
     {relation_nb_nodes_latency_arbitrary_filtered_20_nodes_4_depth_all_receivers_gen_averages}
     {relation_nb_nodes_overhead_arbitrary_filtered_20_nodes_4_depth_all_receivers_gen_averages}
     {relation_overhead_latency_arbitrary_filtered_20_nodes_4_depth_all_receivers_gen_averages}
-    {The arbitrary strategy shows a linear relation between the number of
-    nodes and the latency (top-left). However, the other relations between
-    variables both seem to be split into two linear functions with a clear gaps
-    between them.}
+    {The filtered arbitrary strategy shows a linear relation between the number of
+    nodes and the latency (top-left). The top-right graph, in combination with
+    the histogram on \fig{fig:distArbitrary} shows that the overhead is evenly
+    spread with no correlation with the number of nodes.}
     {fig:relArbitraryFiltered}
 
-
-\todo{finish analysis}
 
 \FloatBarrier
 \subsection{Fitting of the basic model}
