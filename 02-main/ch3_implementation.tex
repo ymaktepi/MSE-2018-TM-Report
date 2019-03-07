@@ -110,40 +110,40 @@ strategies as well as their expected locations in the triangle.
 	\centering
 	\includegraphics[width=0.8\columnwidth]{all_strats}
   %\captionsetup{justification=centering}
-    \caption{Strategies examples with 4 validators. Top-left: Round-robin.
-    Top-right: Double round-robin. Bottom-left: Maximal overhead. Bottom-right:
+    \caption{Strategies examples with 4 validators. Top-left: Round-Robin.
+    Top-right: Double Round-Robin. Bottom-left: Maximal Overhead. Bottom-right:
     Arbitrary. Arrows here show justifications for all messages.}
 	\label{fig:allStrats}
 \end{figure}
 
-\subsection{Round-robin}
+\subsection{Round-Robin}
 Nodes send messages one after the other in a fixed order (\fig{fig:allStrats},
 top-left). The expected overhead for this strategy should be the lowest of all
 the strategies as only one message is sent at a time and each sent message
 should finalize a new block.  The latency, on the other hand, should be quite
 high because as seen in \ssec{ssec:cbc} \(50\%\) of the validators have to
-acknowledge the messages to finalize them. Since the round-robin has a fixed
+acknowledge the messages to finalize them. Since the Round-Robin has a fixed
 rotation order for the message production, finalization happens only a rotation
 and a half later, where the first rotation acknowledges the message's existence
 and the subsequent half rotation confirms acknowledgment.
 
-\subsection{Double Round-robin}
+\subsection{Double Round-Robin}
 In this setting, two nodes send messages at the same time, in a fixed order
 (\fig{fig:allStrats}, top-right). If the two nodes that send messages at the
 same step are as far as possible from each other in the set of validators, the
-latency to finality is supposedly half as much as the simple round-robin
+latency to finality is supposedly half as much as the simple Round-Robin
 strategy, as the whole validator set sends a message in half the number of
 steps. The overhead is however doubled because two messages are sent at each
 step.
 
-\subsection{Triple Round-robin}
-This strategy is similar to the Double round-robin, except that three nodes send
+\subsection{Triple Round-Robin}
+This strategy is similar to the Double Round-Robin, except that three nodes send
 a message at each step. It was decided to add this strategy at a later stage of
 the project in order to have intermediate comparison points between the Double
-round-robin and the Maximal overhead strategy. As for the Double round-robin
+Round-Robin and the Maximal Overhead strategy. As for the Double Round-Robin
 strategy, the latency should be divided by three compared to the simple
-round-robin and the overhead should be three times higher.
-Note that a \(N\)-parallelized round-robins could be implemented in order to change the
+Round-Robin and the overhead should be three times higher.
+Note that a \(N\)-parallelized round-robin could be implemented in order to change the
 position in the trade-off triangle but it would lose meaning for a number of
 nodes smaller than \(N\) so there is no quadruple (or bigger) round-robin
 implementation.
@@ -161,8 +161,8 @@ over two steps.
 The Arbitrary strategy is the simplest to think of: pick a sender at
 random(\fig{fig:allStrats}, bottom-right).  Using fixed probability density
 functions, one node is arbitrarily selected at each step to create a message.
-This strategy could be modified in the same way the simple Round-robin has
-evolved into the Double and Triple round robin strategies to show the evolution
+This strategy could be modified in the same way the simple Round-Robin has
+evolved into the Double and Triple Round-Robin strategies to show the evolution
 of the metrics with the number of messages sent at each step.
 
 \subsection{Bottom-up strategies}
