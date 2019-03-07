@@ -7,7 +7,7 @@ and compares them to the expected results for each strategy described in
 \sect{sec:strategies}. The second part of the chapter shows the scores of the
 strategies when the obtained data are fitted to the model discussed in
 \ssec{ssec:model}. The latter part of the chapter discusses suggested
-improvements to the model for a better strategiey juxtaposition.
+improvements to the model for a better strategy juxtaposition.
 
 \section{Tests}
 Tests that cover all the combinations between sending strategies and receivers
@@ -77,7 +77,7 @@ The fitted line has the following equation:
 The latency is expected to be around \(1.5\cdot n\) because the finality is
 reached when at least 50\% of the network has acknowledged that the whole
 network has the finalized message in its justification. As pictured in the
-top-left graph of \fig{fig:relRR}, the fitted line has a slightly small
+top-left graph of \fig{fig:relRR}, the fitted line has a slightly gentler
 slope compared to the data points due to the fact that the line is fitted to be
 linear and the data points are close the origin. 
 The gaps in the histogram for latecy showed in \fig{fig:distRR} are explained by the fact
@@ -106,7 +106,7 @@ distributions show a similar shape. The latency is more localized than for the
 single round-robin and demonstrates a difference between distributions. The
 distribution of the overhead presents a peak at 2, which was expected, but also
 shows that there are some messages that have double this overhead at 4. The
-appearence of these outliers is explained further in \ssec{ssec:arbitrary}. 
+appearance of these outliers is explained further in \ssec{ssec:arbitrary}.
 
 \triplefigure
     {relation_nb_nodes_latency_double_rr_20_nodes_4_depth_all_receivers_gen_averages}
@@ -118,7 +118,7 @@ appearence of these outliers is explained further in \ssec{ssec:arbitrary}.
     only emerge when the tests are run with 3 or 5 nodes.}
     {fig:relDRR}
 
-As for the simple round-robin strategy, the plots including the Overhead are not
+As for the simple round-robin strategy, the plots including the overhead are not
 of much use here, except they show that its value is 2, as it is expected. 
 On the other hand, the plot on the top-left of \fig{fig:relDRR} shows a
 linear relation between the number of nodes and the latency: 
@@ -158,7 +158,7 @@ overhead is three times larger.
 2, 5 and 11 nodes. When running 2 nodes, which is an obvious edge case for this
 strategy (as there are only 2 nodes and there should be at least 3 to send
 different messages), the overhead is only 1 because only one node sends a
-message in this case. The appearence of the other two outliers is explained further in
+message in this case. The appearance of the other two outliers is explained further in
 \ssec{ssec:arbitrary}. 
 
 \triplefigure
@@ -205,7 +205,7 @@ overhead and number of nodes of \(o = n\), as was expected.  The two other plots
 on the same Figure only confirm that the latency equals 2, which is the minimum
 that can be reached, as there needs to be two steps to finalize a message.
 During the first step, all nodes acknowledge they have seen a message, and the
-second step confirms that everyone has seen the other nodes acknowledgments.
+second step confirms that everyone has seen the other nodes' acknowledgments.
 
 \triplefigure
     {relation_nb_nodes_latency_overhead_10-20_nodes_4_depth_all_receivers_gen_averages}
@@ -240,8 +240,8 @@ between the latency and the number of nodes. The equation of the fitted line is:
 Though the slope varies a bit, it is still very similar to that of the simple
 round-robin strategy.
 
-The two other graphs on the Figure are less straightforward to explain than the
-previous strategies'. The plot that pictures the relationship between the
+The two other graphs on the figure are less straightforward to explain than the
+previous strategies'. The plot that illustrates the relationship between the
 overhead and the number of nodes shows two linear branches that split quite
 clearly, and the same goes for the plot of the latency against the overhead.
 The latter one shows an even weirder artifact: 
@@ -260,7 +260,7 @@ During the analysis phase of this strategy and particularly when trying to
 explain the straight line appearing on the bottom-left graph on
 \fig{fig:relArbitrary}, a critical bug was discovered. This bug happens when two
 or more messages are finalized during the last step of the simulation. As the
-bug was identified the near end of the projet's tomeframe, it was not corrected,
+bug was identified the near end of the project's timeframe, it was not corrected,
 but will require to be fixed in order to continue research on the subject. As
 the data collection process is segregated from the metrics computations
 (\ssec{ssec:metricsMeasurements}), data that has elready been generated are not
@@ -464,7 +464,7 @@ The final model is therefore:
     \caption{Raw fitted values for the simple model, rounded to the 3rd
         decimal place. The RMSE column shows the error value for the linear
         regression. The scores are now normalized to the \([0, 1]\)
-        interval. The new model also improves the relatives values for the
+        interval. The new model also improves the relative values for the
         overhead score, the double round-robin score is roughly half the one for
         the simple round-robin and the triple round-robin score is roughly a
         third of the overhead score for the simple round-robin strategy.}
@@ -548,7 +548,7 @@ up strategies (see \ssec{ssec:bottomUpStrats}) that could include
 rewarding/slashing the stake of the nodes.
 
 \subsection{Optimize and simplify model}
-As seen in \ssec{ssec:fittingBase} andi \ssec{ssec:fittingImproved}, the model
+As seen in \ssec{ssec:fittingBase} and \ssec{ssec:fittingImproved}, the model
 might be too restrictive for the actual problem. It might be worth trying to
 find a better fitting model to better reproduce the real life use case.
 One could argue that tying the number of nodes to the rest of the variables
@@ -566,9 +566,9 @@ network, based on real life network topologies, latencies, number of nodes, \ldo
 As seen in \ssec{ssec:proptest}, more than one sending strategy have been
 implemented, but only one has been thoroughly analysed. The some receivers
 strategy was implemented early in the project for other purposes but it turned
-out during the analysis phase that chosing both the number of nodes that receive
-the message as well as which ones get them was too many varying parameters
-added at once. The half receivers strategy was then implemented but data points
+out during the analysis phase that choosing both the number of nodes that receive
+the message as well as which ones get them introduced too many parameters
+varying simultaneously. The half receivers strategy was then implemented but data points
 were generated too late into the project's lifetime to fully analyse them as
 well. A next step would therefore to use the half receivers strategy to validate
 that the chosen model does not overfit the all receivers strategy data.
