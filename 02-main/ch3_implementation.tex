@@ -21,15 +21,10 @@ that:
 \subsubsection{Latency}
 The latency is the number of messages required to finalize a block and is a
 measure of a blockchain's liveness. Latency should be as close to \(2\) 
- so as to
-reach finality as soon as possible \todo{explain why a latency of two is the
-  minimum (and for n validators, it will be $2 \times
-  safety\_threshold/validator\_weight$, assuming uniform weight distribution).
-  Maybe more appropriate in Chapter 2:Finality though}
-and the closer the latency is to the ideal
+ so as to reach finality as soon as possible and the closer the latency is to the ideal
 value, the more alive the system is as transactions take less time to be
-confirmed. The minimal value for latency is \(2\) because a minimum of two steps
-are needed for nodes to both acknowledge the existance of a block and 
+confirmed. The minimal value for latency is \(2\) because it is the minimal
+number of steps to finalize a block, as seen in \ssec{ssec:finality}:Finality.
 
 \subsubsection{Number of nodes}
 The number of nodes in the validator set and should be as high as possible to
@@ -47,7 +42,11 @@ needed to move consensus forward.
 	\centering
 	\includegraphics[width=\columnwidth]{metrics-example}
   %\captionsetup{justification=centering}
-    \caption{Metrics computation example \todo{comment}}
+    \caption{Metrics computation example. At time \(t_1\), \(m_1\) is finalized
+    (left). At time \(t_2\), \(m_2\) is finalized. The latency \(l_2\) for \(m_2\) is the difference
+    of height between \(t_1\) and \(t_2\), worth $4$ in this case, and its
+    overhead \(o_2\) is worth $3$ and is the number of messages sent between the
+    finalization of the previous message (\(m_1\)) and \(m_2\).}
 	\label{fig:metricsSchema}
 \end{figure}
 
@@ -63,7 +62,7 @@ messages that have been sent between \(t_1\) and \(t_2\), worth 3.
 
 \subsection{Tradeoff triangle/Trilemma}
 In a standard consensus protocol, the three metrics form a trade-off triangle in
-kind of a ``pick two'' fashion. \todo{not a pick two} \gls{cbc}-Casper has no
+kind of a ``pick two'' fashion. \todo{not a pick two} \gls{cbc} Casper has no
 assumptions on timings, sources, contents, destinations of the messages that are
 exchanged, and can therefore explore the whole trade-off space. This project
 aims to find strategies that span the entirety of the triangle and
@@ -113,7 +112,7 @@ strategies as well as their expected locations in the triangle.
   %\captionsetup{justification=centering}
     \caption{Strategies examples with 4 validators. Top-left: Round-robin.
     Top-right: Double round-robin. Bottom-left: Maximal overhead. Bottom-right:
-    Arbitrary. Arrows here show justifications for all messages.\todo{ref}}
+    Arbitrary. Arrows here show justifications for all messages.}
 	\label{fig:allStrats}
 \end{figure}
 
@@ -135,7 +134,7 @@ same step are as far as possible from each other in the set of validators, the
 latency to finality is supposedly half as much as the simple round-robin
 strategy, as the whole validator set sends a message in half the number of
 steps. The overhead is however doubled because two messages are sent at each
-step.  \todo{remove - before cbc and casper}
+step.
 
 \subsection{Triple Round-robin}
 This strategy is similar to the Double round-robin, except that three nodes send
@@ -190,7 +189,6 @@ writing, the simulations do not include network latencies.
 
 \subsection{\texttt{proptest}}
 \label{ssec:proptest}
-
 The \texttt{proptest} implementation is able to run blockchain simulations off
 the following parameters:
 \begin{itemize}
@@ -244,11 +242,9 @@ proposed model and tools.
 
 \subsection{Metrics measurements}
 \label{ssec:metricsMeasurements}
-
 Metrics are not computed as-is in the \texttt{proptest} implementation. Simpler
 data are logged into \texttt{csv} files, and are processed by a \texttt{Python}
 script. The recorded data are: 
-
 \begin{itemize}
     \item the number of nodes;
     \item the identity of the current node;
@@ -256,7 +252,6 @@ script. The recorded data are:
     \item the height of the highest finalized block;
     \item and the total number of messages that have been sent.
 \end{itemize}
-
 This two step processing enabled the generation of
 data before having a precise definition of the metrics. It also permits to vary
 the way metrics are recorded. For example, from the same log file, you could

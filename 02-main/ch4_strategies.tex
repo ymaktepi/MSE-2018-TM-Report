@@ -36,7 +36,6 @@ find the scores of each variable according to the model presented in
 
 \subsection{Round-robin}
 \FloatBarrier
-
 The distributions of the number of nodes and the latency
 (\fig{fig:distRR} top row) have the same
 shapes except for the gaps every 3 steps. The resemblance in shape is explained
@@ -80,8 +79,7 @@ reached when at least 50\% of the network has acknowledged that the whole
 network has the finalized message in its justification. As pictured in the
 top-left graph of \fig{fig:relRR}, the fitted line has a slightly small
 slope compared to the data points due to the fact that the line is fitted to be
-linear and the data points are close the origin. \todo{insert line with 1.5*n
-?}\
+linear and the data points are close the origin. 
 The gaps in the histogram for latecy showed in \fig{fig:distRR} are explained by the fact
 that we expect the relation to be \(l = 1.5\cdot n\), and therefore the span of
 the latency distribution is bigger than the one for the number of nodes. The
@@ -221,7 +219,6 @@ second step confirms that everyone has seen the other nodes acknowledgments.
 \FloatBarrier
 \subsection{Arbitrary}
 \label{ssec:arbitrary}
-
 This strategy is the only one that uses a random factor and that can be
 considered as a "bottom-up" strategy. The main goal of this strategy is to
 have a reference point when comparing new strategies.
@@ -289,11 +286,10 @@ in order to better benchmark the strategy (\fig{fig:relArbitraryFiltered}).
 \FloatBarrier
 \subsection{Fitting of the basic model}
 \label{ssec:fittingBase}
-Fitting the basic model described in \ssec{ssec:model} (\(1 = s_n
-\cdot \frac{1}{n} + s_l\cdot l + s_o\cdot o\)) to the data using a simple linear
-regression gives the results as shown as raw values on
-\tab{fig:recapTests} and in a bar graph on
-\fig{fig:recapTestsPlot}.
+Fitting the basic model described in \ssec{ssec:model} (\(1 = s_n \cdot
+\frac{1}{n} + s_l\cdot l + s_o\cdot o\)) to the data using a simple linear
+regression gives the results as shown as raw values on \tab{fig:recapTests} and
+in a bar graph on \fig{fig:recapTestsPlot}.
 
 \begin{table}[h]
     \centering{
@@ -368,16 +364,13 @@ relies in the fact that \(s_n\) serves as a buffer for how well the other two
 variables perfom in a given strategy.  Indeed, the model forces the relation
 between the scores and the variables, and if the scores for both the latency and
 the overhead are low, the score for the number of nodes is forced to be high.
+Furthermore, the number of nodes is the variable with the lowest variance so the
+fitting shows a lower error by using it as a buffer instead of the two others.
 This is confirmed by looking at the error column in \tab{fig:recapTests}; the
-bigger the score for number of nodes is, the higher the error.  \todo{explain
-why 2.5; number of nodes is the one with lower variance therefore the linear
-regression fits using only it as a preponderant variable. the mean number of
-nodes is roughly 10.5. when fitting the model, it is therefore reduced to \(1 =
-s_n/n = 2.5 / \)}
+bigger the score for number of nodes is, the higher the error. 
 
 \FloatBarrier
 \subsection{Normalized model}
-
 \fig{fig:recapTestsPlotNorm} presents a normalized visualization of the same
 data. The normalization is made per-class, i. e. each class is normalized
 against the best score for this class. This normalization mainly permits to
@@ -404,6 +397,7 @@ buffer when the two other scores are bad and don't fit the model.
 
 \FloatBarrier
 \subsection{Improvements of the basic model and new fitting}
+\label{ssec:fittingImproved}
 Now that there are exploitable results for the basic model, some obvious
 improvements can be made. The first step is to have the same scale, because it
 offers a better visual comparison. The chosen scale is \([0,1]\). The next step
@@ -438,18 +432,19 @@ give scores that are easier to reason about. For example, it is known that the
 overhead for the double-round robin is 2/3 of the overhead for the triple
 round-robin, and therefore its score should be 3/2 of the overhead score for the
 triple round-robin. However, by looking at the scores in \tab{fig:recapTests},
-we see it is not the case. \todo{numbers?}
+we see it is not the case.
 By performing a simple bisection, an exponent of \(\frac{1}{2}\) is found. As
-showed in \fig{fig:recapTestsPlotNew} and \tab{fig:recapTestsNew}, not only using this exponent gives a better ratio
-between the overhead score for the double and triple round-robin strategies, but
-it also gives a better ratio between the simple and double and between the
-single and triple round-robin strategies. Indeed, the overhead score for the
-single round-robin strategy should be twice the one for the double round robin
-strategy and three times as much as the score for the triple round-robin.
-By looking at the error values obtained by the fitting of the new model on the
-data (\fig{fig:errorComparison}), it can be seen that those are marginally lower than the original basic
-model, which means the model better fits the data that output predictable
-results. 
+showed in \fig{fig:recapTestsPlotNew} and \tab{fig:recapTestsNew}, not only
+using this exponent gives a better ratio between the overhead score for the
+double and triple round-robin strategies, but it also gives a better ratio
+between the simple and double and between the single and triple round-robin
+strategies. Indeed, the overhead score for the single round-robin strategy
+should be twice the one for the double round robin strategy and three times as
+much as the score for the triple round-robin.  By looking at the error values
+obtained by the fitting of the new model on the data
+(\fig{fig:errorComparison}), it can be seen that those are marginally lower than
+the original basic model, which means the model better fits the data that output
+predictable results. 
 
 The exponent for the latency is not to be changed because the scores already
 match the expectations (the score for the triple round-robin is 3/2 of the score
@@ -534,10 +529,9 @@ The final model is therefore:
 
 \FloatBarrier
 \section{Further research}
-
 \subsection{Resolve edge case bug}
-As discussed in \ssec{ssec:arbitrary}, an edge case bug has been discovered at
-the near end of the project. It is necessary to fix this implementation error
+As discussed in \ssec{ssec:arbitrary}, an edge case bug has been identified at
+the end of the project. It is necessary to fix this implementation error
 before researching further on the subject.
 
 \subsection{Half set strategy}
@@ -550,15 +544,16 @@ coefficients for the refined model.
 \subsection{Bottom up strategies}
 Now that the framework is functional and can give some reference points and has
 ways to compare strategies, one obvious next step would be to implement bottom
-up strategies (see \ssec{ssec:bottomUpStrats}) that could include rewarding/slashing the stake of the nodes.
+up strategies (see \ssec{ssec:bottomUpStrats}) that could include
+rewarding/slashing the stake of the nodes.
 
 \subsection{Optimize and simplify model}
-As seen in the final comparison plots \todo{section}, the model might be too restrictive for
-the actual problem. It might be worth trying to find a better fitting model to
-better reproduce the real life use case.\
+As seen in \ssec{ssec:fittingBase} andi \ssec{ssec:fittingImproved}, the model
+might be too restrictive for the actual problem. It might be worth trying to
+find a better fitting model to better reproduce the real life use case.
 One could argue that tying the number of nodes to the rest of the variables
-might be too restrictive, and getting rid of the parameter could offer other
-insights while comparing strategies.
+might be \todo{whole section aaaaaaaaaaaaaaaaaaaaaaaaa}, and getting rid of the parameter could offer other insights
+while comparing strategies.
 
 \subsection{Better network modeling}
 Currently, the \texttt{proptest} implementation does not include a good model

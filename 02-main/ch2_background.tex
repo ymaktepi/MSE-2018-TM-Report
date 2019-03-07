@@ -23,12 +23,12 @@ because it's inherent to the protocol.
 \subsection{What is \gls{pos}?}
 \gls{pos} selects a new block creator according to their weight -or stake- which
 is determined through the node's age, wealth, etc. In this report, we will
-mainly discuss a specific \gls{pos} protocol, \gls{cbc}-Casper.
+mainly discuss a specific \gls{pos} protocol, \gls{cbc} Casper.
 
-\subsection{\gls{cbc}-Casper}
+\subsection{\gls{cbc} Casper}
 \label{ssec:cbc}
 \FloatBarrier
-\gls{cbc}-Casper \cite{abstractCBC} \cite{abstractCBC2} is an abstract consensus
+\gls{cbc} Casper \cite{abstractCBC} \cite{abstractCBC2} is an abstract consensus
 protocol family which is \gls{pos}-ready. Nodes, called validators in this
 context, send messages to each other, acknowledging they saw other messages by
 including them in a \textit{justification}, that is attached to each message.
@@ -39,60 +39,60 @@ single older message as their estimate and form a \textit{block-\gls{dag}}. Runn
 a slightly modified version of the \gls{ghost} algorithm on the \gls{dag}
 \cite{abstractCBC} \cite{GHOST} returns a blockchain.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.8\columnwidth]{cbc-example}
-  %\captionsetup{justification=centering}
-    \caption{\gls{cbc} blockchain example \todo{comment}}
-	\label{fig:example}
-\end{figure}
+\doublefigure
+    {cbc-example-12}
+    {cbc-example-2}
+    {\gls{cbc} example on a blockchain consensus.\\
+    Four nodes are represented horizontaly. Messages are colored circles,
+    justifications are dotted lines and the selected blockchain is pictured as
+    blue arrows. \\
+    On the right, an initial state of the network is pictured.\\
+    On the left, validator \(v_1\) publishes a new message to the network and
+    includes the latest messages it has seen in its justification. The estimate
+    of the newly published message is the output of the \gls{ghost} algorithm
+    run on said message and its justification.
+    }
+    {fig:example}
 
-\fig{fig:example} demonstrates a small example of a \gls{cbc} execution oer a
-blockchain with four nodes, messages sent by validators as colored circles,
-justifications as dotted arrows, and the selected blockchain with blue arrows.
-The blockchain is obtained by running the \gls{ghost} algorithm on the state of
-the network as shown in \fig{fig:example} and the result of this algorithm would
-be the estimate of a new message sent by an honest validator within this network
-state. 
+The picture on the left of \fig{fig:example} demonstrates a small example of a
+\gls{cbc} execution over a blockchain with four nodes, messages sent by
+validators as colored circles, justifications as dotted arrows, and the selected
+blockchain with blue arrows.  The blockchain is obtained by running the
+\gls{ghost} algorithm on the state of the network as shown in \fig{fig:example}
+and the result of this algorithm would be the estimate of a new message sent by
+an honest validator within this network state. 
 
-\fig{fig:example2} examplifies validator \(v_1\) producing a new message and the
-resulting new blockchain. An honest node includes all the latest messages it has
-received (including its own last message).  When a validator does not include
-its own messages in its justifications, it is considered as an
-\textit{equivocator} which does not follow the protocol, and may be punished by
-the network for such a behavior. Note that validator \(v_1\) does not equivocate
-because its first message is in the justification of \(v_2\)'s first message,
-and \(v_1\) has this message in the justification of its second message. This is
-legal because \(v_1\)'s first message is in the dependency of its later
-messages.
+The picture on the right of \fig{fig:example2} examplifies validator \(v_1\)
+producing a new message and the resulting new blockchain. An honest node
+includes all the latest messages it has received (including its own last
+message).  When a validator does not include its own messages in its
+justifications, it is considered as an \textit{equivocator} which does not
+follow the protocol, and may be punished by the network for such a behavior.
+Note that validator \(v_1\) does not equivocate because its first message is in
+the justification of \(v_2\)'s first message, and \(v_1\) has this message in
+the justification of its second message. This is legal because \(v_1\)'s first
+message is in the dependency of its later messages.
 
 \subsubsection{Finality}
 \label{ssec:finality}
-
 \textit{Finality} is a key concept to address for this project whereby,
 currently a block is considered finalized in a network state if it cannot be
-removed by receiving new messages by receiving new messages from honest nodes. 
+removed by receiving new messages by receiving new messages from honest nodes.
 For \gls{cbc} Casper, a block is considered finalized when a safety oracle is
 detected. There are multiple parameters and ways to compute safety oracles and
-the one that has been used for this project is: \todo{TODODODODO
+the one that has been used for this project is that a block is considered safe
+when every node in a subset of the network has seen each other member of the
+same subset agreeing on said block. Two nodes agree on a block when they both
+include it in the blockchain of their estimate. In this project, the subset will
+be any 50\% of the network. This implies that at least two rounds of messages
+are needed in order to finalize a block; the first one for nodes to acknowledge
+they have seen a message by including it in their justification, and the second
+to acknowledge that they have seen other nodes seeing it.
 
-A block is considered safe when every node in a subset of the network has seen
-each other member of the same subset agreeing on said block. Two nodes agree on
-a block when they both include it in the blockchain of their estimate. In this
-project, the subset will be any 50\% of the network.  }
-
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.8\columnwidth]{cbc-example-2}
-  %\captionsetup{justification=centering}
-    \caption{\gls{cbc} blockchain example 2 \todo{comment}}
-	\label{fig:example2}
-\end{figure}
 
 \FloatBarrier
 \subsection{Differences between \gls{cbc} Casper and \gls{pow}}
 \label{ssec:powVsPos}
-
 \subsubsection{Block production}
 In a \gls{pow}\cite{yellowpaper} setting, a miner can broadcast any block to the
 network, which will only be picked up by the other nodes if the block is valid,
@@ -167,10 +167,12 @@ will be implemented as well, in order to validate the functionality of the
 framework.
 
 \section{\texttt{core\_cbc}}
-\texttt{core\_cbc} a Rust implementation of the \gls{cbc}-Casper, made by
-TrueLevel \todo{introduce somewhere}. It implements the consensus algorithms
-proposed in the paper and offers an abstract structure that can be used to
-create consensus on any value.
+\texttt{core\_cbc} a Rust implementation of the \gls{cbc} Casper, made by
+TrueLevel, the company with which this project takes place. It implements the
+consensus algorithms proposed in the \gls{cbc} Casper paper and offers an
+abstract structure that can be used to create consensus on any value. This
+project uses \texttt{core\_cbc} as a base layer to implement tests and run
+simulations.
 
 \section{Parity Ethereum}
 Parity is a Rust Ethereum client. It includes a \textit{Pluggable Consensus}
@@ -204,7 +206,7 @@ blockchains.
 
 \subsection{Local testnet}
 Scripts that create and manage two local nodes have been written. They launch 2
-Parity instances with the \gls{cbc}-Casper consensus engine, and connect them
+Parity instances with the \gls{cbc} Casper consensus engine, and connect them
 to each other. Each node has a user account to send transactions, as well as a
 sender account, that can act as a validator in a Casper sense. Currently, each
 node produces a block every 10 seconds. This is a basic strategy that enabled
