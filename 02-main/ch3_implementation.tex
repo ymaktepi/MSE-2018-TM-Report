@@ -1,17 +1,16 @@
 \chapter{Testing Framework Implementation}
 \label{chap:implementation}
 
-This chapter describes the modelisation of the problem, the block building
+This chapter describes the modelling of the problem, the block building
 strategies that have been implemented in order to validate the correctness of
 the proposed model, and the methodology that has been employed to test the
 framework.
 
-\section{Modelisation}
+\section{Modelling}
 \subsection{Metrics}
 \FloatBarrier
 A way to rationally compare strategies is needed in order to discuss their
-relative strengths and weaknesses. Three main characteristics will be used for
-that:
+relative strengths and weaknesses. The three main characteristics which will be used are:
 \begin{itemize}
         \item latency;
         \item number of nodes;
@@ -20,14 +19,14 @@ that:
 
 \subsubsection{Latency}
 The latency is the number of messages required to finalize a block and is a
-measure of a blockchain's liveness. Latency should be as close to \(2\) 
- so as to reach finality as soon as possible and the closer the latency is to the ideal
-value, the more alive the system is as transactions take less time to be
+measure of a blockchain's liveness. Latency should be as close to \(2\)
+ as possible so as to reach finality as soon as possible. The closer the latency is to the ideal
+value, the more live the system is as transactions take less time to be
 confirmed. The minimal value for latency is \(2\) because it is the minimal
 number of steps to finalize a block, as seen in \ssec{ssec:finality}:Finality.
 
 \subsubsection{Number of nodes}
-The number of nodes in the validator set and should be as high as possible to
+The number of nodes in the validator set; should be as high as possible to
 guarantee decentralization and safety.
 
 \subsubsection{Overhead}
@@ -51,7 +50,7 @@ needed to move consensus forward.
 \end{figure}
 
 \fig{fig:metricsSchema} portrays how the metrics are computed: the left half of
-the Figure is the initial states of the system at time \(t_1\) where message
+the Figure shows the initial states of the system at time \(t_1\) where message
 \(m_1\) is finalized. The other half of the Figure is the same system at time
 \(t_2\) when \(m_2\) is finalized. The latency of \(m_2\) is \(l_2\)
 -represented by the difference in heights between \(m_3\) and \(m_2\)- which is
@@ -73,14 +72,14 @@ chosen is:
 \[1 = s_n \cdot \frac{1}{n} + s_l\cdot l + s_o\cdot o\]
 
 
-This model binds each 3 variable \(n\) (number of nodes), \(l\) (latency) and
+This model binds each 3 variables: \(n\) (number of nodes), \(l\) (latency) and
 \(o\) (overhead) to their score \(s_{variable}\).
 
 The higher the score \(s_x\) is, the more its related variable is dominant in
 the strategy and therefore the closer to a corner of the triangle the strategy
 is.  \(\frac{1}{n}\) is used because a large number of nodes is wanted.  The
 basic model has linear dependencies between scores and variables and is probably
-highly inaccurate but serves as a decent starting point to analyze the
+highly inaccurate but serves as a decent starting point for analysing the
 simulation dataset.
 
 \subsection{Model Evaluation}
@@ -216,7 +215,7 @@ New strategies (including bottom-up ones) can be easily implemented as well.
 
 \subsubsection{Receiver strategy}
 Receiver strategies select a set of validators that receive messages created by
-Sender strategies. Three strategies have been implemented for now: 
+Sender strategies. Three strategies have been implemented for now:
 \begin{itemize}
         \item All receivers;
         \item Half receivers;
@@ -242,7 +241,7 @@ proposed model and tools.
 \label{ssec:metricsMeasurements}
 Metrics are not computed as-is in the \texttt{proptest} implementation. Simpler
 data are logged into \texttt{csv} files, and are processed by a \texttt{Python}
-script. The recorded data are: 
+script. The recorded data are:
 \begin{itemize}
     \item the number of nodes;
     \item the identity of the current node;
