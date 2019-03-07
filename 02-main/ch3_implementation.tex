@@ -44,8 +44,8 @@ needed to move consensus forward.
   %\captionsetup{justification=centering}
     \caption{Metrics computation example. At time \(t_1\), \(m_1\) is finalized
     (left). At time \(t_2\), \(m_2\) is finalized. The latency \(l_2\) for \(m_2\) is the difference
-    of height between \(t_1\) and \(t_2\), worth $4$ in this case, and its
-    overhead \(o_2\) is worth $3$ and is the number of messages sent between the
+    of height between \(t_1\) and \(t_2\), worth \(4\) in this case, and its
+    overhead \(o_2\) is worth \(3\) and is the number of messages sent between the
     finalization of the previous message (\(m_1\)) and \(m_2\).}
 	\label{fig:metricsSchema}
 \end{figure}
@@ -60,17 +60,15 @@ messages that have been sent between \(t_1\) and \(t_2\), worth 3.
 
 \FloatBarrier
 
-\subsection{Tradeoff triangle/Trilemma}
-In a standard consensus protocol, the three metrics form a trade-off triangle in
-kind of a ``pick two'' fashion. \todo{not a pick two} \gls{cbc} Casper has no
-assumptions on timings, sources, contents, destinations of the messages that are
-exchanged, and can therefore explore the whole trade-off space. This project
-aims to find strategies that span the entirety of the triangle and
-\todo{finish sentence what}
-
 \subsection{Basic model}
 \label{ssec:model}
-The first strategy evaluation model that was chosen is:
+The proposed variables can be considered as forming a trade-off triangle or trilemma.
+As \gls{cbc} Casper does not make assumptions on timing, sources, contents,
+destinations of the messages that are exchanged, the whole trade-off space can
+be explored by varying any of those parameters.
+
+The first strategy evaluation model which represents such a trilemma that was
+chosen is:
 
 \[1 = s_n \cdot \frac{1}{n} + s_l\cdot l + s_o\cdot o\]
 

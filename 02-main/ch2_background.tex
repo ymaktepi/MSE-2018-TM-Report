@@ -42,11 +42,11 @@ a slightly modified version of the \gls{ghost} algorithm on the \gls{dag}
 \doublefigure
     {cbc-example-12}
     {cbc-example-2}
-    {\gls{cbc} example on a blockchain consensus.\\
+    {\gls{cbc} example on a blockchain consensus.%\\
     Four nodes are represented horizontaly. Messages are colored circles,
     justifications are dotted lines and the selected blockchain is pictured as
-    blue arrows. \\
-    On the right, an initial state of the network is pictured.\\
+    blue arrows.% \\
+    On the right, an initial state of the network is pictured. %\\
     On the left, validator \(v_1\) publishes a new message to the network and
     includes the latest messages it has seen in its justification. The estimate
     of the newly published message is the output of the \gls{ghost} algorithm
@@ -62,7 +62,7 @@ blockchain with blue arrows.  The blockchain is obtained by running the
 and the result of this algorithm would be the estimate of a new message sent by
 an honest validator within this network state. 
 
-The picture on the right of \fig{fig:example2} examplifies validator \(v_1\)
+The picture on the right of \fig{fig:example} examplifies validator \(v_1\)
 producing a new message and the resulting new blockchain. An honest node
 includes all the latest messages it has received (including its own last
 message).  When a validator does not include its own messages in its
@@ -113,11 +113,12 @@ work to produce blocks in a \gls{pow} chain. However, as there is a negligible
 computational cost, a node could easily spam the Casper network.
 
 \subsubsection{Economic majority}
-\todo{cite ref, and better explanation}
 As machines that are better at solving the cryptographic puzzle in a \gls{pow}
-context are more expensive to buy and to operate, \todo{nah}
+context are more expensive to buy and to operate, therefore the work is a proxy
+for the economic majority. If a miner can do more work than another, it has more
+computational power and therefore more at stake.
 Economic majority is however built in the \gls{cbc} Casper protocol, in the form
-of the weight that validators have.
+of the stake that validator have in the consensus mechanism.
 
 \subsubsection{Building strategy}
 In order to receive a reward for its work, a miner wants a block it has produced

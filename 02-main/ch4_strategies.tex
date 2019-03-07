@@ -51,13 +51,12 @@ relations between variables.
     {Distributions of the dataset for the Round-Robin strategy and all
     receivers. As the latency (top-right) presents a linear correlation with the number of
     nodes (top-left), the shapes of the histograms are similar. The overhead
-    (bottom) always
-    equals to 1 because only one message is sent per step, and each step
+    (bottom) always equals to $\protect 1$ because only one message is sent per step, and each step
     finalizes a block.}
     {fig:distRR}
 
 The histogram for the overhead is easy to analyse as well; the overhead is
-expected to be 1 because once consensus is obtained for the genesis block, only
+expected to be $1$ because once consensus is obtained for the genesis block, only
 one message from the next validator is needed to finalize the next block.
 
 \triplefigure
@@ -372,12 +371,13 @@ bigger the score for number of nodes is, the higher the error.
 \FloatBarrier
 \subsection{Normalized model}
 \fig{fig:recapTestsPlotNorm} presents a normalized visualization of the same
-data. The normalization is made per-class, i. e. each class is normalized
-against the best score for this class. This normalization mainly permits to
-better visually compare the strategies on a per-class basis. It also shows a
-correlation between the scores for the number of nodes and the error values,
-which further confirms that the score for the number of nodes is used as a
-buffer when the two other scores are bad and don't fit the model.
+data in \fig{fig:recapTestsPlot}. The normalization is made per-class, i. e.
+each class is normalized against the best score for that class. This
+normalization mainly permits to better visually compare the strategies on a
+per-class basis. It also shows a correlation between the scores for the number
+of nodes and the error values, which further confirms that the score for the
+number of nodes is used as a buffer when the two other scores are sub-par and
+don't fit the model.
 
 
 \begin{figure}[h]
@@ -398,12 +398,12 @@ buffer when the two other scores are bad and don't fit the model.
 \FloatBarrier
 \subsection{Improvements of the basic model and new fitting}
 \label{ssec:fittingImproved}
-Now that there are exploitable results for the basic model, some obvious
-improvements can be made. The first step is to have the same scale, because it
-offers a better visual comparison. The chosen scale is \([0,1]\). The next step
-is to try to give a meaning to relative values for the same score when comparing
-two strategies. This is obtained by finding better exponents for the variables
-in the model.
+Now that there are exploitable results for the basic model, some improvements
+can be made. The first step is to standardize the scale by imposing the range
+\([0,1]\) which simplifies the visual juxtapisition as seen in
+\fig{fig:recapTestsPlotNorm}. The next step is to try to give a meaning to
+relative values for the same score when comparing two strategies. This is
+obtained by finding better exponents for the variables in the model.
 
 \subsubsection{Improving factors}
 As seen in \ssec{ssec:fittingBase}, the best score for
@@ -421,25 +421,31 @@ Both models are represented on \fig{fig:improvedFactors}
     {final_plot_new_model_factor_latency_and_nodes}
     {Improvement of the factors of the basic model. On the left, the latency
     score has a maximum of \(1.0\). On the right, the score for the number of nodes
-    is also normalized to a maximum of \(1.0\).}
+    is also normalized to a maximum of \(1.0\).
+    }
     {fig:improvedFactors}
 
 
 \subsubsection{Improving exponents}
 Now that the model gives a normalized output, it is possible to improve it by
-changing the exponents applied to the variables. Modifying the exponents could
-give scores that are easier to reason about. For example, it is known that the
-overhead for the Double Round-Robin is 2/3 of the overhead for the Triple Round-Robin, and therefore its score should be 3/2 of the overhead score for the
-Triple Round-Robin. However, by looking at the scores in \tab{fig:recapTests},
-we see it is not the case.
-By performing a simple bisection, an exponent of \(\frac{1}{2}\) is found. As
-showed in \fig{fig:recapTestsPlotNew} and \tab{fig:recapTestsNew}, not only
-using this exponent gives a better ratio between the overhead score for the
-Double  and Triple Round-Robin strategies, but it also gives a better ratio
-between the simple and double and between the single and Triple Round-Robin
-strategies. Indeed, the overhead score for the single Round-Robin strategy
-should be twice the one for the Double Round-Robin strategy and three times as
-much as the score for the Triple Round-Robin.  By looking at the error values
+changing the exponents applied to the variables which could produce scores that
+are easier to reason about. For example, as described in \ssec{ssec:doubleRR}
+and \ssec{ssec:tripleRR} the
+overhead for the Double Round-Robin is 2/3 of the overhead for the Triple
+Round-Robin and, therefore, its score should be 3/2 of the overhead score for the
+Triple Round-Robin. 
+However it seems it isn't the case as the score values in \tab{fig:recapTests}
+for the Double an Triple Round-Robins are worth $0.162$ and $0.091$ and their
+ratio amounts to $1.780$ but by performing a bisection on the function
+\(\frac{0.162}{0.091}^e\) with a goal value of $3/2$, an exponent of
+\(\frac{1}{2}\) is revealed.
+As in \fig{fig:recapTestsPlotNew} and \tab{fig:recapTestsNew},using this newly
+calculated exponent gives a much better ratio to the overhead score for each
+Round-Robin strategy pair: Single-Double($2.092$), Double-Triple ($1.598$), and
+Single-Triple ($3.344$).
+Indeed, the overhead score for the single Round-Robin strategy
+should be twice that of the Double Round-Robin strategy and three times as
+much as the score for the Triple Round-Robin. By looking at the error values
 obtained by the fitting of the new model on the data
 (\fig{fig:errorComparison}), it can be seen that those are marginally lower than
 the original basic model, which means the model better fits the data that output
@@ -449,8 +455,8 @@ The exponent for the latency is not to be changed because the scores already
 match the expectations (the score for the Triple Round-Robin is 3/2 of the score
 for the Double Round-Robin strategy). 
 
-Again, the exponent for the number of nodes will not be modified because of the
-buffer role the score has in the model.
+Again, the exponent for the number of nodes will not be modified because its
+score's role in the model is to buffer.
 
 The final model is therefore: 
 \[1 = 2.556\cdot s_n \cdot \frac{1}{n} + \frac{1}{2} s_l\cdot l + s_o\cdot
@@ -463,8 +469,8 @@ The final model is therefore:
     \caption{Raw fitted values for the simple model, rounded to the 3rd
         decimal place. The RMSE column shows the error value for the linear
         regression. The scores are now normalized to the \([0, 1]\)
-        interval. The new model also improves the relative values for the
-        overhead score, the Double Round-Robin score is roughly half the one for
+        interval. The new model also improves the relatives values for the
+        overhead score, the Double Round-Robin score is roughly half of
         the simple Round-Robin and the Triple Round-Robin score is roughly a
         third of the overhead score for the simple Round-Robin strategy.}
     \label{fig:recapTestsPlotNew}
@@ -493,7 +499,7 @@ The final model is therefore:
         decimal place. The RMSE column shows the error value for the linear
         regression. The scores are now normalized to the \([0, 1]\)
         interval. The new model also improves the relatives values for the
-        overhead score, the Double Round-Robin score is roughly half the one for
+        overhead score, the Double Round-Robin score is roughly half of 
         the simple Round-Robin and the Triple Round-Robin score is roughly a
         third of the overhead score for the simple Round-Robin strategy.}
         \label{fig:recapTestsNew}
@@ -530,36 +536,36 @@ The final model is therefore:
 \section{Further research}
 \subsection{Resolve edge case bug}
 As discussed in \ssec{ssec:arbitrary}, an edge case bug has been identified at
-the end of the project. It is necessary to fix this implementation error
+the end of the project and it is necessary to fix this implementation error
 before researching further on the subject.
 
 \subsection{Half set strategy}
-A new sending strategy that could be interesting to implement is a strategy
-where half the validator set sends a message at each step. That would give a new
+Another strategy that could be interesting to implement consists in 
+half the validator set sends a message at each step. That would give a new
 comparison point with a fixed latency and an overhead that would be half the one
 for the Maximal Overhead strategy. It would be useful to have it to find better
 coefficients for the refined model.
 
 \subsection{Bottom up strategies}
 Now that the framework is functional and can give some reference points and has
-ways to compare strategies, one obvious next step would be to implement bottom
+ways to compare strategies, the next step would be to implement bottom
 up strategies (see \ssec{ssec:bottomUpStrats}) that could include
 rewarding/slashing the stake of the nodes.
 
 \subsection{Optimize and simplify model}
-As seen in \ssec{ssec:fittingBase} and \ssec{ssec:fittingImproved}, the model
-might be too restrictive for the actual problem. It might be worth trying to
-find a better fitting model to better reproduce the real life use case.
-One could argue that tying the number of nodes to the rest of the variables
-might be \todo{whole section aaaaaaaaaaaaaaaaaaaaaaaaa}, and getting rid of the parameter could offer other insights
-while comparing strategies.
+As seen in Subsections \ref{ssec:fittingBase} and \ref{ssec:fittingImproved},
+the model might be too restrictive for the actual problem and it might be worth
+trying to find a better fitting model to more precisely reproduce the real life
+use case, by, for example, trying out new exponents for the number of nodes for
+example. Removing the number of nodes as a whole in the model might also give
+simpler data to analyse.
 
 \subsection{Better network modeling}
 Currently, the \texttt{proptest} implementation does not include a good model
 for the network layer. The three proposed receiving strategies are naive but
-permitted to validate the framework, from the metrics measurements to the actual
+allowed the validation of the framework from the metrics measurements to the actual
 model fitting. A step forward would be to create better models for the
-network, based on real life network topologies, latencies, number of nodes, \ldots
+network, based on real life network topologies, latencies, number of nodes, etc.
 
 \subsection{Further analyse the data}
 As seen in \ssec{ssec:proptest}, more than one sending strategy have been
@@ -569,5 +575,5 @@ out during the analysis phase that choosing both the number of nodes that receiv
 the message as well as which ones get them introduced too many parameters
 varying simultaneously. The half receivers strategy was then implemented but data points
 were generated too late into the project's lifetime to fully analyse them as
-well. A next step would therefore to use the half receivers strategy to validate
+well. A logical next step would to use the half receivers strategy to validate
 that the chosen model does not overfit the all receivers strategy data.

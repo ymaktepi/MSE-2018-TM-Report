@@ -1,24 +1,23 @@
 \chapter{Conclusion}
 \label{chap:conclusion}
 
-This project aimed at finding a way to compare block building strategies for a
-\gls{cbc} Casper blockchain protocol. Based on a core library implementing the
-abstract structure for a \gls{cbc} Casper blockchain, a testing framework has
-been built. The framework is generic enough to allow one to implement new block
-building strategies as well as new network message passing topologies and
-improved termination condition. Three main variables have been selected to
-compare strategies: latency, number of nodes and overhead. The framework has
-been validated using basic strategies and the explicit relative performances
-they are expected to show. By slightly adapting the model to the expected
-performances of the strategies, a new model has been proposed. The new model
-shows a better comparison mean than the first one and but is still weak to
-estimate the scaling of the number of nodes of the different strategies, even
-though its importance is lower than the simpler model.
+This project's target is to setup a methodology to compare block building
+stratgies for a \gls{cbc} Casper protocol particularly for blockchain use. The
+project results in a comparator framework based on a core library implementing
+the \gls{cbc} Casper blockchain abstract structure which is generic enough to
+allow the implementation of new block building strategies, network topologies,
+and improved termination conditions. 
+The framework oversees three variables for comparison: latency, number of nodes,
+and overhead; due to their explicit relative performances through core
+strategies, the framework is valid.
+After adapting the model to achieve target performances for each strategy, a new
+model is proposed. This model shows a better means of comparison though still
+lacking when estimating the scaling of the number of nodes for different
+strategies despite this variable's lesser impact on the Trilemma model.
 
-The main improvements that are still to be added are a better modelisation with
-respect to the number of nodes variable, a network topology
-implementation that reflects a real-life setting, as well as ``bottom-up''
-strategies, that are more likely to be implemented in a real blockchain than the
-basic ones used to validate the framework. Furthermore, data that has been
+Future improvements include: modeling using the number of nodes variable in a
+different way, modeling in a network topology implementation that reflects a
+real-life setting, and dipping into ``bottom-up'' strategies that are more
+likely to be implemented on a deployed blockchain. Furthermore, data that has been
 generated with other sending strategies have not been analyzed yet and could be
-used to optimize the model.
+used to optimize the current model.
