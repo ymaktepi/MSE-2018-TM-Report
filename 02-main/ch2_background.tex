@@ -111,6 +111,9 @@ family does not make any timing assumption.
 The two previous points imply that spamming issues are mitigated by the need to
 work to produce blocks in a \gls{pow} chain. However, as there is a negligible
 computational cost, a node could easily spam the Casper network.
+% TODO (?) Mention how spam is handled in Casper, what are the measures taken
+% to filter or prevent spam, or mention the latest state of the research does
+% not yet handle dealing with spam
 
 \subsubsection{Economic majority}
 As machines that are better at solving the cryptographic puzzle in a \gls{pow}
@@ -183,6 +186,8 @@ between the Parity module and the \texttt{core\_cbc} implementation to test bloc
 strategies in a pseudo real-like manner. The implementation of the bridge was
 not as straight forward as planned so it has been decided to cut it out and test
 strategies without mimicking the network and client settings.
+% TODO Move the impact of this decision on the simulations from background work
+% (from The main disadvantages... to the end of the paragraph) here.
 
 \subsection{Background work}
 During the early stages of this project, a clear objective was set: to be able
