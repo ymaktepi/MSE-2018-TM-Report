@@ -3,7 +3,7 @@
 
 \section{\gls{pow} and \gls{pos}}
 In Ethereum, \gls{pos} is aiming to replace \gls{pow} as a distributed consensus
-algorithm. This section succintly describes both methods, their main
+algorithm. This section succinctly describes both methods, their main
 differences, and which problems arise when you replace \gls{pow} with \gls{pos}.
 
 \subsection{What is \gls{pow}?}
@@ -144,7 +144,7 @@ any chain, or even on its own chain.
             Timing assumption & Work is a proxy for timing & None \\
             \hline
             Spam & Work removes the possibility to spam & Negligible
-            computationnal costs to produce blocks imply potential spam \\
+            computational costs to produce blocks imply potential spam \\
             \hline
             Economic majority & Work is a proxy for economic majority & Economic
             majority \\
@@ -182,8 +182,8 @@ simulations.
 Parity is a Rust Ethereum client. It includes a \textit{Pluggable Consensus}
 module that allows one to easily add new consensus protocols by implementing an
 interface.  At first, the goal of this project was to implement a small bridge
-between the Parity module and the \texttt{core\_cbc} implementation to test block creation
-strategies in a pseudo real-like manner. The implementation of the bridge was
+between the Parity module and the \texttt{core\_cbc} implementation to study block creation
+strategies in a realistic testbed. The implementation of the bridge was
 not as straight forward as planned so it has been decided to cut it out and test
 strategies without mimicking the network and client settings.
 % TODO Move the impact of this decision on the simulations from background work
@@ -197,14 +197,14 @@ that was left to people that had a better understanding of the underlying
 library. Furthermore, considerable effort had been injected in the creation of a
 Docker infrastructure in order to easily deploy, connect and monitor multiple
 custom Parity nodes on a single machine in order to experiment with different
-message building strategies. Using Docker simplified access to the UnNE machine
+message building strategies. Using Docker simplified access to the UniNE machine
 clusters for testing purposes as software on their clusters are heavily
 containerized. After seeing that the Parity implementation would take too much
 time to be completed, and therefore might be unusable for this thesis, it has
 been decided to evaluate strategies inside the \texttt{core-cbc} library instead
 of the more real-life-like setting that is a Parity testnet. The core library
 was still being implemented at the time and further testing was needed.  The
-main disadvantage of doing the experimentations in the library is that the whole
+main disadvantage of doing the experimentation in the library is that the whole
 network latencies and topology are not taken into account. However, a
 non-negligible advantage of implementing strategies in the core library is that
 it will be easier to test them on consensus values that are not only

@@ -79,7 +79,7 @@ network has the finalized message in its justification. As pictured in the
 top-left graph of \fig{fig:relRR}, the fitted line has a slightly gentler
 slope compared to the data points due to the fact that the line is fitted to be
 linear and the data points are close the origin. 
-The gaps in the histogram for latecy showed in \fig{fig:distRR} are explained by the fact
+The gaps in the histogram for latency showed in \fig{fig:distRR} are explained by the fact
 that we expect the relation to be \(l = 1.5\cdot n\), and therefore the span of
 the latency distribution is bigger than the one for the number of nodes. The
 regularity of the gaps (which appear to be every 3 units of latency), is caused
@@ -153,7 +153,7 @@ number of nodes, which follows this equation:
     \[l = 0.496152 \cdot n\]
 This coefficient is about a third that of the single Round-Robin method and the
 overhead is three times larger.
-\fig{fig:relTRR} shows clear outliersfor the overhead value when running
+\fig{fig:relTRR} shows clear outliers for the overhead value when running
 2, 5 and 11 nodes. When running 2 nodes, which is an obvious edge case for this
 strategy (as there are only 2 nodes and there should be at least 3 to send
 different messages), the overhead is only 1 because only one node sends a
@@ -176,7 +176,7 @@ message in this case. The appearance of the other two outliers is explained furt
 \subsection{Maximal Overhead}
 This strategy aims to reduce latency to its minimum, as shown in the
 top-right plot on \fig{fig:distOverhead}. The distributions of the number
-of nodes and overhead are of the same shape because they are lineraly
+of nodes and overhead are of the same shape because they are linearly
 correlated, as will be shown in the next paragraph. 
 Note that the experiments were run with a lower number of nodes because the
 simulations for a large number of nodes takes a large amount of time. The
@@ -193,7 +193,7 @@ such divergences.
     {Distributions of the dataset for the Maximal Overhead strategy and all
     receivers. As the overhead (bottom) and the number of nodes (top-left) are
     linearly correlated, their distributions are of similar shapes. The
-    latency (top-righ) equals 2, as expected. Note that because the maximal
+    latency (top-right) equals 2, as expected. Note that because the maximal
     overhead strategy is computationally heavy, tests were run for 10 nodes and
     a few of them were run for 19 nodes, which is reflected in the shapes of the
     bottom and top-left histograms.}
@@ -261,7 +261,7 @@ or more messages are finalized during the last step of the simulation. As the
 bug was identified the near end of the project's timeframe, it was not corrected,
 but will require to be fixed in order to continue research on the subject. As
 the data collection process is segregated from the metrics computations
-(\ssec{ssec:metricsMeasurements}), data that has elready been generated are not
+(\ssec{ssec:metricsMeasurements}), data that has already been generated are not
 lost and can be used again when the bug is corrected. Note that this bug also
 explains the outliers observed for the Double Round-Robin and Triple Round-Robin
 strategies as well (\ssec{ssec:doubleRR} and \ssec{ssec:tripleRR}).
@@ -366,7 +366,7 @@ made in \ssec{ssec:arbitrary}, the arbitrary strategy is clearly worse than the
 others ones for the latency and overhead which is reflected with the values
 obtained for their respective scores. The main issue with the arbitrary strategy
 relies in the fact that \(s_n\) serves as a buffer for how well the other two
-variables perfom in a given strategy.  Indeed, the model forces the relation
+variables perform in a given strategy.  Indeed, the model forces the relation
 between the scores and the variables, and if the scores for both the latency and
 the overhead are low, the score for the number of nodes is forced to be high.
 Furthermore, the number of nodes is the variable with the lowest variance so the
