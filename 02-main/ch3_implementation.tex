@@ -100,7 +100,7 @@ trade-off triangle:
         \item arbitrary.
 \end{itemize}
 These strategies should allow one to visit the whole triangle and to discuss
-their respective strength and weaknesses. The following sections describe the
+their respective strengths and weaknesses. The following sections describe the
 strategies as well as their expected locations in the triangle.
 
 \begin{figure}[h]
@@ -225,11 +225,11 @@ Sender strategies. Three strategies have been implemented for now:
 The \textit{all receivers} strategy broadcasts messages to each other validator.
 The \textit{some receivers} strategy sends a message to \(1\) or more validator,
 using a uniform probability density function.  As of now, none of the
-implemented strategies are a good modelisation of a typical Ethereum network and
-this will be fixed at a later iteration.  Nonetheless, these strategies offer
+implemented strategies are a good model for a typical Ethereum network but
+theese will be improved at a later time.  Nonetheless, these strategies offer
 two extreme points on the spectrum of the network topology: a fully connected
 one without latency (\textit{all receivers}), and a random one (\textit{some
-receivers}) and will be both taken into account to compare the sender
+receivers}) ; both will be taken into account to compare the sender
 strategies.
 The \textit{half receivers} strategy sends a message to half the validator set,
 chosen at random which has been implemented at a later stage of the project
@@ -250,7 +250,7 @@ script. The recorded data are:
     \item and the total number of messages that have been sent.
 \end{itemize}
 This two step processing enabled the generation of
-data before having a precise definition of the metrics. It also permits to vary
+data before having a precise definition of the metrics. It also permitted varying
 the way metrics are recorded. For example, from the same log file, you could
 extract metrics only when the last step of the consensus is reached, or have an
 average of the metrics at each step of the consensus.
