@@ -537,6 +537,53 @@ The final model is therefore:
         \label{fig:errorComparison}
     }
 \end{table}
+\FloatBarrier
+
+\subsection{Alternative visualizations}
+\label{ssec:summaryViz}
+
+This section presents two alternative vizualisations to better grasp the
+relation between all the variables. The first one is a simple 3D plotting of the
+data points. A picture of the visualization is showed in \fig{fig:3Dplot}. As the
+3D plotting is more easily understandable when used in interactive mode, it is
+recommended to check out the related repository (see \ref{sec:visualization}).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\columnwidth]{3D_arbitrary_20_nodes_4_depth}
+    \caption{3D plot of the dataset for the Arbitrary strategy. It is
+    recommended to use the interactive version located in the visualization
+    repository (see \ref{sec:visualization}).}
+    \label{fig:3Dplot}
+\end{figure}
+
+The second alternative view is an aggreagation of all the data points. It allows
+one to compare the evolution of the overhead and latency relationship according
+to the number of nodes for multiple strategies. \fig{fig:commonViz} shows all
+the discussed strategies on the same picture. When implementing a new strategy,
+a user could use this visualization to instantly compare its performance with
+the current ones'. On the other hand, when a user that has a specific use case
+for a blockchain in mind wants to pick a strategy that fits the use case, they
+could look at this plot and quickly compare existing strategies.
+
+In order to offer the best comparison vector, more simulations should be run
+with more nodes.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\columnwidth]{tendency_20_nodes_4_depth_all_receivers}
+    \caption{This plot summarizes the evolution of the latency and overhead variables
+    with increasing number of nodes. Each strategy is represented using a colored line
+    graph. Each point on the line is the average value for latency and
+    overhead for a fixed number of nodes. The radius of the circles represents
+    the standard deviation. The closer the circle is to the arrow, the bigger
+    the number of nodes. The round robin strategies (blue, orange and green) 
+    plots clearly show a fixed overhead, as they are horizontal (except
+    for the noise at the start of each graph which is due to the bug explained
+    in \ssec{ssec:arbitrary}. The Maximal Overhead strategy plot (red) shows a
+    fixed latency as the graph is vertical.}
+    \label{fig:commonViz}
+\end{figure}
 
 \FloatBarrier
 \section{Further research}
@@ -583,3 +630,10 @@ varying simultaneously. The half receivers strategy was then implemented but dat
 were generated too late into the project's lifetime to fully analyse them as
 well. A logical next step would to use the half receivers strategy to validate
 that the chosen model does not overfit the all receivers strategy data.
+
+
+\subsection{Run simulations with more nodes}
+As seen at the end of \ssec{ssec:summaryViz}, the current plots only offer a
+small sample of simulations as well as a low number of nodes. Running
+simulations with a larger number of nodes would better show the performances of
+each strategy.
